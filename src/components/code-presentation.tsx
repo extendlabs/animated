@@ -17,7 +17,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
     oldTokens: [],
@@ -32,33 +31,27 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
 
   const handleSlideChange = useCallback(
     (direction: "next" | "prev") => {
-      if (isAnimating) return;
-
       const newIndex =
         direction === "next"
           ? Math.min(currentSlide + 1, slides.length - 1)
           : Math.max(currentSlide - 1, 0);
 
-      if (newIndex !== currentSlide) {
-        setIsAnimating(true);
+      if (newIndex !== currentSlide && slides[newIndex] && slides[currentSlide]) {
         const newDiff = computeDiff(
           slides[currentSlide].code,
           slides[newIndex].code,
         );
         setDiffMap(newDiff);
         setCurrentSlide(newIndex);
-        setTimeout(() => {
-          setIsAnimating(false);
-        }, 1000);
       }
     },
-    [currentSlide, slides, isAnimating],
+    [currentSlide, slides],
   );
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
-    if (isAutoPlaying && !isAnimating) {
+    if (isAutoPlaying) {
       interval = setInterval(() => {
         if (currentSlide < slides.length - 1) {
           handleSlideChange("next");
@@ -75,7 +68,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     slides.length,
     autoPlayInterval,
     handleSlideChange,
-    isAnimating,
   ]);
 
   return (
@@ -89,7 +81,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
             <div className="h-4 w-px bg-gray-600" />
             <button
               onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              disabled={isAnimating}
               className="rounded-full p-2 transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={isAutoPlaying ? "Pause" : "Play"}
             >
@@ -138,7 +129,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
         <div className="mt-2 flex justify-between">
           <button
             onClick={() => handleSlideChange("prev")}
-            disabled={currentSlide === 0 || isAnimating}
+            disabled={currentSlide === 0}
             className="flex items-center rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ChevronLeft className="mr-1 h-4 w-4" />
@@ -146,7 +137,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           </button>
           <button
             onClick={() => handleSlideChange("next")}
-            disabled={currentSlide === slides.length - 1 || isAnimating}
+            disabled={currentSlide === slides.length - 1}
             className="flex items-center rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Next
