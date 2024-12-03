@@ -3,7 +3,7 @@
 "use client";
 
 import React from "react";
-import { AnimatePresence, delay, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface AnimatedTokenProps {
   token: any;
@@ -26,7 +26,7 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
       opacity: 1,
     },
     updated: {
-      opacity: 1,
+      opacity: 0,
     },
   };
 
@@ -44,23 +44,24 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
 
   const transitionVariants = {
     changed: {
-      duration: 0.2,
+      duration: 0.15,
       delay: tokenIndex * 0.1,
     },
     stale: {
-      duration: 0.2,
-      delay: tokenIndex * 0.1,
     },
     updated: {
-      duration: 0.2,
+      duration: 0.15,
       delay: tokenIndex * 0.1,
     },
   };
 
   const exitVariants = {
-    changed: { opacity: 0, scale: 0.9, duration: 2, delay: tokenIndex * 0.1 },
-    stale: { opacity: 0, duration: 2, delay: tokenIndex * 0.1 },
-    updated: { opacity: 0, scale: 0.95, duration: 2, delay: tokenIndex * 0.1 },
+    updated: {
+    },
+    changed: {
+      opacity: [1, 0],
+    },
+    stale: {},
   };
 
   return (
@@ -70,7 +71,7 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
       initial={initialVariants[diffType]}
       animate={animateVariants[diffType]}
       transition={transitionVariants[diffType]}
-      exit={{ opacity: 0, duration: 0.2, delay: tokenIndex * 0.1 }}
+      exit={exitVariants[diffType]}
     />
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { Highlight, themes } from "prism-react-renderer";
 import { computeDiff } from "@/lib/utils/code-diff";
@@ -13,7 +13,7 @@ import { AnimatedLine } from "./animated-line";
 
 const CodePresentation: React.FC<CodePresentationProps> = ({
   slides = [],
-  autoPlayInterval = 3000,
+  autoPlayInterval = 1500,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
@@ -36,7 +36,11 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           ? Math.min(currentSlide + 1, slides.length - 1)
           : Math.max(currentSlide - 1, 0);
 
-      if (newIndex !== currentSlide && slides[newIndex] && slides[currentSlide]) {
+      if (
+        newIndex !== currentSlide &&
+        slides[newIndex] &&
+        slides[currentSlide]
+      ) {
         const newDiff = computeDiff(
           slides[currentSlide].code,
           slides[newIndex].code,
@@ -109,18 +113,20 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 className={`${className} min-h-[200px] overflow-x-auto p-4 text-sm`}
                 style={style}
               >
-                {tokens.map((line, i) => (
-                  <AnimatedLine
-                    key={`${currentSlide}-${i}`}
-                    line={line}
-                    lineIndex={i}
-                    currentSlide={currentSlide}
-                    diffType={diffMap.lineDiff[i]}
-                    matchingTokens={diffMap.matchingTokens}
-                    getLineProps={getLineProps}
-                    getTokenProps={getTokenProps}
-                  />
-                ))}
+                <AnimatePresence mode="wait">
+                  {tokens.map((line, i) => (
+                    <AnimatedLine
+                      key={`${currentSlide}-${i}`}
+                      line={line}
+                      lineIndex={i}
+                      currentSlide={currentSlide}
+                      diffType={diffMap.lineDiff[i]}
+                      matchingTokens={diffMap.matchingTokens}
+                      getLineProps={getLineProps}
+                      getTokenProps={getTokenProps}
+                    />
+                  ))}
+                </AnimatePresence>
               </pre>
             )}
           </Highlight>
