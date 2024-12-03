@@ -9,6 +9,16 @@ export default function Home() {
     },
     {
       id: 2,
+      code: 'function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      \n    </div>\n  );\n}',
+      description: 'Complete interactive component'
+    },
+    {
+      id: 3,
+      code: 'function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}',
+      description: 'Complete interactive component'
+    },
+    {
+      id: 4,
       code: 'function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}',
       description: 'Complete interactive component'
     }

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import { Highlight, themes } from 'prism-react-renderer';
 import { computeDiff } from '@/lib/utils/code-diff';
 import { type CodePresentationProps, type DiffResult } from 'types/code-presentation.type';
 import { AnimatedLine } from './animated-line';
+
 
 
 const CodePresentation: React.FC<CodePresentationProps> = ({ 
@@ -39,12 +40,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
       setCurrentSlide(newIndex);
       setTimeout(() => {
         setIsAnimating(false);
-        setDiffMap({
-          lineDiff: {},
-          oldTokens: [],
-          newTokens: [],
-          matchingTokens: [],
-        });
       }, 1000);
     }
   }, [currentSlide, slides, isAnimating]);
@@ -65,12 +60,11 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     return () => clearInterval(interval);
   }, [isAutoPlaying, currentSlide, slides.length, autoPlayInterval, handleSlideChange, isAnimating]);
 
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <motion.div
         className="bg-gray-800 rounded-lg p-6 shadow-xl space-y-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -93,19 +87,16 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
+       
           {slides[currentSlide]?.description && (
-            <motion.div
+            <div
               key={`desc-${currentSlide}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className="bg-gray-700/50 text-gray-200 rounded-md p-3 text-sm"
+              className="bg-gray-700/50 text-gray-200 rounded-md p-3 text-sm transition-colors"
             >
               {slides[currentSlide].description}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+       
 
         <div className="relative rounded-lg overflow-hidden">
           <Highlight

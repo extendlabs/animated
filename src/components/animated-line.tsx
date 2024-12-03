@@ -1,14 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-'use client';
-
-import React from 'react';
-import { motion } from 'framer-motion';
-import { AnimatedToken } from './animated-token';
+import React, { useMemo } from 'react';
+import { AnimatePresence, delay, motion } from 'framer-motion';
 import { useTextAnimation } from '@/hooks/useTextAnimation';
-
+import { AnimatedToken } from './animated-token';
 
 interface AnimatedLineProps {
   line: any[];
@@ -20,26 +13,7 @@ interface AnimatedLineProps {
   getTokenProps: (options: { token: any }) => any;
 }
 
-const lineVariants = {
-    initial: {
-        opacity: 0,
-        transition: {
-          duration: 0
-        }
-    },
-    animate: {
-      opacity: 1,
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0
-      }
-    }
-  };
-
-
-export const AnimatedLine: React.FC<AnimatedLineProps> = ({
+export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(({
   line,
   lineIndex,
   currentSlide,
@@ -47,23 +21,15 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = ({
   getLineProps,
   getTokenProps,
 }) => {
-    const { isDeleting, isTyping } = useTextAnimation(diffType);
-    const getAnimationState = () => {
-        if (isDeleting) return 'exit';
-        if (isTyping) return 'animate';
-        return diffType;
-      };
+  const lineKey = useMemo(() => `${currentSlide}-${lineIndex}`, [currentSlide, lineIndex]);
 
-      console.log('diffType', diffType);
-      console.log('isDeleting', isDeleting);
-      console.log('isTyping', isTyping);
+
+
   return (
+    <AnimatePresence mode="wait">
     <motion.div
-      key={`${currentSlide}-${lineIndex}`}
+      key={lineKey}
       {...getLineProps({ line })}
-    //   initial="initial"
-      animate={getAnimationState()}
-      variants={lineVariants}
       layout
     >
       <motion.span 
@@ -72,22 +38,27 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = ({
       >
         {String(lineIndex + 1).padStart(2, '0')}
       </motion.span>
-      {line.map((token, tokenIndex) => {
-        // const tokenText = token.content;
-        // const isUpdated = matchingTokens.includes(tokenText);
-        
-        return (
-          <AnimatedToken
-            key={`${currentSlide}-${lineIndex}-${tokenIndex}`}
-            token={token}
-            // isUpdated={isUpdated}
-            // currentSlide={currentSlide}
-            // lineIndex={lineIndex}
-            tokenIndex={tokenIndex}
-            getTokenProps={getTokenProps}
-          />
-        );
-      })}
+      {(
+        line.map((token, tokenIndex) => {
+          const tokenKey = `${lineKey}-${tokenIndex}`;
+          return (
+            
+              <AnimatedToken        
+                token={token}
+                tokenIndex={tokenIndex}
+                getTokenProps={getTokenProps}
+                diffType={diffType}
+                key={tokenKey}
+              />
+           
+          );
+        })
+      )}
+      
     </motion.div>
+    </AnimatePresence>
   );
-};
+});
+
+// Add a display name for better debugging
+AnimatedLine.displayName = 'AnimatedLine';

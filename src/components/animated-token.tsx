@@ -7,50 +7,70 @@ import { motion } from 'framer-motion';
 
 interface AnimatedTokenProps {
   token: any;
-  // isUpdated?: boolean;
-  // currentSlide: number;
-  // lineIndex: number;
   tokenIndex: number;
+  diffType?: 'changed' | 'stale' | 'updated';
   getTokenProps: (options: { token: any }) => any;
 }
 
-
-
 export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
   token,
-  // isUpdated,
-  // currentSlide,
-  // lineIndex,
   tokenIndex,
+  diffType = 'stale',
   getTokenProps,
 }) => {
-  const tokenVariants = {
-    initial: { 
-    
+  const initialVariants = {
+    changed: {
+      opacity: 0
     },
-    animate: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.2,
-        delay: tokenIndex * 0.03
-      }
+    stale: {
+      opacity: 1
     },
-    exit: {
-      opacity: 0,
-      x: 10,
-      transition: {
-        duration: 0.1,
-        delay: tokenIndex * 0.02
-      }
+    updated: {
+      opacity: 1
     }
+  };
+
+  const animateVariants = {
+    changed: {
+      opacity: 1
+    },
+    stale: {
+      opacity: 1
+    },
+    updated: {
+      opacity: 1
+    }
+  };
+
+  const transitionVariants = {
+    changed: {
+      duration: 0.2,
+      delay: tokenIndex * 0.1,
+    },
+    stale: {
+      duration: 0.2,
+      delay: tokenIndex * 0.1
+    },
+    updated: {
+      duration: 0.2,
+      delay: tokenIndex * 0.1
+    }
+  };
+
+  const exitVariants = {
+    changed: { opacity: 0, scale: 0.9 },
+    stale: { opacity: 0 },
+    updated: { opacity: 0, scale: 0.95 },
   };
 
   return (
     <motion.span
-    {...getTokenProps({ token })}
-    variants={tokenVariants}
-    layout
+      {...getTokenProps({ token })}
+      initial={initialVariants[diffType]}
+      animate={animateVariants[diffType]}
+      transition={transitionVariants[diffType]}
+      exit={exitVariants[diffType]}
     />
   );
 };
+
