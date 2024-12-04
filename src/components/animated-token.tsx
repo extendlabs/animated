@@ -47,8 +47,7 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
       duration: 0.15,
       delay: tokenIndex * 0.1,
     },
-    stale: {
-    },
+    stale: {},
     updated: {
       duration: 0.15,
       delay: tokenIndex * 0.1,
@@ -56,8 +55,7 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
   };
 
   const exitVariants = {
-    updated: {
-    },
+    updated: {},
     changed: {
       opacity: [1, 0],
     },

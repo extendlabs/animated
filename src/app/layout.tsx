@@ -1,3 +1,9 @@
+import { AppSidebar } from "@/app/_components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -13,7 +19,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <SidebarProvider defaultOpen={true}>
+          <AppSidebar />
+          <SidebarInset className="min-h-screen bg-background">
+            <header className="flex h-14 items-center border-b px-4 lg:px-6">
+              <SidebarTrigger />
+            </header>
+            <main className="flex h-full flex-col">
+              <div className="flex-1 overflow-auto">{children}</div>
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </body>
     </html>
   );
 }

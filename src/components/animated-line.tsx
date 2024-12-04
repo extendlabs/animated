@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { AnimatedToken } from "./animated-token";
@@ -30,7 +28,7 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
 
     return (
       <motion.div {...getLineProps({ line })} layout>
-        <motion.span className="mr-4 select-none text-gray-500" layout>
+        <motion.span className="mr-[19px] select-none text-gray-500" layout>
           {String(lineIndex + 1).padStart(2, "0")}
         </motion.span>
         {line.map((token, tokenIndex) => {
@@ -50,5 +48,4 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
   },
 );
 
-// Add a display name for better debugging
 AnimatedLine.displayName = "AnimatedLine";

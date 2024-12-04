@@ -12,6 +12,5 @@ export interface DiffResult {
 }
 
 export interface CodePresentationProps {
-  slides: Slide[];
   autoPlayInterval?: number;
 }
