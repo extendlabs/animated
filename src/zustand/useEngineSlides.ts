@@ -10,10 +10,14 @@ type Slide = {
 type EngineSettingsSlidesState = {
   slides: Slide[];
   currentSlide: number;
+  isEditing: boolean;
+  isAutoPlaying: boolean;
 };
 
 type EngineSettingsSlidesActions = {
   setCurrentSlide: (currentSlide: number) => void;
+  setIsEditing: (isEditing: boolean) => void;
+  setIsAutoPlaying: (isAutoPlaying: boolean) => void;
   addSlide: (newSlide: Slide) => void;
   deleteSlide: (id: number) => void;
   updateSlide: (id: number, updatedSlide: Partial<Slide>) => void;
@@ -34,10 +38,22 @@ export const useEngineSettingsSlidesStore = create(
       },
     ],
     currentSlide: 0,
+    isEditing: false,
+    isAutoPlaying: false,
 
     setCurrentSlide: (currentSlide) =>
       set((state) => {
         state.currentSlide = currentSlide;
+      }),
+    
+    setIsEditing: (isEditing) =>
+      set((state) => {
+        state.isEditing = isEditing;
+      }),
+    
+    setIsAutoPlaying: (isAutoPlaying) =>
+      set((state) => {
+        state.isAutoPlaying = isAutoPlaying;
       }),
 
     addSlide: (newSlide) =>
@@ -67,5 +83,5 @@ export const useEngineSettingsSlidesStore = create(
   })),
 );
 
-export const { setCurrentSlide, addSlide, deleteSlide, updateSlide } =
+export const { setCurrentSlide, addSlide, deleteSlide, updateSlide, setIsEditing, setIsAutoPlaying } =
   useEngineSettingsSlidesStore.getState();

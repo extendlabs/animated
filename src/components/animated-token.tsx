@@ -1,65 +1,49 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
 import React from "react";
 import { motion } from "framer-motion";
 
 interface AnimatedTokenProps {
   token: any;
   tokenIndex: number;
-  diffType?: "changed" | "stale" | "updated";
+  diffType?: "new" | "removed" | "unchanged" | "updated";
   getTokenProps: (options: { token: any }) => any;
 }
 
 export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
   token,
   tokenIndex,
-  diffType = "stale",
+  diffType = "unchanged",
   getTokenProps,
 }) => {
   const initialVariants = {
-    changed: {
-      opacity: 0,
-    },
-    stale: {
-      opacity: 1,
-    },
-    updated: {
-      opacity: 0,
-    },
+    new: { opacity: 0 },
+    removed: { opacity: 1 },
+    unchanged: { opacity: 1 },
+    updated: { opacity: 0 },
   };
 
   const animateVariants = {
-    changed: {
-      opacity: 1,
-    },
-    stale: {
-      opacity: 1,
-    },
-    updated: {
-      opacity: 1,
-    },
+    new: { opacity: 1 },
+    removed: { opacity: 0, scale: 0.8 },
+    unchanged: { opacity: 1 },
+    updated: { opacity: 1 },
   };
 
   const transitionVariants = {
-    changed: {
-      duration: 0.15,
-      delay: tokenIndex * 0.1,
-    },
-    stale: {},
-    updated: {
-      duration: 0.15,
-      delay: tokenIndex * 0.1,
-    },
+    new: { duration: 0.3, delay: tokenIndex * 0.05 },
+    removed: { duration: 0.3, delay: tokenIndex * 0.05 },
+    updated: { duration: 0.3, delay: tokenIndex * 0.05 },
+    unchanged: {},
   };
 
   const exitVariants = {
-    updated: {},
-    changed: {
+    new: {
       opacity: [1, 0],
     },
-    stale: {},
+    removed: {
+      opacity: [1, 0],
+    },
+    updated: {},
+    unchanged: {},
   };
 
   return (

@@ -81,7 +81,7 @@ export const MyEditor = ({ value, handleUpdateSlide }: any) => {
         bracketPairColorization: {
           enabled: true,
         },
-        formatOnPaste: true,
+        // formatOnPaste: flase,
         suggest: {
           showFields: false,
           showFunctions: false,

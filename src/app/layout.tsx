@@ -8,6 +8,7 @@ import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { EditButton } from "./_components/edit-button";
 
 export const metadata: Metadata = {
   title: "Code Animation Presentation",
@@ -23,8 +24,9 @@ export default function RootLayout({
         <SidebarProvider defaultOpen={true}>
           <AppSidebar />
           <SidebarInset className="min-h-screen bg-background">
-            <header className="flex h-14 items-center border-b px-4 lg:px-6">
+            <header className="flex h-14 items-center justify-between border-b px-4 lg:px-6">
               <SidebarTrigger />
+              <EditButton/>
             </header>
             <main className="flex h-full flex-col">
               <div className="flex-1 overflow-auto">{children}</div>

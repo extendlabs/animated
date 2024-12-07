@@ -5,10 +5,10 @@ export interface Slide {
 }
 
 export interface DiffResult {
-  lineDiff: Record<number, "changed" | "stale" | "updated">;
-  oldTokens: string[][];
-  newTokens: string[][];
-  matchingTokens: string[];
+  lineDiff: Record<number, "new" | "removed" | "unchanged">;
+  oldTokens: string[];
+  newTokens: string[];
+
 }
 
 export interface CodePresentationProps {
