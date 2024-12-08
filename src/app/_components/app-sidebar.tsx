@@ -9,12 +9,12 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { Button } from "../../components/ui/button";
-import { useEngineSettingsSlidesStore } from "@/zustand/useEngineSlides";
+import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
 
 export function AppSidebar() {
   const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
-    useEngineSettingsSlidesStore();
+    useUIStore();
 
   const handleAddSlide = () => {
     const newSlide = {

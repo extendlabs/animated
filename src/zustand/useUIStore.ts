@@ -14,7 +14,7 @@ type EngineSettingsSlidesState = {
   isAutoPlaying: boolean;
 };
 
-type EngineSettingsSlidesActions = {
+type UIStore = {
   setCurrentSlide: (currentSlide: number) => void;
   setIsEditing: (isEditing: boolean) => void;
   setIsAutoPlaying: (isAutoPlaying: boolean) => void;
@@ -23,8 +23,8 @@ type EngineSettingsSlidesActions = {
   updateSlide: (id: number, updatedSlide: Partial<Slide>) => void;
 };
 
-export const useEngineSettingsSlidesStore = create(
-  immer<EngineSettingsSlidesState & EngineSettingsSlidesActions>((set) => ({
+export const useUIStore = create(
+  immer<EngineSettingsSlidesState & UIStore>((set) => ({
     slides: [
       {
         id: 0,
@@ -45,12 +45,12 @@ export const useEngineSettingsSlidesStore = create(
       set((state) => {
         state.currentSlide = currentSlide;
       }),
-    
+
     setIsEditing: (isEditing) =>
       set((state) => {
         state.isEditing = isEditing;
       }),
-    
+
     setIsAutoPlaying: (isAutoPlaying) =>
       set((state) => {
         state.isAutoPlaying = isAutoPlaying;
@@ -74,7 +74,7 @@ export const useEngineSettingsSlidesStore = create(
           (slide: { id: number }) => slide.id === id,
         );
         if (slideIndex !== -1) {
-          if(state.slides[slideIndex]){
+          if (state.slides[slideIndex]) {
             state.slides[slideIndex] = {
               ...state.slides[slideIndex],
               ...updatedSlide,
@@ -85,5 +85,11 @@ export const useEngineSettingsSlidesStore = create(
   })),
 );
 
-export const { setCurrentSlide, addSlide, deleteSlide, updateSlide, setIsEditing, setIsAutoPlaying } =
-  useEngineSettingsSlidesStore.getState();
+export const {
+  setCurrentSlide,
+  addSlide,
+  deleteSlide,
+  updateSlide,
+  setIsEditing,
+  setIsAutoPlaying,
+} = useUIStore.getState();

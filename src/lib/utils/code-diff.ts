@@ -9,7 +9,7 @@ export const tokenizeLine = (line: string): string[] => {
 
 export const computeTokenSimilarity = (
   baseTokens: string[],
-  compareTokens: string[]
+  compareTokens: string[],
 ) => {
   let matches = 0;
   let structuralDifferences = 0;
@@ -28,12 +28,13 @@ export const computeTokenSimilarity = (
 };
 
 export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
-  const cleanOldCode = oldCode.replace(/\r/g, '').trim();
-  const cleanNewCode = newCode.replace(/\r/g, '').trim();
+  const cleanOldCode = oldCode.replace(/\r/g, "").trim();
+  const cleanNewCode = newCode.replace(/\r/g, "").trim();
 
   const diff = diffLines(cleanOldCode, cleanNewCode);
 
-  const lineDiff: Record<number, "new" | "removed" | "unchanged" | "updated"> = {};
+  const lineDiff: Record<number, "new" | "removed" | "unchanged" | "updated"> =
+    {};
   const oldTokens: string[] = [];
   const newTokens: string[] = [];
   const tokenMapping: Record<number, number | null> = {};
@@ -56,11 +57,15 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
             const oldLineTokens = tokenizeLine(oldLine);
             const newLineTokens = tokenizeLine(newLine);
 
-            const { similarityPercentage, structuralDifferences } = computeTokenSimilarity(oldLineTokens, newLineTokens);
+            const { similarityPercentage, structuralDifferences } =
+              computeTokenSimilarity(oldLineTokens, newLineTokens);
 
             if (similarityPercentage >= 70 && structuralDifferences > 0) {
               lineDiff[newLineIndex] = "updated";
-            } else if (similarityPercentage < 100 || oldLine.trim() !== newLine.trim()) {
+            } else if (
+              similarityPercentage < 100 ||
+              oldLine.trim() !== newLine.trim()
+            ) {
               lineDiff[newLineIndex] = "updated";
             } else {
               lineDiff[newLineIndex] = "unchanged";
@@ -70,9 +75,13 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
             newTokens.push(...newLineTokens);
 
             oldLineTokens.forEach((token, tokenIdx) => {
-              const matchIdx = newLineTokens.findIndex((newToken) => newToken === token);
+              const matchIdx = newLineTokens.findIndex(
+                (newToken) => newToken === token,
+              );
               tokenMapping[tokenIdx + oldTokens.length - oldLineTokens.length] =
-                matchIdx >= 0 ? matchIdx + newTokens.length - newLineTokens.length : null;
+                matchIdx >= 0
+                  ? matchIdx + newTokens.length - newLineTokens.length
+                  : null;
             });
           } else {
             lineDiff[newLineIndex] = "new";
@@ -103,7 +112,8 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
         oldTokens.push(...oldLineTokens);
         newTokens.push(...newLineTokens);
 
-        const { similarityPercentage, structuralDifferences } = computeTokenSimilarity(oldLineTokens, newLineTokens);
+        const { similarityPercentage, structuralDifferences } =
+          computeTokenSimilarity(oldLineTokens, newLineTokens);
 
         if (similarityPercentage === 100 && line.trim() === line.trim()) {
           lineDiff[newLineIndex] = "unchanged";
@@ -114,9 +124,13 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
         }
 
         oldLineTokens.forEach((token, tokenIdx) => {
-          const matchIdx = newLineTokens.findIndex((newToken) => newToken === token);
+          const matchIdx = newLineTokens.findIndex(
+            (newToken) => newToken === token,
+          );
           tokenMapping[tokenIdx + oldTokens.length - oldLineTokens.length] =
-            matchIdx >= 0 ? matchIdx + newTokens.length - newLineTokens.length : null;
+            matchIdx >= 0
+              ? matchIdx + newTokens.length - newLineTokens.length
+              : null;
         });
 
         newLineIndex++;

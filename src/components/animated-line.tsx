@@ -31,17 +31,17 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
           {String(lineIndex + 1).padStart(2, "0")}
         </motion.span>
         {line.map((token, tokenIndex) => (
-  <AnimatedToken
-    key={`${lineKey}-${tokenIndex}`}
-    token={token}
-    tokenIndex={tokenIndex}
-    getTokenProps={getTokenProps}
-    diffType={diffType} // Pass parent line's diffType
-  />
-))}
+          <AnimatedToken
+            key={`${lineKey}-${tokenIndex}`}
+            token={token}
+            tokenIndex={tokenIndex}
+            getTokenProps={getTokenProps}
+            diffType={diffType} // Pass parent line's diffType
+          />
+        ))}
       </motion.div>
     );
-  }
+  },
 );
 
 AnimatedLine.displayName = "AnimatedLine";

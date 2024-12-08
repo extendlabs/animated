@@ -8,7 +8,6 @@ export interface DiffResult {
   lineDiff: Record<number, "new" | "removed" | "unchanged" | "updated">;
   oldTokens: string[];
   newTokens: string[];
-
 }
 
 export interface CodePresentationProps {
