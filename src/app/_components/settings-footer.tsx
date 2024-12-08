@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
 import * as React from "react";
@@ -10,21 +11,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { themes } from "prism-react-renderer";
 
 export default function SettingsFooter() {
   const {
     padding,
     radius,
     language,
-    fileName,
+    theme,
     setPadding,
     setRadius,
     setLanguage,
-    setFileName,
+    setTheme,
   } = useSettingsStore();
 
+  const availableThemes = Object.keys(themes);
+
   return (
-    <footer className={`bottom-0 border-t bg-background p-4`}>
+    <footer className="bottom-0 border-t bg-background p-4">
       <div className="container mx-auto flex flex-col items-center justify-center gap-8 sm:flex-row">
         <div className="flex flex-wrap items-center justify-center gap-12 sm:gap-8">
           <div className="flex flex-col gap-2">
@@ -64,12 +68,40 @@ export default function SettingsFooter() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="markup">Markup</SelectItem>
               <SelectItem value="jsx">JSX</SelectItem>
               <SelectItem value="tsx">TSX</SelectItem>
-              <SelectItem value="javascript">JavaScript</SelectItem>
-              <SelectItem value="typescript">TypeScript</SelectItem>
               <SelectItem value="swift">Swift</SelectItem>
+              <SelectItem value="kotlin">Kotlin</SelectItem>
+              <SelectItem value="objectivec">Objective-C</SelectItem>
+              <SelectItem value="js-extras">JS-Extras</SelectItem>
+              <SelectItem value="reason">Reason</SelectItem>
+              <SelectItem value="rust">Rust</SelectItem>
+              <SelectItem value="graphql">GraphQL</SelectItem>
+              <SelectItem value="yaml">YAML</SelectItem>
+              <SelectItem value="go">GO</SelectItem>
+              <SelectItem value="cpp">C++</SelectItem>
+              <SelectItem value="markdown">Markdown</SelectItem>
               <SelectItem value="python">Python</SelectItem>
+              <SelectItem value="json">JSON</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm text-muted-foreground">Theme</span>
+          <Select 
+            value={Object.keys(themes).find(key => themes[key] === theme) ?? 'vsDark'} 
+            onValueChange={(themeName) => setTheme(themes[themeName])}
+          >
+            <SelectTrigger className="h-8 w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {availableThemes.map((themeName) => (
+                <SelectItem key={themeName} value={themeName}>
+                  {themeName}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

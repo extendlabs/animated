@@ -1,3 +1,4 @@
+import { PrismTheme, themes } from "prism-react-renderer";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -7,6 +8,7 @@ type SettingsStoreTypes = {
   radius: string;
   language: string;
   fileName: string;
+  theme: PrismTheme
 };
 
 type SettingsStoreActions = {
@@ -15,6 +17,7 @@ type SettingsStoreActions = {
   setRadius: (radius: string) => void;
   setLanguage: (language: string) => void;
   setFileName: (fileName: string) => void;
+  setTheme: (theme: PrismTheme) => void
 };
 
 export const useSettingsStore = create(
@@ -25,11 +28,13 @@ export const useSettingsStore = create(
       radius: "rounded-lg",
       language: "tsx",
       fileName: "Undefined-1.tsx",
+      theme: themes.vsDark,
       setBackground: (background) => set({ background }),
       setPadding: (padding) => set({ padding }),
       setRadius: (radius) => set({ radius }),
       setLanguage: (language) => set({ language }),
       setFileName: (fileName) => set({ fileName }),
+      setTheme: (theme) => set({ theme }),
     }),
     {
       name: "settings-storage",

@@ -15,6 +15,20 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 
+// Mapping of themes to their default background colors
+const themeBackgrounds: Record<string, string> = {
+  vsDark: "bg-[#1E1E1E]",
+  vsLight: "bg-[#FFFFFF]",
+  dracula: "bg-[#282A36]",
+  github: "bg-[#FFFFFF]",
+  nightOwl: "bg-[#011627]",
+  oceanicNext: "bg-[#1B2B34]",
+  palenight: "bg-[#292D3E]",
+  shadesOfPurple: "bg-[#2D2D2D]",
+  duotoneDark: "bg-[#2A2734]",
+  duotoneLight: "bg-[#EEEEEE]",
+};
+
 const CodePresentation: React.FC<CodePresentationProps> = ({
   autoPlayInterval = 1500,
 }) => {
@@ -28,7 +42,13 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     updateSlide,
   } = useUIStore();
 
-  const { padding, radius, language, fileName } = useSettingsStore();
+  const { padding, radius, language, fileName, theme } = useSettingsStore();
+
+  const currentThemeName = Object.keys(themes).find(
+    (key) => themes[key] === theme
+  ) ?? 'vsDark';
+
+  const themeBackground = themeBackgrounds[currentThemeName] ?? themeBackgrounds.vsDark;
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -118,11 +138,13 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
             >
               <div
                 className={cn(
-                  "rounded-lg bg-[#1e1e1e] shadow-xl",
+                  "shadow-xl",
                   radius,
-                  "transition-all duration-300 ease-in-out",
+                  themeBackground,
+                  "",
                 )}
               >
+                <div className="transition-all duration-300 ease-in-out">
                 <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500" />
@@ -133,7 +155,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                   <div className="w-[62px]" />
                 </div>
                 <Highlight
-                  theme={themes.vsDark}
+                  theme={theme}
                   code={currentCode}
                   language={language}
                 >
@@ -168,6 +190,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                   )}
                 </Highlight>
                 <div className="py-1" />
+              </div>
               </div>
             </div>
           )}
