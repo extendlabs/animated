@@ -23,10 +23,12 @@ export function AppSidebar() {
       description: "New slide description",
     };
     addSlide(newSlide);
+    setCurrentSlide(newSlide.id);
   };
 
   const handleDeleteSlide = (id: number) => {
     deleteSlide(id);
+    setCurrentSlide(0);
   };
 
   return (
