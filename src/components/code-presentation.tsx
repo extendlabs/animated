@@ -14,20 +14,7 @@ import { computeDiff } from "@/lib/utils/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
-
-// Mapping of themes to their default background colors
-const themeBackgrounds: Record<string, string> = {
-  vsDark: "bg-[#1E1E1E]",
-  vsLight: "bg-[#FFFFFF]",
-  dracula: "bg-[#282A36]",
-  github: "bg-[#FFFFFF]",
-  nightOwl: "bg-[#011627]",
-  oceanicNext: "bg-[#1B2B34]",
-  palenight: "bg-[#292D3E]",
-  shadesOfPurple: "bg-[#2D2D2D]",
-  duotoneDark: "bg-[#2A2734]",
-  duotoneLight: "bg-[#EEEEEE]",
-};
+import { themeStyles } from "@/constants/themes";
 
 const CodePresentation: React.FC<CodePresentationProps> = ({
   autoPlayInterval = 1500,
@@ -42,13 +29,18 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     updateSlide,
   } = useUIStore();
 
-  const { padding, radius, language, fileName, theme } = useSettingsStore();
+  const { padding, radius, language, fileName, theme, background } =
+    useSettingsStore();
 
-  const currentThemeName = Object.keys(themes).find(
-    (key) => themes[key] === theme
-  ) ?? 'vsDark';
+  const currentThemeName =
+    Object.keys(themes).find((key) => themes[key] === theme) ?? "vsDark";
 
-  const themeBackground = themeBackgrounds[currentThemeName] ?? themeBackgrounds.vsDark;
+  const themeBackground =
+    themeStyles[currentThemeName]?.bg ?? themeStyles.vsDark?.bg;
+  const themeBorder =
+    themeStyles[currentThemeName]?.border ?? themeStyles.vsDark?.border;
+  const themeText =
+    themeStyles[currentThemeName]?.text ?? themeStyles.vsDark?.text;
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -135,30 +127,31 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 padding,
                 "transition-all duration-300 ease-in-out",
               )}
+              style={{ background: background }}
             >
               <div
-                className={cn(
-                  "shadow-xl",
-                  radius,
-                  themeBackground,
-                  "",
-                )}
+                className={cn("shadow-xl", radius)}
+                style={{
+                  background: themeBackground,
+                }}
               >
-                <div className="transition-all duration-300 ease-in-out">
-                <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
+                <div
+                  className={cn(
+                    "flex items-center justify-between border-b px-4 py-3",
+                  )}
+                  style={{ borderColor: themeBorder }}
+                >
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500" />
                     <div className="h-3 w-3 rounded-full bg-yellow-500" />
                     <div className="h-3 w-3 rounded-full bg-green-500" />
                   </div>
-                  <div className="text-sm text-zinc-400">{fileName}</div>
+                  <div className={cn("text-sm")} style={{ color: themeText }}>
+                    {fileName}
+                  </div>
                   <div className="w-[62px]" />
                 </div>
-                <Highlight
-                  theme={theme}
-                  code={currentCode}
-                  language={language}
-                >
+                <Highlight theme={theme} code={currentCode} language={language}>
                   {({
                     className,
                     style,
@@ -169,7 +162,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                     <pre
                       className={cn(
                         className,
-                        "overflow-hidden p-4 pl-5 text-sm",
+                        "overflow-hidden pl-5 pt-4 text-sm",
                       )}
                       style={style}
                     >
@@ -189,8 +182,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                     </pre>
                   )}
                 </Highlight>
-                <div className="py-1" />
-              </div>
+                <div className="py-2" />
               </div>
             </div>
           )}
