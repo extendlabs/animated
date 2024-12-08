@@ -5,7 +5,7 @@ export interface Slide {
 }
 
 export interface DiffResult {
-  lineDiff: Record<number, "new" | "removed" | "unchanged">;
+  lineDiff: Record<number, "new" | "removed" | "unchanged" | "updated">;
   oldTokens: string[];
   newTokens: string[];
 

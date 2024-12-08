@@ -43,14 +43,14 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
 
   for (let i = 0; i < diff.length; i++) {
     const part = diff[i];
-    const lines = part.value.split("\n").filter(Boolean);
+    const lines = part?.value.split("\n").filter(Boolean);
 
-    if (part.added) {
+    if (part?.added) {
       const prevPart = i > 0 ? diff[i - 1] : null;
-      if (prevPart && prevPart.removed) {
+      if (prevPart?.removed) {
         // Handle potential "updated" lines
         const removedLines = prevPart.value.split("\n").filter(Boolean);
-        lines.forEach((newLine, index) => {
+        lines?.forEach((newLine, index) => {
           const oldLine = removedLines[index];
           if (oldLine) {
             const oldLineTokens = tokenizeLine(oldLine);
@@ -83,20 +83,20 @@ export const computeDiff = (oldCode: string, newCode: string): DiffResult => {
         });
       } else {
         // Regular new lines
-        lines.forEach((line) => {
+        lines?.forEach((line) => {
           lineDiff[newLineIndex] = "new";
           newTokens.push(...tokenizeLine(line));
           newLineIndex++;
         });
       }
-    } else if (part.removed) {
-      lines.forEach((line) => {
+    } else if (part?.removed) {
+      lines?.forEach((line) => {
         lineDiff[oldLineIndex] = "removed";
         oldTokens.push(...tokenizeLine(line));
         oldLineIndex++;
       });
     } else {
-      lines.forEach((line) => {
+      lines?.forEach((line) => {
         const oldLineTokens = tokenizeLine(line);
         const newLineTokens = tokenizeLine(line);
 

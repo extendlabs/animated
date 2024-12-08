@@ -74,10 +74,12 @@ export const useEngineSettingsSlidesStore = create(
           (slide: { id: number }) => slide.id === id,
         );
         if (slideIndex !== -1) {
-          state.slides[slideIndex] = {
-            ...state.slides[slideIndex],
-            ...updatedSlide,
-          };
+          if(state.slides[slideIndex]){
+            state.slides[slideIndex] = {
+              ...state.slides[slideIndex],
+              ...updatedSlide,
+            };
+          }
         }
       }),
   })),

@@ -31,32 +31,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     [slides, currentSlide],
   );
 
-
-  // const handleSlideChange = useCallback(
-  //   (direction: "next" | "prev") => {
-  //     const newIndex =
-  //       direction === "next"
-  //         ? Math.min(currentSlide + 1, slides.length - 1)
-  //         : Math.max(currentSlide - 1, 0);
-
-  //     if (
-  //       newIndex !== currentSlide &&
-  //       slides[newIndex] &&
-  //       slides[currentSlide]
-  //     ) {
-  //       const newDiff = computeDiff(
-  //         slides[currentSlide].code,
-  //         slides[newIndex].code,
-  //       )
-      
-  //       setDiffMap(newDiff);
-  //       setCurrentSlide(newIndex);
-  //     }
-  //   },
-  //   [currentSlide, slides, setCurrentSlide],
-  // );
-
-
   const handleSlideChange = useCallback(
     (direction: "next" | "prev") => {
       const newIndex =
@@ -65,31 +39,20 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           : Math.max(currentSlide - 1, 0);
 
       if (newIndex !== currentSlide) {
-        // Step 1: Reset lineDiff to "unchanged" for all lines
-        // setDiffMap((prevDiff) => ({
-        //   lineDiff: Object.keys(prevDiff.lineDiff).reduce((acc, lineIndex) => {
-        //     acc[+lineIndex] = "unchanged";
-        //     return acc;
-        //   }, {} as Record<number, "new" | "removed" | "unchanged">),
-        //   oldTokens: [],
-        //   newTokens: [],
-        // }));
-
-        // Step 2: Compute new diff and set it after a short delay
         setTimeout(() => {
-          const newDiff = computeDiff(
-            slides[currentSlide].code,
-            slides[newIndex].code,
-          );
-          setDiffMap(newDiff);
-          setCurrentSlide(newIndex);
-        }, 300); // Adjust delay as per animation timing
+          if (slides[newIndex] && slides[currentSlide]) {
+            const newDiff = computeDiff(
+              slides[currentSlide].code,
+              slides[newIndex].code,
+            );
+            setDiffMap(newDiff);
+            setCurrentSlide(newIndex);
+          }
+        }, 300);
       }
     },
     [currentSlide, slides, setCurrentSlide],
   );
-
-  console.log(diffMap)
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
