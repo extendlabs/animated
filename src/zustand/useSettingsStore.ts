@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { PrismTheme, themes } from "prism-react-renderer";
+import { type PrismTheme, themes } from "prism-react-renderer";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 type SettingsStoreTypes = {

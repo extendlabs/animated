@@ -120,10 +120,13 @@ export default function SettingsFooter() {
             <span className="text-sm text-muted-foreground">Theme</span>
             <Select
               value={
-                Object.keys(themes).find((key) => themes[key] === theme) ??
-                "vsDark"
+                Object.keys(themes).find(
+                  (key) => themes[key as keyof typeof themes] === theme,
+                ) ?? "vsDark"
               }
-              onValueChange={(themeName) => setTheme(themes[themeName])}
+              onValueChange={(themeName: keyof typeof themes) =>
+                setTheme(themes[themeName])
+              }
             >
               <SelectTrigger className="h-8 w-[140px]">
                 <SelectValue />

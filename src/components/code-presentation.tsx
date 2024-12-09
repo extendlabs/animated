@@ -15,7 +15,7 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
-import { PauseIcon, Play, PlayIcon } from "lucide-react";
+import { PauseIcon, PlayIcon } from "lucide-react";
 
 const CodePresentation: React.FC<CodePresentationProps> = ({
   autoPlayInterval = 1500,
@@ -34,7 +34,9 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     useSettingsStore();
 
   const currentThemeName =
-    Object.keys(themes).find((key) => themes[key] === theme) ?? "vsDark";
+    Object.keys(themes).find(
+      (key) => themes[key as keyof typeof themes] === theme,
+    ) ?? "vsDark";
 
   const themeBackground =
     themeStyles[currentThemeName]?.bg ?? themeStyles.vsDark?.bg;
