@@ -27,7 +27,7 @@ export const useSettingsStore = create(
   immer<SettingsStoreTypes & SettingsStoreActions>((set) => ({
     background: "linear-gradient(to right, #3b82f6, #9333ea, #ec4899)",
     padding: "p-4",
-    radius: "rounded-lg",
+    radius: "rounded-[10px]",
     language: "tsx",
     fileName: "Undefined-1.tsx",
     theme: themes.vsDark,

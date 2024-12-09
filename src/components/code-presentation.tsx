@@ -15,6 +15,7 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
+import { PauseIcon, Play, PlayIcon } from "lucide-react";
 
 const CodePresentation: React.FC<CodePresentationProps> = ({
   autoPlayInterval = 1500,
@@ -196,9 +197,14 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
               }}
               aria-label={isAutoPlaying ? "Pause" : "Play"}
               disabled={isAutoPlaying}
-              variant="outline"
+              variant="ghost"
+              size={"icon"}
             >
-              Play
+              {isAutoPlaying ? (
+                <PauseIcon className="h-4 w-4" />
+              ) : (
+                <PlayIcon className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>
