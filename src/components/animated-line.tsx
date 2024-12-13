@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { AnimatedToken } from "./animated-token";
+import { cn } from "@/lib/utils";
 
 interface AnimatedLineProps {
   line: any[];
   lineIndex: number;
   currentSlide: number;
+  thumbnail?: boolean;
   diffType?: "new" | "removed" | "unchanged" | "updated";
   getLineProps: (options: { line: any[] }) => any;
   getTokenProps: (options: { token: any }) => any;
@@ -17,6 +19,7 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
     lineIndex,
     currentSlide,
     diffType,
+    thumbnail,
     getLineProps,
     getTokenProps,
   }) => {
@@ -27,7 +30,10 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
 
     return (
       <motion.div {...getLineProps({ line })} layout>
-        <motion.span className="mr-4 select-none text-gray-500" layout>
+        <motion.span
+          className={cn("mr-4 select-none text-gray-500", thumbnail && "mr-1")}
+          layout
+        >
           {String(lineIndex + 1).padStart(2, "0")}
         </motion.span>
         {line.map((token, tokenIndex) => (

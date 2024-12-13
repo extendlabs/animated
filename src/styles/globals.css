@@ -49,6 +49,7 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-width: auto;
   }
   body {
     @apply bg-background text-foreground;
@@ -128,22 +129,42 @@
   color: #ffffff !important;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-body::-webkit-scrollbar {
-  display: none;
-}
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 10px;
+    @apply transition-all duration-1000 ease-in-out;
+  }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-body {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-800;
+  }
 
-.overflow-x-auto::-webkit-scrollbar {
-  display: none;
-}
+  ::-webkit-scrollbar-thumb {
+    @apply rounded bg-zinc-600;
+  }
 
-.overflow-x-auto {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply rounded bg-zinc-500;
+  }
+
+  .sidebar {
+    @apply transition-all duration-1000 ease-in-out;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+    @apply transition-all duration-1000 ease-in-out;
+  }
+
+  .sidebar:hover::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    @apply rounded bg-zinc-600;
+  }
+
+  .sidebar::-webkit-scrollbar-track {
+    @apply bg-neutral-800;
+  }
 }

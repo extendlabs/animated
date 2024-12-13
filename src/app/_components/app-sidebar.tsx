@@ -51,12 +51,11 @@ export function AppSidebar() {
               </div>
               <div className="border-t border-border p-2">
                 <Button
-                  variant="outline"
-                  className="w-full"
+                  variant="ghost"
+                  className="h-[120px] w-full rounded-md bg-slate-600/20 p-2 hover:bg-slate-600/50"
                   onClick={handleAddSlide}
                 >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Slide
+                  <Plus className="text-slate-200" />
                 </Button>
               </div>
             </SidebarMenu>

@@ -1,6 +1,8 @@
+import React, { useState } from "react";
+import CodePreview from "@/components/code-preview";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
+import { Trash } from "lucide-react";
 
 type Slide = {
   id: number;
@@ -23,28 +25,34 @@ export const SidebarCard = ({
   setCurrentSlide,
   handleDeleteSlide,
 }: Props) => {
+  const [hoveredSlide, setHoveredSlide] = useState<number | null>(null);
+  const isCurrent = currentSlide === slide.id;
+
   return (
     <div
       key={slide.id}
       onClick={() => setCurrentSlide(slide.id)}
-      className={cn(
-        "relative cursor-pointer rounded-lg p-4 transition-colors hover:bg-muted/50",
-        currentSlide === slide.id && "bg-muted",
-      )}
+      onMouseEnter={() => setHoveredSlide(slide.id)}
+      onMouseLeave={() => setHoveredSlide(null)}
+      className={cn("group relative cursor-pointer transition-colors")}
     >
-      <div className="group flex items-center justify-between">
-        <div className="font-mono text-sm">Slide {index + 1}</div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteSlide(slide.id);
-          }}
-          className="opacity-0 transition-opacity duration-200 hover:bg-transparent hover:text-red-500 group-hover:opacity-100"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+      <div className="relative aspect-[16/9] w-full">
+        <CodePreview currentSlide={index} isCurrent={isCurrent} />
+
+        {hoveredSlide === slide.id && ( // Show button only when hovered
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteSlide(slide.id);
+            }}
+            asChild
+            className="transi absolute right-2 top-2 size-[16px] text-slate-300 duration-200 hover:bg-transparent hover:text-red-500"
+          >
+            <Trash className="size-[14px]" />
+          </Button>
+        )}
       </div>
     </div>
   );

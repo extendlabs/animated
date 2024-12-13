@@ -1,3 +1,5 @@
+"use client";
+
 import CodePresentation from "@/components/code-presentation";
 
 export default function Home() {
