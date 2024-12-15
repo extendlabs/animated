@@ -10,7 +10,6 @@ import React, {
 
 import { motion } from "framer-motion";
 import { themes } from "prism-react-renderer";
-import html2canvas from "html2canvas";
 import {
   type CodePresentationProps,
   type DiffResult,
@@ -23,7 +22,7 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
 import { PauseIcon, PlayIcon } from "lucide-react";
-import { HighlightCode } from "./highlight-code";
+import { CodeCard } from "./code-card";
 
 const CodePresentation: React.FC<CodePresentationProps> = ({
   autoPlayInterval = 1500,
@@ -38,7 +37,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     updateSlide,
   } = useUIStore();
 
-  const { padding, radius, language, fileName, theme, background } =
+  const { padding, radius, language, fileName, theme, background, cardTheme } =
     useSettingsStore();
 
   const currentThemeName =
@@ -123,68 +122,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
   };
 
   const componentRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
-    null,
-  );
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-
-  const startRecording = async () => {
-    if (!componentRef.current) return;
-
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    canvas.width = componentRef.current.clientWidth;
-    canvas.height = componentRef.current.clientHeight;
-
-    // Create a stream to capture the canvas
-    const stream = canvas.captureStream(30); // 30 fps
-    const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        setRecordedChunks((prev) => [...prev, event.data]);
-      }
-    };
-
-    setMediaRecorder(recorder);
-    recorder.start();
-
-    const draw = async () => {
-      if (canvasRef.current && componentRef.current && context) {
-        context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before each draw
-
-        await html2canvas(componentRef.current).then((canvas) => {
-          const img = new Image();
-          img.src = canvas.toDataURL();
-          context.drawImage(img, 0, 0);
-        });
-      }
-
-      requestAnimationFrame(() => void draw()); // Keep drawing
-    };
-
-    await draw(); // Start the drawing loop
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      const blob = new Blob(recordedChunks, { type: "video/webm" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.href = url;
-      a.download = "code-presentation.webm";
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
-
-      setMediaRecorder(null);
-      setRecordedChunks([]);
-    }
-  };
 
   return (
     <div>
@@ -206,37 +143,19 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 )}
                 style={{ background: background }}
               >
-                <div
-                  className={cn("shadow-xl", radius)}
-                  style={{
-                    background: themeBackground,
-                  }}
-                >
-                  <div
-                    className={cn(
-                      "flex items-center justify-between border-b px-4 py-3",
-                    )}
-                    style={{ borderColor: themeBorder }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500" />
-                      <div className="h-3 w-3 rounded-full bg-yellow-500" />
-                      <div className="h-3 w-3 rounded-full bg-green-500" />
-                    </div>
-                    <div className={cn("text-sm")} style={{ color: themeText }}>
-                      {fileName}
-                    </div>
-                    <div className="w-[62px]" />
-                  </div>
-                  <HighlightCode
-                    theme={theme}
-                    currentCode={currentCode}
-                    language={language}
-                    currentSlide={currentSlide}
-                    diffMap={diffMap}
-                  />
-                  <div className="py-2" />
-                </div>
+                <CodeCard
+                  theme={theme}
+                  currentCode={currentCode}
+                  language={language}
+                  diffMap={diffMap}
+                  currentSlide={currentSlide}
+                  radius={radius}
+                  themeBackground={themeBackground}
+                  themeBorder={themeBorder}
+                  themeText={themeText}
+                  fileName={fileName}
+                  cardTheme={cardTheme}
+                />
               </div>
             )}
           </div>
@@ -258,22 +177,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 ) : (
                   <PlayIcon className="h-4 w-4" />
                 )}
-              </Button>
-              <Button
-                onClick={startRecording}
-                aria-label="Record"
-                variant="ghost"
-              >
-                Record
-              </Button>
-              <Button
-                onClick={stopRecording}
-                aria-label="Stop Recording"
-                variant="ghost"
-                size="icon"
-                disabled={!mediaRecorder}
-              >
-                Stop
               </Button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { type PrismTheme, themes } from "prism-react-renderer";
+import { type CardTheme } from "types/code-presentation.type";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -11,6 +12,8 @@ type SettingsStoreTypes = {
   language: string;
   fileName: string;
   theme: PrismTheme;
+  withLineIndex: boolean;
+  cardTheme: CardTheme;
 };
 
 type SettingsStoreActions = {
@@ -20,6 +23,8 @@ type SettingsStoreActions = {
   setLanguage: (language: string) => void;
   setFileName: (fileName: string) => void;
   setTheme: (theme: PrismTheme) => void;
+  setWithLineIndex: (withLineIndex: boolean) => void;
+  setCardTheme: (cardTheme: CardTheme) => void;
 };
 
 export const useSettingsStore = create(
@@ -30,12 +35,16 @@ export const useSettingsStore = create(
     language: "tsx",
     fileName: "Undefined-1.tsx",
     theme: themes.vsDark,
+    withLineIndex: true,
+    cardTheme: "default",
     setBackground: (background) => set({ background }),
     setPadding: (padding) => set({ padding }),
     setRadius: (radius) => set({ radius }),
     setLanguage: (language) => set({ language }),
     setFileName: (fileName) => set({ fileName }),
     setTheme: (theme) => set({ theme }),
+    setWithLineIndex: (withLineIndex) => set({ withLineIndex }),
+    setCardTheme: (cardTheme) => set({ cardTheme }),
   })),
 );
 
@@ -46,4 +55,6 @@ export const {
   setLanguage,
   setFileName,
   setTheme,
+  setWithLineIndex,
+  setCardTheme,
 } = useSettingsStore.getState();

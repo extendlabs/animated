@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from 'lucide-react';
+import { Plus } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -30,7 +30,6 @@ export function AppSidebar() {
     deleteSlide(id);
     setCurrentSlide(0);
   };
-
 
   return (
     <Sidebar>
@@ -68,4 +67,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-

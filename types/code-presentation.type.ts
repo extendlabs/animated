@@ -13,3 +13,12 @@ export interface DiffResult {
 export interface CodePresentationProps {
   autoPlayInterval?: number;
 }
+
+export type CardTheme =
+  | "minimal"
+  | "defaultColorLess"
+  | "default"
+  | "leftName"
+  | "centerName"
+  | "rightName"
+  | "window";
