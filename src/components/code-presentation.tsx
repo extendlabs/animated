@@ -150,7 +150,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     setMediaRecorder(recorder);
     recorder.start();
 
-    // Function to draw the component onto the canvas continuously
     const draw = async () => {
       if (canvasRef.current && componentRef.current && context) {
         context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before each draw

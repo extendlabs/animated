@@ -61,12 +61,20 @@ export const useUIStore = create(
         state.slides.push(newSlide);
       }),
 
-    deleteSlide: (id) =>
-      set((state) => {
-        state.slides = state.slides.filter(
-          (slide: { id: number }) => slide.id !== id,
-        );
-      }),
+      deleteSlide: (id) =>
+        set((state) => {
+          state.slides = state.slides
+            .filter((slide: { id: number }) => slide.id !== id)
+            .map((slide, index) => ({
+              ...slide,
+              id: index,
+            }));
+            
+          if (state.currentSlide >= state.slides.length) {
+            state.currentSlide = Math.max(state.slides.length - 1, 0);
+          }
+        }),
+      
 
     updateSlide: (id, updatedSlide) =>
       set((state) => {
