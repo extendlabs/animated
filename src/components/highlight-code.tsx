@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Highlight, PrismTheme } from "prism-react-renderer";
+import { Highlight, type PrismTheme } from "prism-react-renderer";
 import { AnimatePresence } from "framer-motion";
 import { AnimatedLine } from "./animated-line";
 import { type DiffResult } from "types/code-presentation.type";

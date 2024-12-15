@@ -7,14 +7,14 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+
+import { motion } from "framer-motion";
+import { themes } from "prism-react-renderer";
 import html2canvas from "html2canvas";
-import { AnimatePresence, motion } from "framer-motion";
-import { Highlight, themes } from "prism-react-renderer";
 import {
   type CodePresentationProps,
   type DiffResult,
 } from "types/code-presentation.type";
-import { AnimatedLine } from "./animated-line";
 import { Button } from "./ui/button";
 import { MyEditor } from "./my-editor";
 import { computeDiff } from "@/lib/code-diff";
@@ -151,15 +151,21 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     recorder.start();
 
     // Function to draw the component onto the canvas continuously
-    const draw = () => {
+    const draw = async () => {
       if (canvasRef.current && componentRef.current && context) {
         context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before each draw
-        context.drawImage(componentRef.current, 0, 0); // Draw the component content to the canvas
+
+        await html2canvas(componentRef.current).then((canvas) => {
+          const img = new Image();
+          img.src = canvas.toDataURL();
+          context.drawImage(img, 0, 0);
+        });
       }
-      requestAnimationFrame(draw); // Keep drawing
+
+      requestAnimationFrame(() => void draw()); // Keep drawing
     };
 
-    draw(); // Start the drawing loop
+    await draw(); // Start the drawing loop
   };
 
   const stopRecording = () => {
