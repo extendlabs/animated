@@ -42,8 +42,11 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
     removed: {
       opacity: [1, 0],
     },
-    updated: {},
-    unchanged: {},
+    updated: {
+      opacity: [1, 0],
+    },
+    unchanged: {
+    },
   };
 
   return (

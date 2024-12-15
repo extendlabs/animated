@@ -58,6 +58,9 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     newTokens: [],
   });
 
+
+  console.log(diffMap)
+
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
     [slides, currentSlide],
