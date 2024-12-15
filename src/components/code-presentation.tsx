@@ -264,7 +264,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 onClick={startRecording}
                 aria-label="Record"
                 variant="ghost"
-                size="icon"
               >
                 Record
               </Button>

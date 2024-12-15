@@ -29,7 +29,7 @@ export default function RootLayout({
         <SidebarProvider defaultOpen={true}>
           <AppSidebar />
           <SidebarInset className="min-h-screen bg-background">
-            <header className="flex h-14 items-center justify-between border-b px-4 lg:px-6">
+            <header className="flex h-16 items-center justify-between border-b px-4 lg:px-6">
               <SidebarTrigger />
               <EditButton />
             </header>
