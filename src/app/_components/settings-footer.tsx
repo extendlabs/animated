@@ -30,7 +30,7 @@ export default function SettingsFooter() {
   const availableThemes = Object.keys(themes);
 
   return (
-    <footer className="bottom-0 border-t bg-background p-4">
+    <footer className="bottom-0 border-t bg-background p-8">
       <div className="container mx-auto flex flex-col items-center justify-center gap-8 sm:flex-row">
         <div className="flex flex-wrap items-center justify-center gap-12 sm:gap-8">
           <div className="flex flex-col gap-2">
@@ -150,6 +150,7 @@ export default function SettingsFooter() {
                   variant={padding == `p-${size}` ? "secondary" : "ghost"}
                   className="h-8 px-2 text-xs"
                   onClick={() => setPadding(`p-${size}`)}
+                  size={"icon"}
                 >
                   {size}
                 </Button>
