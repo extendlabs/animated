@@ -29,20 +29,23 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
     const { withLineIndex } = useSettingsStore((state) => state);
 
     const lineVariants = {
-      initial: { opacity: 0, height: 0 },
+      initial: { opacity: 0, height: 0},
       animate: { opacity: 1, height: "auto" },
       exit: { opacity: 0, height: 0 }
     };
 
+
+    console.log(isExiting)
     return (
       <motion.div
         {...getLineProps({ line })}
+        key={lineIndex}
         layout
         variants={lineVariants}
-        
+        initial={isNewLine ? "initial" : false}
         animate="animate"
         exit="exit"
-        transition={{ duration: 0.8 }}
+        transition={!isExiting ? { duration: 0 } : { duration: 0.5}}
       >
         {withLineIndex && (
           <motion.span
@@ -50,9 +53,9 @@ export const AnimatedLine: React.FC<AnimatedLineProps> = React.memo(
               "mr-4 select-none text-gray-500",
               thumbnail && "mr-3",
             )}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            // initial={{ opacity: 0 }}
+            // animate={{ opacity: 1 }}
+            // exit={{ opacity: 0 }}
           >
             {String(lineIndex + 1).padStart(2, "0")}
           </motion.span>

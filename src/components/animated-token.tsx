@@ -29,10 +29,10 @@ export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
       {...getTokenProps({ token })}
       layout
       variants={variants}
-      initial={isNewLine ? "initial" : false}
+      initial={"initial"}
       animate="animate"
       exit="exit"
-      transition={{ duration: 0.6, delay: tokenIndex * 0.05 }}
+      transition={{ duration: 0.5, delay: tokenIndex * 0.05 }}
     />
   );
 };

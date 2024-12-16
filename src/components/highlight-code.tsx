@@ -22,52 +22,47 @@ export const HighlightCode: React.FC<Props> =
     diffMap,
     thumbnail,
   }) => {
-    const prevTokensRef = useRef<any[][]>([]);
+    const prevTokensRef = useRef<string[]>([]); // Track previous lines as plain strings
     const [exitingLines, setExitingLines] = useState<Set<string>>(new Set());
 
     useEffect(() => {
       const newExitingLines = new Set<string>();
-      prevTokensRef.current.forEach((line, index) => {
-        const lineContent = line.map(token => token.content).join('');
-        if (!currentCode.includes(lineContent)) {
+      const currentLines = currentCode.split("\n"); // Split current code into lines
+
+      prevTokensRef.current.forEach((lineContent, index) => {
+        if (!currentLines.includes(lineContent)) {
           newExitingLines.add(`${index}-${lineContent}`);
         }
       });
+
       setExitingLines(newExitingLines);
 
-      return () => {
-        prevTokensRef.current = [];
-        setExitingLines(new Set());
-      };
+      // Save current lines for the next render
+      prevTokensRef.current = currentLines;
+
     }, [currentCode]);
 
     return (
       <Highlight theme={theme} code={currentCode} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => {
-          const uniqueTokens = tokens.map((line, index) => ({
-            id: `${index}-${line.map(token => token.content).join('')}`,
-            line,
-            index
-          }));
+          const currentLines = tokens.map(line => line.map(token => token.content).join(""));
 
           return (
             <pre
               className={cn(
                 className,
                 "overflow-hidden pl-5 pt-4 text-sm",
-                thumbnail && "pl-1 pt-1 text-[4px] leading-[6px]",
+                thumbnail && "pl-1 pt-1 text-[4px] leading-[6px]"
               )}
               style={style}
             >
               <AnimatePresence initial={false}>
-                {uniqueTokens.map(({ id, line, index }) => {
-                  const isNewLine = !prevTokensRef.current.some(prevLine => 
-                    prevLine.every((token, i) => token.content === line[i]?.content)
-                  );
+                {tokens.map((line, index) => {
+                  const lineContent = currentLines[index];
+                  const id = `${index}-${lineContent}`;
+                  const isNewLine = !prevTokensRef.current.includes(lineContent);
                   const isExiting = exitingLines.has(id);
                   const lineDiffType = diffMap?.lineDiff[index] || "unchanged";
-
-                  prevTokensRef.current[index] = line;
 
                   return (
                     <AnimatedLine
@@ -89,7 +84,6 @@ export const HighlightCode: React.FC<Props> =
         }}
       </Highlight>
     );
-  }
+  };
 
 HighlightCode.displayName = "HighlightCode";
-
