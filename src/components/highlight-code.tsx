@@ -23,29 +23,33 @@ export const HighlightCode: React.FC<Props> =
     thumbnail,
   }) => {
     const prevTokensRef = useRef<string[]>([]); // Track previous lines as plain strings
-    const [exitingLines, setExitingLines] = useState<Set<string>>(new Set());
+    const [exitingLines, setExitingLines] = useState<Set<number>>(new Set()); // Track exiting line indices
 
     useEffect(() => {
-      const newExitingLines = new Set<string>();
-      const currentLines = currentCode.split("\n"); // Split current code into lines
+      const prevLines = prevTokensRef.current;
+      const currentLines = currentCode.split("\n");
 
-      prevTokensRef.current.forEach((lineContent, index) => {
-        if (!currentLines.includes(lineContent)) {
-          newExitingLines.add(`${index}-${lineContent}`);
+      const newExitingLines = new Set<number>();
+
+      // Identify exiting lines
+      prevLines.forEach((lineContent, index) => {
+        if (currentLines[index] !== lineContent) {
+          newExitingLines.add(index);
         }
       });
 
       setExitingLines(newExitingLines);
 
-      // Save current lines for the next render
+      // Save the current lines for the next render
       prevTokensRef.current = currentLines;
-
     }, [currentCode]);
 
     return (
       <Highlight theme={theme} code={currentCode} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => {
-          const currentLines = tokens.map(line => line.map(token => token.content).join(""));
+          const currentLines = tokens.map(line =>
+            line.map(token => token.content).join("")
+          );
 
           return (
             <pre
@@ -59,14 +63,15 @@ export const HighlightCode: React.FC<Props> =
               <AnimatePresence initial={false}>
                 {tokens.map((line, index) => {
                   const lineContent = currentLines[index];
-                  const id = `${index}-${lineContent}`;
-                  const isNewLine = !prevTokensRef.current.includes(lineContent);
-                  const isExiting = exitingLines.has(id);
+                  const isNewLine =
+                    index >= prevTokensRef.current.length ||
+                    prevTokensRef.current[index] !== lineContent;
+                  const isExiting = exitingLines.has(index);
                   const lineDiffType = diffMap?.lineDiff[index] || "unchanged";
 
                   return (
                     <AnimatedLine
-                      key={id}
+                      key={`${index}-${lineContent}`}
                       line={line}
                       lineIndex={index}
                       isNewLine={isNewLine}
