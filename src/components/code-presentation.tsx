@@ -59,7 +59,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
   });
 
 
-  console.log(diffMap)
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
@@ -74,7 +73,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           : Math.max(currentSlide - 1, 0);
 
       if (newIndex !== currentSlide) {
-        setTimeout(() => {
+      
           if (slides[newIndex] && slides[currentSlide]) {
             const newDiff = computeDiff(
               slides[currentSlide].code,
@@ -83,7 +82,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
             setDiffMap(newDiff);
             setCurrentSlide(newIndex);
           }
-        }, 300);
+       
       }
     },
     [currentSlide, slides, setCurrentSlide],
@@ -91,7 +90,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-
     if (isAutoPlaying) {
       interval = setInterval(() => {
         if (currentSlide < slides.length - 1) {

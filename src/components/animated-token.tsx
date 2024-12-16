@@ -3,60 +3,37 @@ import { motion } from "framer-motion";
 
 interface AnimatedTokenProps {
   token: any;
+  lineIndex: number;
   tokenIndex: number;
-  diffType?: "new" | "removed" | "unchanged" | "updated";
+  isNewLine: boolean;
+  diffType?: "new" | "unchanged" | "default";
   getTokenProps: (options: { token: any }) => any;
 }
 
 export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
   token,
+  lineIndex,
   tokenIndex,
-  diffType = "unchanged",
+  isNewLine,
+  diffType = "default",
   getTokenProps,
 }) => {
-  const initialVariants = {
-    new: { opacity: 0 },
-    removed: { opacity: 1 },
-    unchanged: { opacity: 1 },
-    updated: { opacity: 0 },
-  };
-
-  const animateVariants = {
-    new: { opacity: 1 },
-    removed: { opacity: 0, scale: 0.8 },
-    unchanged: { opacity: 1 },
-    updated: { opacity: 1 },
-  };
-
-  const transitionVariants = {
-    new: { duration: 0.3, delay: tokenIndex * 0.05 },
-    removed: { duration: 0.3, delay: tokenIndex * 0.05 },
-    updated: { duration: 0.3, delay: tokenIndex * 0.05 },
-    unchanged: {},
-  };
-
-  const exitVariants = {
-    new: {
-      opacity: [1, 0],
-    },
-    removed: {
-      opacity: [1, 0],
-    },
-    updated: {
-      opacity: [1, 0],
-    },
-    unchanged: {
-    },
+  const variants = {
+    initial: { opacity: diffType === "new" ? 0 : 1 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
   };
 
   return (
     <motion.span
       {...getTokenProps({ token })}
-      key={crypto.randomUUID()}
-      initial={initialVariants[diffType]}
-      animate={animateVariants[diffType]}
-      transition={transitionVariants[diffType]}
-      exit={exitVariants[diffType]}
+      layout
+      variants={variants}
+      initial={isNewLine ? "initial" : false}
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.6, delay: tokenIndex * 0.05 }}
     />
   );
 };
+

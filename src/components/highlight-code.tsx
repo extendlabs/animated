@@ -1,8 +1,9 @@
+import React, { useRef, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Highlight, type PrismTheme } from "prism-react-renderer";
 import { AnimatePresence } from "framer-motion";
-import { AnimatedLine } from "./animated-line";
 import { type DiffResult } from "types/code-presentation.type";
+import { AnimatedLine } from "./animated-line";
 
 type Props = {
   theme: PrismTheme;
@@ -13,62 +14,82 @@ type Props = {
   thumbnail?: boolean;
 };
 
-export const HighlightCode = ({
-  theme,
-  currentCode,
-  language,
-  currentSlide,
-  diffMap,
-  thumbnail,
-}: Props) => {
-  return (
-    <Highlight theme={theme} code={currentCode} language={language}>
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre
-          className={cn(
-            className,
-            "overflow-hidden pl-5 pt-4 text-sm",
-            thumbnail && "pl-1 pt-1 text-[4px] leading-[6px]",
-          )}
-          style={style}
-        >
-          {!diffMap ? (
-            tokens.map((line, i) => (
-              <div key={i} {...getLineProps({ line })}>
-                <span
-                  className={cn(
-                    "mr-4 select-none text-gray-500",
-                    thumbnail && "mr-1",
-                  )}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                {line.map((token) => (
-                  <span
-                    {...getTokenProps({ token })}
-                    key={crypto.randomUUID()}
-                  />
-                ))}
-              </div>
-            ))
-          ) : (
-            <AnimatePresence mode="wait">
-              {tokens.map((line, i) => (
-                <AnimatedLine
-                  key={`${currentSlide}-${i}`}
-                  line={line}
-                  lineIndex={i}
-                  currentSlide={currentSlide}
-                  diffType={diffMap.lineDiff[i]}
-                  thumbnail
-                  getLineProps={getLineProps}
-                  getTokenProps={getTokenProps}
-                />
-              ))}
-            </AnimatePresence>
-          )}
-        </pre>
-      )}
-    </Highlight>
-  );
-};
+export const HighlightCode: React.FC<Props> = 
+  ({
+    theme,
+    currentCode,
+    language,
+    diffMap,
+    thumbnail,
+  }) => {
+    const prevTokensRef = useRef<any[][]>([]);
+    const [exitingLines, setExitingLines] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+      const newExitingLines = new Set<string>();
+      prevTokensRef.current.forEach((line, index) => {
+        const lineContent = line.map(token => token.content).join('');
+        if (!currentCode.includes(lineContent)) {
+          newExitingLines.add(`${index}-${lineContent}`);
+        }
+      });
+      setExitingLines(newExitingLines);
+
+      return () => {
+        prevTokensRef.current = [];
+        setExitingLines(new Set());
+      };
+    }, [currentCode]);
+
+    return (
+      <Highlight theme={theme} code={currentCode} language={language}>
+        {({ className, style, tokens, getLineProps, getTokenProps }) => {
+          const uniqueTokens = tokens.map((line, index) => ({
+            id: `${index}-${line.map(token => token.content).join('')}`,
+            line,
+            index
+          }));
+
+          return (
+            <pre
+              className={cn(
+                className,
+                "overflow-hidden pl-5 pt-4 text-sm",
+                thumbnail && "pl-1 pt-1 text-[4px] leading-[6px]",
+              )}
+              style={style}
+            >
+              <AnimatePresence initial={false}>
+                {uniqueTokens.map(({ id, line, index }) => {
+                  const isNewLine = !prevTokensRef.current.some(prevLine => 
+                    prevLine.every((token, i) => token.content === line[i]?.content)
+                  );
+                  const isExiting = exitingLines.has(id);
+                  const lineDiffType = diffMap?.lineDiff[index] || "unchanged";
+
+                  prevTokensRef.current[index] = line;
+
+                  return (
+                    <AnimatedLine
+                      key={id}
+                      line={line}
+                      lineIndex={index}
+                      isNewLine={isNewLine}
+                      isExiting={isExiting}
+                      diffType={lineDiffType}
+                      thumbnail={thumbnail}
+                      getLineProps={getLineProps}
+                      getTokenProps={getTokenProps}
+                    />
+                  );
+                })}
+              </AnimatePresence>
+            </pre>
+          );
+        }}
+      </Highlight>
+    );
+  }
+
+HighlightCode.displayName = "HighlightCode";
+
