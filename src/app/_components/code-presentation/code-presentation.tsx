@@ -1,0 +1,171 @@
+"use client";
+
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
+
+import { motion } from "framer-motion";
+import { themes } from "prism-react-renderer";
+import {
+  type DiffResult,
+} from "types/code-presentation.type";
+import { Button } from "../../../components/ui/button";
+import { MyEditor } from "../my-editor";
+import { computeDiff } from "@/lib/code-diff";
+import { useSettingsStore } from "@/zustand/useSettingsStore";
+import { useUIStore } from "@/zustand/useUIStore";
+import { themeStyles } from "@/constants/themes";
+import { PauseIcon, PlayIcon } from "lucide-react";
+import { CodeCard } from "./_components/code-card";
+
+type Props = {
+  autoPlayInterval?: number;
+}
+
+export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
+  
+  const {
+    slides,
+    currentSlide,
+    isEditing,
+    isAutoPlaying,
+    setCurrentSlide,
+    setIsAutoPlaying,
+    updateSlide,
+  } = useUIStore();
+
+  const { 
+    theme, 
+  } = useSettingsStore();
+
+  const currentThemeName =
+    Object.keys(themes).find(
+      (key) => themes[key as keyof typeof themes] === theme,
+    ) ?? "vsDark";
+
+  const themeBackground =
+    themeStyles[currentThemeName]?.bg ?? themeStyles.vsDark?.bg;
+
+  const themeBorder =
+    themeStyles[currentThemeName]?.border ?? themeStyles.vsDark?.border;
+    
+  const themeText =
+    themeStyles[currentThemeName]?.text ?? themeStyles.vsDark?.text;
+
+  const [diffMap, setDiffMap] = useState<DiffResult>({
+    lineDiff: {},
+    oldTokens: [],
+    newTokens: [],
+  });
+
+  const currentCode = useMemo(
+    () => slides[currentSlide]?.code ?? "",
+    [slides, currentSlide],
+  );
+
+  const handleSlideChange = useCallback(
+    (direction: "next" | "prev") => {
+      const newIndex =
+        direction === "next"
+          ? Math.min(currentSlide + 1, slides.length - 1)
+          : Math.max(currentSlide - 1, 0);
+
+      if (newIndex !== currentSlide) {
+      
+          if (slides[newIndex] && slides[currentSlide]) {
+            const newDiff = computeDiff(
+              slides[currentSlide].code,
+              slides[newIndex].code,
+            );
+            setDiffMap(newDiff);
+            setCurrentSlide(newIndex);
+          }
+       
+      }
+    },
+    [currentSlide, slides, setCurrentSlide],
+  );
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isAutoPlaying) {
+      interval = setInterval(() => {
+        if (currentSlide < slides.length - 1) {
+          handleSlideChange("next");
+        } else {
+          setIsAutoPlaying(false);
+          setDiffMap({
+            lineDiff: {},
+            oldTokens: [],
+            newTokens: [],
+          });
+        }
+      }, autoPlayInterval);
+    }
+
+    return () => clearInterval(interval);
+  }, [
+    isAutoPlaying,
+    currentSlide,
+    slides.length,
+    autoPlayInterval,
+    handleSlideChange,
+    setIsAutoPlaying,
+  ]);
+
+  const handleUpdateSlide = (value: string | undefined) => {
+    if (value !== undefined) {
+      const updatedSlide = { code: value, description: "Updated description" };
+      updateSlide(currentSlide, updatedSlide);
+    }
+  };
+
+  return (
+    <div>
+      <div className="mx-auto w-full max-w-3xl">
+        <motion.div className="space-y-4 rounded-lg p-4">
+          <div className="relative overflow-hidden rounded-sm">
+            {isEditing ? (
+              <MyEditor
+                value={currentCode}
+                handleUpdateSlide={handleUpdateSlide}
+              />
+            ) : (
+                <CodeCard
+                  currentCode={currentCode}
+                  diffMap={diffMap}
+                  currentSlide={currentSlide}
+                  themeBackground={themeBackground}
+                  themeBorder={themeBorder}
+                  themeText={themeText}
+                />
+            )}
+          </div>
+          <div className="flex justify-center">
+            <div className="mt-4 flex items-center space-x-4">
+              <Button
+                onClick={() => {
+                  setCurrentSlide(0);
+                  setIsAutoPlaying(!isAutoPlaying);
+                }}
+                aria-label={isAutoPlaying ? "Pause" : "Play"}
+                disabled={isAutoPlaying}
+                variant="ghost"
+                size={"icon"}
+              >
+                {isAutoPlaying ? (
+                  <PauseIcon className="h-4 w-4" />
+                ) : (
+                  <PlayIcon className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};

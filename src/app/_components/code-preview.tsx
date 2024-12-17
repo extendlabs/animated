@@ -6,14 +6,13 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
-import { HighlightCode } from "./highlight-code";
+import { HighlightCode } from "./code-presentation/_components/highlight-code";
 
 type Props = {
   currentSlide: number;
-  isCurrent: boolean;
 };
 
-const CodePreview = ({ currentSlide, isCurrent }: Props) => {
+const CodePreview = ({ currentSlide }: Props) => {
   const { slides } = useUIStore();
   const { language, theme, background, fileName } = useSettingsStore();
 
@@ -42,11 +41,6 @@ const CodePreview = ({ currentSlide, isCurrent }: Props) => {
         )}
         style={{ background: background }}
       >
-        {!isCurrent ? (
-          <div className="absolute inset-0 h-full rounded-sm bg-black bg-opacity-70 hover:bg-slate-600/50" />
-        ) : (
-          <div className="absolute inset-0 h-[120px] rounded-sm hover:bg-slate-600/50" />
-        )}
         <div
           className="h-full rounded-sm"
           style={{

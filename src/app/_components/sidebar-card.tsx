@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import CodePreview from "@/components/code-preview";
+import React from "react";
+import CodePreview from "@/app/_components/code-preview";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
@@ -25,7 +25,7 @@ export const SidebarCard = ({
   setCurrentSlide,
   handleDeleteSlide,
 }: Props) => {
-  const [hoveredSlide, setHoveredSlide] = useState<number | null>(null);
+  const [hoveredSlide, setHoveredSlide] = React.useState<number | null>(null);
   const isCurrent = currentSlide === slide.id;
 
   return (
@@ -34,12 +34,25 @@ export const SidebarCard = ({
       onClick={() => setCurrentSlide(slide.id)}
       onMouseEnter={() => setHoveredSlide(slide.id)}
       onMouseLeave={() => setHoveredSlide(null)}
-      className={cn("group relative cursor-pointer transition-colors")}
+      className={cn(
+        "relative cursor-pointer overflow-hidden rounded-md",
+        "group transition-all duration-200",
+      )}
     >
       <div className="relative aspect-[16/9] w-full">
-        <CodePreview currentSlide={index} isCurrent={isCurrent} />
-
-        {hoveredSlide === slide.id && ( // Show button only when hovered
+        <CodePreview currentSlide={index} />
+        <div
+          className={cn(
+            "absolute inset-0 bg-black bg-opacity-0 transition-opacity duration-200 hover:bg-slate-300/30",
+            !isCurrent && "bg-opacity-50",
+          )}
+        />
+        <div
+          className={cn(
+            "absolute right-0 top-0 p-2 opacity-0 transition-opacity duration-200",
+            hoveredSlide !== null && hoveredSlide >= 0 && "opacity-100",
+          )}
+        >
           <Button
             variant="ghost"
             size="icon"
@@ -47,12 +60,11 @@ export const SidebarCard = ({
               e.stopPropagation();
               handleDeleteSlide(slide.id);
             }}
-            asChild
-            className="transi absolute right-2 top-2 size-[16px] text-slate-300 duration-200 hover:bg-transparent hover:text-red-500"
+            className="size-6 bg-transparent text-slate-300 transition-colors duration-200 hover:bg-transparent hover:text-red-500"
           >
-            <Trash className="size-[14px]" />
+            <Trash className="size-4" />
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );

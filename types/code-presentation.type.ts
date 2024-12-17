@@ -5,11 +5,17 @@ export interface Slide {
 }
 
 export interface DiffResult {
-  lineDiff: Record<number, "new" | "removed" | "unchanged" | "updated">;
+  lineDiff: Record<number, "new" | "unchanged">;
   oldTokens: string[];
   newTokens: string[];
 }
 
-export interface CodePresentationProps {
-  autoPlayInterval?: number;
-}
+
+export type CardTheme =
+  | "minimal"
+  | "defaultColorLess"
+  | "default"
+  | "leftName"
+  | "centerName"
+  | "rightName"
+  | "window";
