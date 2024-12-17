@@ -1,38 +1,46 @@
 import { cn } from "@/lib/utils";
 import { HighlightCode } from "./highlight-code";
-import { type PrismTheme } from "prism-react-renderer";
-import { type CardTheme, type DiffResult } from "types/code-presentation.type";
+import { type DiffResult } from "types/code-presentation.type";
 import { CardHeader } from "./card-header";
+import { useSettingsStore } from "@/zustand/useSettingsStore";
 
 type Props = {
-  theme: PrismTheme;
   currentCode: string;
-  language: string;
   currentSlide: number;
   diffMap: DiffResult | null;
-  thumbnail?: boolean;
-  radius: string;
   themeBackground?: string;
   themeBorder?: string;
   themeText?: string;
-  fileName: string;
-  cardTheme: CardTheme;
 };
 
 export const CodeCard = ({
-  theme,
   currentCode,
-  language,
   currentSlide,
   diffMap,
-  radius,
   themeBackground,
   themeBorder,
   themeText,
-  fileName,
-  cardTheme,
 }: Props) => {
+
+    const { 
+      padding, 
+      radius, 
+      language, 
+      fileName, 
+      theme, 
+      background, 
+      cardTheme 
+    } = useSettingsStore();
+
   return (
+    <div
+      className={cn(
+        "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-12",
+        padding,
+        "transition-all duration-300 ease-in-out",
+      )}
+      style={{ background: background }}
+    >
     <div
       className={cn("p-1 shadow-xl", radius)}
       style={{
@@ -54,6 +62,7 @@ export const CodeCard = ({
         diffMap={diffMap}
       />
       <div className="py-2" />
+    </div>
     </div>
   );
 };

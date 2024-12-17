@@ -1,23 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { type TokenInputProps, type TokenOutputProps, type Token } from "prism-react-renderer";
 
-interface AnimatedTokenProps {
-  token: any;
+type Props = {
+  token: Token;
   lineIndex: number;
   tokenIndex: number;
   isNewLine: boolean;
   diffType?: "new" | "unchanged" | "default";
-  getTokenProps: (options: { token: any }) => any;
+  getTokenProps: (input: TokenInputProps) => TokenOutputProps
 }
 
-export const AnimatedToken: React.FC<AnimatedTokenProps> = ({
+export const AnimatedToken = ({
   token,
-  lineIndex,
   tokenIndex,
-  isNewLine,
   diffType = "default",
   getTokenProps,
-}) => {
+}: Props) => {
   const variants = {
     initial: { opacity: diffType === "new" ? 0 : 1 },
     animate: { opacity: 1 },

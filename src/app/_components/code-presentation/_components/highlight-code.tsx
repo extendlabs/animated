@@ -14,24 +14,22 @@ type Props = {
   thumbnail?: boolean;
 };
 
-export const HighlightCode: React.FC<Props> = 
+export const HighlightCode = 
   ({
     theme,
     currentCode,
     language,
     diffMap,
     thumbnail,
-  }) => {
-    const prevTokensRef = useRef<string[]>([]); // Track previous lines as plain strings
-    const [exitingLines, setExitingLines] = useState<Set<number>>(new Set()); // Track exiting line indices
+  }: Props) => {
+    const prevTokensRef = useRef<string[]>([]);
+    const [exitingLines, setExitingLines] = useState<Set<number>>(new Set());
 
     useEffect(() => {
       const prevLines = prevTokensRef.current;
       const currentLines = currentCode.split("\n");
-
       const newExitingLines = new Set<number>();
 
-      // Identify exiting lines
       prevLines.forEach((lineContent, index) => {
         if (currentLines[index] !== lineContent) {
           newExitingLines.add(index);
@@ -40,7 +38,6 @@ export const HighlightCode: React.FC<Props> =
 
       setExitingLines(newExitingLines);
 
-      // Save the current lines for the next render
       prevTokensRef.current = currentLines;
     }, [currentCode]);
 
@@ -50,7 +47,6 @@ export const HighlightCode: React.FC<Props> =
           const currentLines = tokens.map(line =>
             line.map(token => token.content).join("")
           );
-
           return (
             <pre
               className={cn(
@@ -67,7 +63,7 @@ export const HighlightCode: React.FC<Props> =
                     index >= prevTokensRef.current.length ||
                     prevTokensRef.current[index] !== lineContent;
                   const isExiting = exitingLines.has(index);
-                  const lineDiffType = diffMap?.lineDiff[index] || "unchanged";
+                  const lineDiffType = diffMap?.lineDiff[index] ?? "unchanged";
 
                   return (
                     <AnimatedLine

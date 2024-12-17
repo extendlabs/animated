@@ -1,6 +1,6 @@
 "use client";
 
-import CodePresentation from "@/components/code-presentation";
+import {CodePresentation} from "@/app/_components/code-presentation/code-presentation";
 
 export default function Home() {
   return (

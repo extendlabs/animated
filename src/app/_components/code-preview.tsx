@@ -6,7 +6,7 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
-import { HighlightCode } from "./highlight-code";
+import { HighlightCode } from "./code-presentation/_components/highlight-code";
 
 type Props = {
   currentSlide: number;
