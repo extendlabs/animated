@@ -56,7 +56,7 @@ export const HighlightCode =
               )}
               style={style}
             >
-              <AnimatePresence initial={false}>
+              <AnimatePresence initial={false}  key={crypto.randomUUID()}>
                 {tokens.map((line, index) => {
                   const lineContent = currentLines[index];
                   const isNewLine =
