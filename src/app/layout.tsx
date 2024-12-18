@@ -11,8 +11,8 @@ import { type Metadata } from "next";
 import { EditButton } from "./_components/edit-button";
 import SettingsFooter from "./_components/settings-footer";
 import { Toaster } from "@/components/ui/toaster";
-import { DynamicAuthButton } from "@/components/dynamic-auth-button";
-import { AuthProvider } from "@/contexts/auth-context";
+import OauthSignInButton from "@/components/OauthSignIn/OauthSignIn";
+import { Suspense } from "react";
 
 
 export const metadata: Metadata = {
@@ -30,7 +30,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-      <AuthProvider>
         <SidebarProvider defaultOpen={true}>
           <AppSidebar />
           <SidebarInset className="min-h-screen bg-background">
@@ -38,7 +37,7 @@ export default function RootLayout({
               <SidebarTrigger />
               <div>
                 <EditButton />
-                <DynamicAuthButton />
+                <OauthSignInButton />
               </div>
             </header>
             <main className="flex h-full flex-col">
@@ -46,9 +45,10 @@ export default function RootLayout({
             </main>
             <SettingsFooter />
           </SidebarInset>
+          <Suspense>
           <Toaster />
+        </Suspense>
         </SidebarProvider>
-        </AuthProvider>
       </body>
     </html>
   );

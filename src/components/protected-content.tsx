@@ -1,20 +1,13 @@
-'use client'
-
-import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "./ui/button"
-import handleCheckout from "@/lib/handleCheckout"
+
+export async function ProtectedContent() {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await (await supabase).auth.getUser();
 
 
-
-export function ProtectedContent() {
-  const { user } = useAuth()
-
-  const handleSubscribe = async () => {
-    if (!user) {
-      return console.log(-1)
-    }
-    await handleCheckout('price_1QXLUc2Ls1a5Pom3Gj761yel', user?.id)
-  }
 
   if (!user) {
     return <p>Please log in to see additional content.</p>
@@ -22,7 +15,7 @@ export function ProtectedContent() {
 
   return (
     <div>
-      <Button onClick={handleSubscribe}>Subscribe product</Button>
+      <Button>Subscribe product</Button>
     </div>
   )
 }
