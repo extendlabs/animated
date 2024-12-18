@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
+import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
 import { getErrorRedirect } from "@/lib/helpers";
 import { getStripe } from "@/lib/stripe/client";
@@ -10,6 +12,7 @@ import cn from "classnames";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { type Tables } from "types_db";
+import { motion } from "framer-motion";
 
 type Subscription = Tables<"subscriptions">;
 type Product = Tables<"products">;
@@ -32,14 +35,31 @@ interface Props {
 
 type BillingInterval = "lifetime" | "year" | "month";
 
+const variants = {
+  badge: {
+    hidden: {
+      opacity: 0,
+      y: 50,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { delay: 1.2 },
+    },
+  },
+  card: {
+    hidden: {
+      opacity: 0,
+      y: 50,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  },
+};
+
 export default function Pricing({ user, products, subscription }: Props) {
-  const intervals = Array.from(
-    new Set(
-      products.flatMap((product) =>
-        product?.prices?.map((price) => price?.interval),
-      ),
-    ),
-  );
   const router = useRouter();
   const [billingInterval, setBillingInterval] =
     useState<BillingInterval>("month");
@@ -103,98 +123,130 @@ export default function Pricing({ user, products, subscription }: Props) {
     );
   } else {
     return (
-      <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-24 lg:px-8">
-          <div className="sm:align-center sm:flex sm:flex-col">
-            <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
-              Pricing Plans
-            </h1>
-            <p className="m-auto mt-5 max-w-2xl text-xl text-zinc-200 sm:text-center sm:text-2xl">
-              Start building for free, then add a site plan to go live. Account
-              plans unlock additional features.
-            </p>
-            <div className="relative mt-6 flex self-center rounded-lg border border-zinc-800 bg-zinc-900 p-0.5 sm:mt-8">
-              {intervals.includes("month") && (
-                <button
-                  onClick={() => setBillingInterval("month")}
-                  type="button"
-                  className={`${
-                    billingInterval === "month"
-                      ? "relative w-1/2 border-zinc-800 bg-zinc-700 text-white shadow-sm"
-                      : "relative ml-0.5 w-1/2 border border-transparent text-zinc-400"
-                  } m-1 whitespace-nowrap rounded-md py-2 text-sm font-medium focus:z-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 sm:w-auto sm:px-8`}
-                >
-                  Monthly billing
-                </button>
-              )}
-              {intervals.includes("year") && (
-                <button
-                  onClick={() => setBillingInterval("year")}
-                  type="button"
-                  className={`${
-                    billingInterval === "year"
-                      ? "relative w-1/2 border-zinc-800 bg-zinc-700 text-white shadow-sm"
-                      : "relative ml-0.5 w-1/2 border border-transparent text-zinc-400"
-                  } m-1 whitespace-nowrap rounded-md py-2 text-sm font-medium focus:z-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 sm:w-auto sm:px-8`}
-                >
-                  Yearly billing
-                </button>
-              )}
+      <section id="pricing" className="space-y-4">
+        <div className="min-h-dvh">
+          <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 px-8 py-[6dvh] text-center">
+            <div className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
+              <FadeUp delay={0.2} duration={0.8}>
+                <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                  Pricing Plans
+                </h1>
+              </FadeUp>
+              <FadeUp delay={0.4} duration={0.8}>
+                <p className="mx-2 my-6 max-w-2xl text-base font-light tracking-tight dark:text-zinc-300 sm:text-xl">
+                  Start building for free, then add a site plan to go live.
+                  Account plans unlock additional features.
+                </p>
+              </FadeUp>
+              <div className="gradient pointer-events-none absolute inset-0 -z-10 block opacity-30 blur-3xl"></div>
             </div>
-          </div>
-          <div className="mt-12 flex flex-wrap justify-center gap-6 space-y-0 sm:mt-16 lg:mx-auto lg:max-w-4xl xl:mx-0 xl:max-w-none">
-            {products.map((product) => {
-              const price = product?.prices?.find(
-                (price) => price.interval === billingInterval,
-              );
-              if (!price) return null;
-              const priceString = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: price.currency!,
-                minimumFractionDigits: 0,
-              }).format((price?.unit_amount ?? 0) / 100);
-              return (
-                <div
-                  key={product.id}
+            <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4">
+              <div
+                className={cn(
+                  "relative mt-12 flex h-full flex-col pb-2 text-start",
+                )}
+              >
+                <motion.div
                   className={cn(
-                    "flex flex-col divide-y divide-zinc-600 rounded-lg bg-zinc-900 shadow-sm",
-                    {
-                      "border border-pink-500": subscription
-                        ? product.name === subscription?.prices?.products?.name
-                        : product.name === "Freelancer",
-                    },
-                    "flex-1", // This makes the flex item grow to fill the space
-                    "basis-1/3", // Assuming you want each card to take up roughly a third of the container's width
-                    "max-w-xs", // Sets a maximum width to the cards to prevent them from getting too large
+                    "z-10 flex w-full flex-grow flex-col rounded-3xl bg-background p-6",
                   )}
+                  variants={variants.card}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ duration: 0.5 }}
                 >
-                  <div className="p-6">
-                    <h2 className="text-2xl font-semibold leading-6 text-white">
-                      {product.name}
-                    </h2>
-                    <p className="mt-4 text-zinc-300">{product.description}</p>
-                    <p className="mt-8">
-                      <span className="white text-5xl font-extrabold">
-                        {priceString}
-                      </span>
-                      <span className="text-base font-medium text-zinc-100">
+                  <div className="mb-6">
+                    <p className="text-xl font-medium">Free</p>
+                    <p className="mt-4 text-zinc-300">Free of charge</p>
+                  </div>
+                  <div className="mb-6">
+                    <div className="flex items-baseline">
+                      <span className="text-4xl font-bold">0</span>
+                      <span className="ml-2 text-lg text-gray-400">
                         /{billingInterval}
                       </span>
-                    </p>
-                    <Button
-                      type="button"
-                      disabled={priceIdLoading === price.id}
-                      onClick={() => handleStripeCheckout(price)}
-                    >
-                      {subscription ? "Manage" : "Subscribe"}
-                    </Button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                </motion.div>
+              </div>
+              {products.map((product) => {
+                const price = product?.prices?.find(
+                  (price) => price.interval === billingInterval,
+                );
+                if (!price) return null;
+                const priceString = new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: price.currency!,
+                  minimumFractionDigits: 0,
+                }).format((price?.unit_amount ?? 0) / 100);
+                return (
+                  <div
+                    key={product.id}
+                    className={cn(
+                      "relative mt-12 flex h-full flex-col pb-2 text-start",
+                    )}
+                  >
+                    <motion.div
+                      className="absolute -top-7 left-0"
+                      variants={variants.badge}
+                      initial="hidden"
+                      animate="visible"
+                      transition={{ duration: 1 }}
+                    >
+                      <div className="rounded-l-3xl rounded-r-xl bg-accent px-4 py-1.5 pb-12 pl-6 text-sm font-medium text-white">
+                        Most Popular
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      className={cn(
+                        "z-10 flex w-full flex-grow flex-col justify-between rounded-3xl bg-gradient-to-b from-gray-800 to-gray-900 p-6 text-white",
+                      )}
+                      variants={variants.card}
+                      initial="hidden"
+                      animate="visible"
+                      transition={{ duration: 0.5 }}
+                    >
+                      <div className="mb-6">
+                        <p className="text-xl font-medium">{product.name}</p>
+                        <p className="mt-4 text-zinc-300">
+                          {product.description}
+                        </p>
+                      </div>
+                      <div className="mb-6">
+                        <div className="flex items-baseline">
+                          <span className="text-4xl font-bold">
+                            {priceString}
+                          </span>
+                          <span className="ml-2 text-lg text-gray-400">
+                            /{billingInterval}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-auto">
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5, duration: 0.3 }}
+                        >
+                          <Button
+                            type="button"
+                            disabled={priceIdLoading === price.id}
+                            onClick={() => handleStripeCheckout(price)}
+                            className="w-full"
+                          >
+                            {subscription ? "Manage" : "Subscribe"}
+                          </Button>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
     );
   }
 }
+

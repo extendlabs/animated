@@ -1,7 +1,8 @@
 import { ProtectedContent } from "@/components/protected-content";
-import { CodePresentation } from "./_components/code-presentation/code-presentation";
+
 import { createClient } from "@/lib/supabase/server";
 import { getProducts, getSubscription, getUser } from "@/lib/supabase/queries";
+import { CodePresentation } from "../_components/code-presentation/code-presentation";
 
 export default async function Home() {
   const supabase = await createClient();

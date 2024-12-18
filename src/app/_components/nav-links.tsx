@@ -16,7 +16,7 @@ type Props = {
 export default function Navlinks({ user }: Props) {
   const router = getRedirectMethod() === "client" ? useRouter() : null;
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-5">
       <Link href="/pricing">Pricing</Link>
       {user && <Link href="/account">Account</Link>}
       {user ? (

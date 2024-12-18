@@ -8,7 +8,7 @@ export async function ProtectedContent() {
   } = await (await supabase).auth.getUser();
 
   if (!user) {
-    return <p>Please log in to see additional content.</p>;
+    return;
   }
 
   return (
