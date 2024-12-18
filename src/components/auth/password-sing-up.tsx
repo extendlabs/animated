@@ -1,24 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { handleRequest } from '@/lib/auth-helpers/client'
-import { signUp } from '@/lib/auth-helpers/server'
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { handleRequest } from "@/lib/auth-helpers/client";
+import { signUp } from "@/lib/auth-helpers/server";
+import { useRouter } from "next/navigation";
 
 export default function PasswordSignUp() {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const router = useRouter()
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        setIsSubmitting(true)
-        await handleRequest(e, signUp, router);
-        setIsSubmitting(false);
-      };
-    
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitting(true);
+    await handleRequest(e, signUp, router);
+    setIsSubmitting(false);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -44,8 +43,9 @@ export default function PasswordSignUp() {
           autoComplete="current-password"
         />
       </div>
-      <Button type="submit" className="w-full" disabled={isSubmitting}>Sign Up</Button>
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        Sign Up
+      </Button>
     </form>
-  )
+  );
 }
-

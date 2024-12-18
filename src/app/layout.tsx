@@ -1,8 +1,5 @@
 import { AppSidebar } from "@/app/_components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -11,7 +8,6 @@ import SettingsFooter from "./_components/settings-footer";
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from "react";
 import Navbar from "./_components/navbar";
-
 
 export const metadata: Metadata = {
   title: "Code Animation Presentation",
@@ -32,7 +28,7 @@ export default function RootLayout({
           <AppSidebar />
           <SidebarInset className="min-h-screen bg-background">
             <header>
-              <Navbar/>
+              <Navbar />
             </header>
             <main className="flex h-full flex-col">
               <div className="flex-1 overflow-auto">{children}</div>
@@ -40,11 +36,10 @@ export default function RootLayout({
             <SettingsFooter />
           </SidebarInset>
           <Suspense>
-          <Toaster />
-        </Suspense>
+            <Toaster />
+          </Suspense>
         </SidebarProvider>
       </body>
     </html>
   );
 }
-

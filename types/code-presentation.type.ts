@@ -10,7 +10,6 @@ export interface DiffResult {
   newTokens: string[];
 }
 
-
 export type CardTheme =
   | "minimal"
   | "defaultColorLess"

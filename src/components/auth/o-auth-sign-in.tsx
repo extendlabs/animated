@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-
-import { type Provider } from '@supabase/supabase-js';
+import { type Provider } from "@supabase/supabase-js";
 import { FaGoogle } from "react-icons/fa";
-import { useState } from 'react';
-import { Button } from '../ui/button';
-import { signInWithOAuth } from '@/lib/auth-helpers/client';
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { signInWithOAuth } from "@/lib/auth-helpers/client";
 
 type OAuthProviders = {
   name: Provider;
@@ -16,10 +15,10 @@ type OAuthProviders = {
 export default function OauthSignIn() {
   const oAuthProviders: OAuthProviders[] = [
     {
-      name: 'google',
-      displayName: 'Google',
-      icon: <FaGoogle className="h-5 w-5" />
-    }
+      name: "google",
+      displayName: "Google",
+      icon: <FaGoogle className="h-5 w-5" />,
+    },
     /* Add desired OAuth providers here */
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);

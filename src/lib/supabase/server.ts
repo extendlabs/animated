@@ -1,5 +1,6 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 export const createClient = async () => {
   const cookieStore = await cookies();
@@ -15,16 +16,14 @@ export const createClient = async () => {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } catch (error) {
-          }
+          } catch (e) {}
         },
         remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.set({ name, value: '', ...options });
-          } catch (error) {
-          }
-        }
-      }
-    }
+            cookieStore.set({ name, value: "", ...options });
+          } catch (e) {}
+        },
+      },
+    },
   );
 };

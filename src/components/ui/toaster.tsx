@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-'use client';
+"use client";
 
 import {
   Toast,
@@ -7,12 +7,12 @@ import {
   ToastDescription,
   ToastProvider,
   ToastTitle,
-  ToastViewport
-} from '@/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
+  ToastViewport,
+} from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export function Toaster() {
   const { toast, toasts } = useToast();
@@ -21,24 +21,24 @@ export function Toaster() {
   const router = useRouter();
 
   useEffect(() => {
-    const status = searchParams.get('status');
-    const status_description = searchParams.get('status_description');
-    const error = searchParams.get('error');
-    const error_description = searchParams.get('error_description');
+    const status = searchParams.get("status");
+    const status_description = searchParams.get("status_description");
+    const error = searchParams.get("error");
+    const error_description = searchParams.get("error_description");
     if (error || status) {
       toast({
         title: error
-          ? error ?? 'Hmm... Something went wrong.'
-          : status ?? 'Alright!',
+          ? (error ?? "Hmm... Something went wrong.")
+          : (status ?? "Alright!"),
         description: error ? error_description : status_description,
-        variant: error ? 'destructive' : undefined
+        variant: error ? "destructive" : undefined,
       });
       const newSearchParams = new URLSearchParams(searchParams.toString());
       const paramsToRemove = [
-        'error',
-        'status',
-        'status_description',
-        'error_description'
+        "error",
+        "status",
+        "status_description",
+        "error_description",
       ];
       paramsToRemove.forEach((param) => newSearchParams.delete(param));
       const redirectPath = `${pathname}?${newSearchParams.toString()}`;

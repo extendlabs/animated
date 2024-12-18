@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { getErrorRedirect } from '@/lib/helpers';
-import { getStripe } from '@/lib/stripe/client';
-import { checkoutWithStripe } from '@/lib/stripe/server';
-import { User } from '@supabase/supabase-js';
-import cn from 'classnames';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Tables } from 'types_db';
+import { Button } from "@/components/ui/button";
+import { getErrorRedirect } from "@/lib/helpers";
+import { getStripe } from "@/lib/stripe/client";
+import { checkoutWithStripe } from "@/lib/stripe/server";
+import { type User } from "@supabase/supabase-js";
+import cn from "classnames";
+import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
+import { type Tables } from "types_db";
 
-type Subscription = Tables<'subscriptions'>;
-type Product = Tables<'products'>;
-type Price = Tables<'prices'>;
+type Subscription = Tables<"subscriptions">;
+type Product = Tables<"products">;
+type Price = Tables<"prices">;
 interface ProductWithPrices extends Product {
   prices: Price[];
 }
@@ -30,19 +30,19 @@ interface Props {
   subscription: SubscriptionWithProduct | null;
 }
 
-type BillingInterval = 'lifetime' | 'year' | 'month';
+type BillingInterval = "lifetime" | "year" | "month";
 
 export default function Pricing({ user, products, subscription }: Props) {
   const intervals = Array.from(
     new Set(
       products.flatMap((product) =>
-        product?.prices?.map((price) => price?.interval)
-      )
-    )
+        product?.prices?.map((price) => price?.interval),
+      ),
+    ),
   );
   const router = useRouter();
   const [billingInterval, setBillingInterval] =
-    useState<BillingInterval>('month');
+    useState<BillingInterval>("month");
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const currentPath = usePathname();
 
@@ -51,12 +51,12 @@ export default function Pricing({ user, products, subscription }: Props) {
 
     if (!user) {
       setPriceIdLoading(undefined);
-      return router.push('/signin/signup');
+      return router.push("/signin/signup");
     }
 
     const { errorRedirect, sessionId } = await checkoutWithStripe(
       price,
-      currentPath
+      currentPath,
     );
 
     if (errorRedirect) {
@@ -69,9 +69,9 @@ export default function Pricing({ user, products, subscription }: Props) {
       return router.push(
         getErrorRedirect(
           currentPath,
-          'An unknown error occurred.',
-          'Please try again later or contact a system administrator.'
-        )
+          "An unknown error occurred.",
+          "Please try again later or contact a system administrator.",
+        ),
       );
     }
 
@@ -84,10 +84,10 @@ export default function Pricing({ user, products, subscription }: Props) {
   if (!products.length) {
     return (
       <section className="bg-black">
-        <div className="max-w-6xl px-4 py-8 mx-auto sm:py-24 sm:px-6 lg:px-8">
-          <div className="sm:flex sm:flex-col sm:align-center"></div>
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-24 lg:px-8">
+          <div className="sm:align-center sm:flex sm:flex-col"></div>
           <p className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
-            No subscription pricing plans found. Create them in your{' '}
+            No subscription pricing plans found. Create them in your{" "}
             <a
               className="text-pink-500 underline"
               href="https://dashboard.stripe.com/products"
@@ -104,68 +104,68 @@ export default function Pricing({ user, products, subscription }: Props) {
   } else {
     return (
       <section className="bg-black">
-        <div className="max-w-6xl px-4 py-8 mx-auto sm:py-24 sm:px-6 lg:px-8">
-          <div className="sm:flex sm:flex-col sm:align-center">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-24 lg:px-8">
+          <div className="sm:align-center sm:flex sm:flex-col">
             <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
               Pricing Plans
             </h1>
-            <p className="max-w-2xl m-auto mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl">
+            <p className="m-auto mt-5 max-w-2xl text-xl text-zinc-200 sm:text-center sm:text-2xl">
               Start building for free, then add a site plan to go live. Account
               plans unlock additional features.
             </p>
-            <div className="relative self-center mt-6 bg-zinc-900 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
-              {intervals.includes('month') && (
+            <div className="relative mt-6 flex self-center rounded-lg border border-zinc-800 bg-zinc-900 p-0.5 sm:mt-8">
+              {intervals.includes("month") && (
                 <button
-                  onClick={() => setBillingInterval('month')}
+                  onClick={() => setBillingInterval("month")}
                   type="button"
                   className={`${
-                    billingInterval === 'month'
-                      ? 'relative w-1/2 bg-zinc-700 border-zinc-800 shadow-sm text-white'
-                      : 'ml-0.5 relative w-1/2 border border-transparent text-zinc-400'
-                  } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
+                    billingInterval === "month"
+                      ? "relative w-1/2 border-zinc-800 bg-zinc-700 text-white shadow-sm"
+                      : "relative ml-0.5 w-1/2 border border-transparent text-zinc-400"
+                  } m-1 whitespace-nowrap rounded-md py-2 text-sm font-medium focus:z-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 sm:w-auto sm:px-8`}
                 >
                   Monthly billing
                 </button>
               )}
-              {intervals.includes('year') && (
+              {intervals.includes("year") && (
                 <button
-                  onClick={() => setBillingInterval('year')}
+                  onClick={() => setBillingInterval("year")}
                   type="button"
                   className={`${
-                    billingInterval === 'year'
-                      ? 'relative w-1/2 bg-zinc-700 border-zinc-800 shadow-sm text-white'
-                      : 'ml-0.5 relative w-1/2 border border-transparent text-zinc-400'
-                  } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
+                    billingInterval === "year"
+                      ? "relative w-1/2 border-zinc-800 bg-zinc-700 text-white shadow-sm"
+                      : "relative ml-0.5 w-1/2 border border-transparent text-zinc-400"
+                  } m-1 whitespace-nowrap rounded-md py-2 text-sm font-medium focus:z-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 sm:w-auto sm:px-8`}
                 >
                   Yearly billing
                 </button>
               )}
             </div>
           </div>
-          <div className="mt-12 space-y-0 sm:mt-16 flex flex-wrap justify-center gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
+          <div className="mt-12 flex flex-wrap justify-center gap-6 space-y-0 sm:mt-16 lg:mx-auto lg:max-w-4xl xl:mx-0 xl:max-w-none">
             {products.map((product) => {
               const price = product?.prices?.find(
-                (price) => price.interval === billingInterval
+                (price) => price.interval === billingInterval,
               );
               if (!price) return null;
-              const priceString = new Intl.NumberFormat('en-US', {
-                style: 'currency',
+              const priceString = new Intl.NumberFormat("en-US", {
+                style: "currency",
                 currency: price.currency!,
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               }).format((price?.unit_amount ?? 0) / 100);
               return (
                 <div
                   key={product.id}
                   className={cn(
-                    'flex flex-col rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900',
+                    "flex flex-col divide-y divide-zinc-600 rounded-lg bg-zinc-900 shadow-sm",
                     {
-                      'border border-pink-500': subscription
+                      "border border-pink-500": subscription
                         ? product.name === subscription?.prices?.products?.name
-                        : product.name === 'Freelancer'
+                        : product.name === "Freelancer",
                     },
-                    'flex-1', // This makes the flex item grow to fill the space
-                    'basis-1/3', // Assuming you want each card to take up roughly a third of the container's width
-                    'max-w-xs' // Sets a maximum width to the cards to prevent them from getting too large
+                    "flex-1", // This makes the flex item grow to fill the space
+                    "basis-1/3", // Assuming you want each card to take up roughly a third of the container's width
+                    "max-w-xs", // Sets a maximum width to the cards to prevent them from getting too large
                   )}
                 >
                   <div className="p-6">
@@ -174,7 +174,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                     </h2>
                     <p className="mt-4 text-zinc-300">{product.description}</p>
                     <p className="mt-8">
-                      <span className="text-5xl font-extrabold white">
+                      <span className="white text-5xl font-extrabold">
                         {priceString}
                       </span>
                       <span className="text-base font-medium text-zinc-100">
@@ -186,7 +186,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                       disabled={priceIdLoading === price.id}
                       onClick={() => handleStripeCheckout(price)}
                     >
-                      {subscription ? 'Manage' : 'Subscribe'}
+                      {subscription ? "Manage" : "Subscribe"}
                     </Button>
                   </div>
                 </div>

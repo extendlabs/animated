@@ -21,16 +21,8 @@ export const CodeCard = ({
   themeBorder,
   themeText,
 }: Props) => {
-
-    const { 
-      padding, 
-      radius, 
-      language, 
-      fileName, 
-      theme, 
-      background, 
-      cardTheme 
-    } = useSettingsStore();
+  const { padding, radius, language, fileName, theme, background, cardTheme } =
+    useSettingsStore();
 
   return (
     <div
@@ -41,28 +33,28 @@ export const CodeCard = ({
       )}
       style={{ background: background }}
     >
-    <div
-      className={cn("p-1 shadow-xl", radius)}
-      style={{
-        background: themeBackground,
-      }}
-    >
-      <CardHeader
-        cardTheme={cardTheme}
-        themeBorder={themeBorder}
-        themeText={themeText}
-        fileName={fileName}
-      />
+      <div
+        className={cn("p-1 shadow-xl", radius)}
+        style={{
+          background: themeBackground,
+        }}
+      >
+        <CardHeader
+          cardTheme={cardTheme}
+          themeBorder={themeBorder}
+          themeText={themeText}
+          fileName={fileName}
+        />
 
-      <HighlightCode
-        theme={theme}
-        currentCode={currentCode}
-        language={language}
-        currentSlide={currentSlide}
-        diffMap={diffMap}
-      />
-      <div className="py-2" />
-    </div>
+        <HighlightCode
+          theme={theme}
+          currentCode={currentCode}
+          language={language}
+          currentSlide={currentSlide}
+          diffMap={diffMap}
+        />
+        <div className="py-2" />
+      </div>
     </div>
   );
 };

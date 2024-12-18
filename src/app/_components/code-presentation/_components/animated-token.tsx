@@ -1,6 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { type TokenInputProps, type TokenOutputProps, type Token } from "prism-react-renderer";
+import {
+  type TokenInputProps,
+  type TokenOutputProps,
+  type Token,
+} from "prism-react-renderer";
 
 type Props = {
   token: Token;
@@ -8,8 +12,8 @@ type Props = {
   tokenIndex: number;
   isNewLine: boolean;
   diffType?: "new" | "unchanged" | "default";
-  getTokenProps: (input: TokenInputProps) => TokenOutputProps
-}
+  getTokenProps: (input: TokenInputProps) => TokenOutputProps;
+};
 
 export const AnimatedToken = ({
   token,
@@ -35,4 +39,3 @@ export const AnimatedToken = ({
     />
   );
 };
-

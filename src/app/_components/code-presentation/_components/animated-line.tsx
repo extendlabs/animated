@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { AnimatedToken } from "./animated-token";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-import { type TokenInputProps, type TokenOutputProps, type LineInputProps, type LineOutputProps, type Token } from "prism-react-renderer";
+import {
+  type TokenInputProps,
+  type TokenOutputProps,
+  type LineInputProps,
+  type LineOutputProps,
+  type Token,
+} from "prism-react-renderer";
 
 type Props = {
   line: Token[];
@@ -47,10 +53,7 @@ export const AnimatedLine = ({
     >
       {withLineIndex && (
         <motion.span
-          className={cn(
-            "mr-4 select-none text-gray-500",
-            thumbnail && "mr-3"
-          )}
+          className={cn("mr-4 select-none text-gray-500", thumbnail && "mr-3")}
         >
           {String(lineIndex + 1).padStart(2, "0")}
         </motion.span>

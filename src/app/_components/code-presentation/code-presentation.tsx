@@ -1,17 +1,10 @@
 "use client";
 
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 
 import { motion } from "framer-motion";
 import { themes } from "prism-react-renderer";
-import {
-  type DiffResult,
-} from "types/code-presentation.type";
+import { type DiffResult } from "types/code-presentation.type";
 import { Button } from "../../../components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
@@ -23,10 +16,9 @@ import { CodeCard } from "./_components/code-card";
 
 type Props = {
   autoPlayInterval?: number;
-}
+};
 
 export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
-  
   const {
     slides,
     currentSlide,
@@ -37,9 +29,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     updateSlide,
   } = useUIStore();
 
-  const { 
-    theme, 
-  } = useSettingsStore();
+  const { theme } = useSettingsStore();
 
   const currentThemeName =
     Object.keys(themes).find(
@@ -51,7 +41,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
 
   const themeBorder =
     themeStyles[currentThemeName]?.border ?? themeStyles.vsDark?.border;
-    
+
   const themeText =
     themeStyles[currentThemeName]?.text ?? themeStyles.vsDark?.text;
 
@@ -74,16 +64,14 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
           : Math.max(currentSlide - 1, 0);
 
       if (newIndex !== currentSlide) {
-      
-          if (slides[newIndex] && slides[currentSlide]) {
-            const newDiff = computeDiff(
-              slides[currentSlide].code,
-              slides[newIndex].code,
-            );
-            setDiffMap(newDiff);
-            setCurrentSlide(newIndex);
-          }
-       
+        if (slides[newIndex] && slides[currentSlide]) {
+          const newDiff = computeDiff(
+            slides[currentSlide].code,
+            slides[newIndex].code,
+          );
+          setDiffMap(newDiff);
+          setCurrentSlide(newIndex);
+        }
       }
     },
     [currentSlide, slides, setCurrentSlide],
@@ -134,14 +122,14 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
                 handleUpdateSlide={handleUpdateSlide}
               />
             ) : (
-                <CodeCard
-                  currentCode={currentCode}
-                  diffMap={diffMap}
-                  currentSlide={currentSlide}
-                  themeBackground={themeBackground}
-                  themeBorder={themeBorder}
-                  themeText={themeText}
-                />
+              <CodeCard
+                currentCode={currentCode}
+                diffMap={diffMap}
+                currentSlide={currentSlide}
+                themeBackground={themeBackground}
+                themeBorder={themeBorder}
+                themeText={themeText}
+              />
             )}
           </div>
           <div className="flex justify-center">

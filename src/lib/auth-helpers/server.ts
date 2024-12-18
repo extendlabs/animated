@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-'use server';
+"use server";
 
-
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { createClient } from '../supabase/server';
-import { getErrorRedirect, getStatusRedirect, getURL } from '../helpers';
-import { getAuthTypes } from './settings';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { createClient } from "../supabase/server";
+import { getErrorRedirect, getStatusRedirect, getURL } from "../helpers";
+import { getAuthTypes } from "./settings";
 
 function isValidEmail(email: string) {
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -18,7 +17,7 @@ export async function redirectToPath(path: string) {
 }
 
 export async function SignOut(formData: FormData) {
-  const pathName = String(formData.get('pathName')).trim();
+  const pathName = String(formData.get("pathName")).trim();
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
@@ -26,33 +25,33 @@ export async function SignOut(formData: FormData) {
   if (error) {
     return getErrorRedirect(
       pathName,
-      'Hmm... Something went wrong.',
-      'You could not be signed out.'
+      "Hmm... Something went wrong.",
+      "You could not be signed out.",
     );
   }
 
-  return '/';
+  return "/";
 }
 
 export async function signInWithEmail(formData: FormData) {
   const cookieStore = await cookies();
-  const callbackURL = getURL('/auth/callback');
+  const callbackURL = getURL("/auth/callback");
 
-  const email = String(formData.get('email')).trim();
+  const email = String(formData.get("email")).trim();
   let redirectPath: string;
 
   if (!isValidEmail(email)) {
     redirectPath = getErrorRedirect(
-      '/',
-      'Invalid email address.',
-      'Please try again.'
+      "/",
+      "Invalid email address.",
+      "Please try again.",
     );
   }
 
   const supabase = await createClient();
   const options = {
     emailRedirectTo: callbackURL,
-    shouldCreateUser: true
+    shouldCreateUser: true,
   };
 
   // If allowPassword is false, do not create a new user
@@ -60,62 +59,56 @@ export async function signInWithEmail(formData: FormData) {
   if (allowPassword) options.shouldCreateUser = false;
   const { data, error } = await supabase.auth.signInWithOtp({
     email,
-    options: options
+    options: options,
   });
 
   if (error) {
     redirectPath = getErrorRedirect(
-      '/',
-      'You could not be signed in.',
-      error.message
+      "/",
+      "You could not be signed in.",
+      error.message,
     );
   } else if (data) {
-    cookieStore.set('preferredSignInView', 'email_signin', { path: '/' });
+    cookieStore.set("preferredSignInView", "email_signin", { path: "/" });
     redirectPath = getStatusRedirect(
-      '/',
-      'Success!',
-      'Please check your email for a magic link. You may now close this tab.',
-      true
+      "/",
+      "Success!",
+      "Please check your email for a magic link. You may now close this tab.",
+      true,
     );
   } else {
     redirectPath = getErrorRedirect(
-      '/',
-      'Hmm... Something went wrong.',
-      'You could not be signed in.'
+      "/",
+      "Hmm... Something went wrong.",
+      "You could not be signed in.",
     );
   }
 
   return redirectPath;
 }
 
-
-
 export async function signInWithPassword(formData: FormData) {
   const cookieStore = await cookies();
-  const email = String(formData.get('email')).trim();
-  const password = String(formData.get('password')).trim();
+  const email = String(formData.get("email")).trim();
+  const password = String(formData.get("password")).trim();
   let redirectPath: string;
 
   const supabase = await createClient();
   const { error, data } = await supabase.auth.signInWithPassword({
     email,
-    password
+    password,
   });
 
   if (error) {
-    redirectPath = getErrorRedirect(
-      '/',
-      'Sign in failed.',
-      error.message
-    );
+    redirectPath = getErrorRedirect("/", "Sign in failed.", error.message);
   } else if (data.user) {
-    cookieStore.set('preferredSignInView', 'password_signin', { path: '/' });
-    redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
+    cookieStore.set("preferredSignInView", "password_signin", { path: "/" });
+    redirectPath = getStatusRedirect("/", "Success!", "You are now signed in.");
   } else {
     redirectPath = getErrorRedirect(
-      '/',
-      'Hmm... Something went wrong.',
-      'You could not be signed in.'
+      "/",
+      "Hmm... Something went wrong.",
+      "You could not be signed in.",
     );
   }
 
@@ -123,17 +116,17 @@ export async function signInWithPassword(formData: FormData) {
 }
 
 export async function signUp(formData: FormData) {
-  const callbackURL = getURL('/auth/callback');
+  const callbackURL = getURL("/auth/callback");
 
-  const email = String(formData.get('email')).trim();
-  const password = String(formData.get('password')).trim();
+  const email = String(formData.get("email")).trim();
+  const password = String(formData.get("password")).trim();
   let redirectPath: string;
 
   if (!isValidEmail(email)) {
     redirectPath = getErrorRedirect(
-      '/',
-      'Invalid email address.',
-      'Please try again.'
+      "/",
+      "Invalid email address.",
+      "Please try again.",
     );
   }
 
@@ -142,38 +135,31 @@ export async function signUp(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: callbackURL
-    }
+      emailRedirectTo: callbackURL,
+    },
   });
 
   if (error) {
-    redirectPath = getErrorRedirect(
-      '/',
-      'Sign up failed.',
-      error.message
-    );
+    redirectPath = getErrorRedirect("/", "Sign up failed.", error.message);
   } else if (data.session) {
-    redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
-  } else if (
-    data.user?.identities &&
-    data.user.identities.length == 0
-  ) {
+    redirectPath = getStatusRedirect("/", "Success!", "You are now signed in.");
+  } else if (data.user?.identities && data.user.identities.length == 0) {
     redirectPath = getErrorRedirect(
-      '/',
-      'Sign up failed.',
-      'There is already an account associated with this email address. Try resetting your password.'
+      "/",
+      "Sign up failed.",
+      "There is already an account associated with this email address. Try resetting your password.",
     );
   } else if (data.user) {
     redirectPath = getStatusRedirect(
-      '/',
-      'Success!',
-      'Please check your email for a confirmation link. You may now close this tab.'
+      "/",
+      "Success!",
+      "Please check your email for a confirmation link. You may now close this tab.",
     );
   } else {
     redirectPath = getErrorRedirect(
-      '/',
-      'Hmm... Something went wrong.',
-      'You could not be signed up.'
+      "/",
+      "Hmm... Something went wrong.",
+      "You could not be signed up.",
     );
   }
 

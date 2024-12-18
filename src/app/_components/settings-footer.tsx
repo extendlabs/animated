@@ -80,7 +80,9 @@ export default function SettingsFooter() {
           <div className="grid grid-cols-4 gap-8">
             <div>
               <div className="flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">Background</span>
+                <span className="text-sm text-muted-foreground">
+                  Background
+                </span>
                 <Select value={background} onValueChange={setBackground}>
                   <SelectTrigger className="h-8 w-[140px]">
                     <SelectValue />
@@ -143,7 +145,9 @@ export default function SettingsFooter() {
               </div>
 
               <div className="mt-2 flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">Card Theme</span>
+                <span className="text-sm text-muted-foreground">
+                  Card Theme
+                </span>
                 <Select value={cardTheme} onValueChange={setCardTheme}>
                   <SelectTrigger className="h-8 w-[140px]">
                     <SelectValue />
@@ -164,7 +168,7 @@ export default function SettingsFooter() {
                 <Select
                   value={
                     Object.keys(themes).find(
-                      (key) => themes[key as keyof typeof themes] === theme
+                      (key) => themes[key as keyof typeof themes] === theme,
                     ) ?? "vsDark"
                   }
                   onValueChange={(themeName: keyof typeof themes) =>
@@ -203,7 +207,9 @@ export default function SettingsFooter() {
               </div>
 
               <div className="mt-2 flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">Line index</span>
+                <span className="text-sm text-muted-foreground">
+                  Line index
+                </span>
                 <div className="flex gap-2">
                   <Switch
                     id="line-index"
