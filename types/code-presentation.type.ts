@@ -10,10 +10,6 @@ export interface DiffResult {
   newTokens: string[];
 }
 
-export interface CodePresentationProps {
-  autoPlayInterval?: number;
-}
-
 export type CardTheme =
   | "minimal"
   | "defaultColorLess"

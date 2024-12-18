@@ -1,32 +1,24 @@
 "use client";
 
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 
 import { motion } from "framer-motion";
 import { themes } from "prism-react-renderer";
-import {
-  type CodePresentationProps,
-  type DiffResult,
-} from "types/code-presentation.type";
-import { Button } from "./ui/button";
-import { MyEditor } from "./my-editor";
+import { type DiffResult } from "types/code-presentation.type";
+import { Button } from "../../../components/ui/button";
+import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
-import { cn } from "@/lib/utils";
 import { themeStyles } from "@/constants/themes";
 import { PauseIcon, PlayIcon } from "lucide-react";
-import { CodeCard } from "./code-card";
+import { CodeCard } from "./_components/code-card";
 
-const CodePresentation: React.FC<CodePresentationProps> = ({
-  autoPlayInterval = 1500,
-}) => {
+type Props = {
+  autoPlayInterval?: number;
+};
+
+export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   const {
     slides,
     currentSlide,
@@ -37,8 +29,7 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     updateSlide,
   } = useUIStore();
 
-  const { padding, radius, language, fileName, theme, background, cardTheme } =
-    useSettingsStore();
+  const { theme } = useSettingsStore();
 
   const currentThemeName =
     Object.keys(themes).find(
@@ -47,8 +38,10 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
 
   const themeBackground =
     themeStyles[currentThemeName]?.bg ?? themeStyles.vsDark?.bg;
+
   const themeBorder =
     themeStyles[currentThemeName]?.border ?? themeStyles.vsDark?.border;
+
   const themeText =
     themeStyles[currentThemeName]?.text ?? themeStyles.vsDark?.text;
 
@@ -57,8 +50,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     oldTokens: [],
     newTokens: [],
   });
-
-
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
@@ -73,16 +64,14 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
           : Math.max(currentSlide - 1, 0);
 
       if (newIndex !== currentSlide) {
-      
-          if (slides[newIndex] && slides[currentSlide]) {
-            const newDiff = computeDiff(
-              slides[currentSlide].code,
-              slides[newIndex].code,
-            );
-            setDiffMap(newDiff);
-            setCurrentSlide(newIndex);
-          }
-       
+        if (slides[newIndex] && slides[currentSlide]) {
+          const newDiff = computeDiff(
+            slides[currentSlide].code,
+            slides[newIndex].code,
+          );
+          setDiffMap(newDiff);
+          setCurrentSlide(newIndex);
+        }
       }
     },
     [currentSlide, slides, setCurrentSlide],
@@ -122,8 +111,6 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     }
   };
 
-  const componentRef = useRef<HTMLDivElement>(null);
-
   return (
     <div>
       <div className="mx-auto w-full max-w-3xl">
@@ -135,32 +122,16 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
                 handleUpdateSlide={handleUpdateSlide}
               />
             ) : (
-              <div
-                ref={componentRef}
-                className={cn(
-                  "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-12",
-                  padding,
-                  "transition-all duration-300 ease-in-out",
-                )}
-                style={{ background: background }}
-              >
-                <CodeCard
-                  theme={theme}
-                  currentCode={currentCode}
-                  language={language}
-                  diffMap={diffMap}
-                  currentSlide={currentSlide}
-                  radius={radius}
-                  themeBackground={themeBackground}
-                  themeBorder={themeBorder}
-                  themeText={themeText}
-                  fileName={fileName}
-                  cardTheme={cardTheme}
-                />
-              </div>
+              <CodeCard
+                currentCode={currentCode}
+                diffMap={diffMap}
+                currentSlide={currentSlide}
+                themeBackground={themeBackground}
+                themeBorder={themeBorder}
+                themeText={themeText}
+              />
             )}
           </div>
-
           <div className="flex justify-center">
             <div className="mt-4 flex items-center space-x-4">
               <Button
@@ -186,5 +157,3 @@ const CodePresentation: React.FC<CodePresentationProps> = ({
     </div>
   );
 };
-
-export default CodePresentation;

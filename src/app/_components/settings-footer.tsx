@@ -36,35 +36,42 @@ export default function SettingsFooter() {
   const availableThemes = Object.keys(themes);
 
   const availableCardThemes = [
-    {
-      value: "default",
-      label: "Default",
-    },
-    {
-      value: "minimal",
-      label: "Minimal",
-    },
-    {
-      value: "defaultColorLess",
-      label: "Color Less",
-    },
-    {
-      value: "leftName",
-      label: "Left Name",
-    },
-    {
-      value: "centerName",
-      label: "Center Name",
-    },
-    {
-      value: "rightName",
-      label: "Right Name",
-    },
-    {
-      value: "window",
-      label: "Window",
-    },
+    { value: "default", label: "Default" },
+    { value: "minimal", label: "Minimal" },
+    { value: "defaultColorLess", label: "Color Less" },
+    { value: "leftName", label: "Left Name" },
+    { value: "centerName", label: "Center Name" },
+    { value: "rightName", label: "Right Name" },
+    { value: "window", label: "Window" },
   ];
+
+  const radiusOptions = [
+    { value: "rounded-none", label: "None" },
+    { value: "rounded-[10px]", label: "Small" },
+    { value: "rounded-[14px]", label: "Medium" },
+    { value: "rounded-[18px]", label: "Large" },
+  ];
+
+  const languageOptions = [
+    "markup",
+    "jsx",
+    "tsx",
+    "swift",
+    "kotlin",
+    "objectivec",
+    "js-extras",
+    "reason",
+    "rust",
+    "graphql",
+    "yaml",
+    "go",
+    "cpp",
+    "markdown",
+    "python",
+    "json",
+  ];
+
+  const paddingOptions = ["4", "6", "12", "20"];
 
   return (
     <footer className="bottom-0 border-t bg-background p-8">
@@ -111,10 +118,11 @@ export default function SettingsFooter() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="rounded-none">None</SelectItem>
-                    <SelectItem value="rounded-[10px]">Small</SelectItem>
-                    <SelectItem value="rounded-[14px]">Medium</SelectItem>
-                    <SelectItem value="rounded-[18px]">Large</SelectItem>
+                    {radiusOptions.map(({ value, label }) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -127,25 +135,15 @@ export default function SettingsFooter() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="markup">Markup</SelectItem>
-                    <SelectItem value="jsx">JSX</SelectItem>
-                    <SelectItem value="tsx">TSX</SelectItem>
-                    <SelectItem value="swift">Swift</SelectItem>
-                    <SelectItem value="kotlin">Kotlin</SelectItem>
-                    <SelectItem value="objectivec">Objective-C</SelectItem>
-                    <SelectItem value="js-extras">JS-Extras</SelectItem>
-                    <SelectItem value="reason">Reason</SelectItem>
-                    <SelectItem value="rust">Rust</SelectItem>
-                    <SelectItem value="graphql">GraphQL</SelectItem>
-                    <SelectItem value="yaml">YAML</SelectItem>
-                    <SelectItem value="go">GO</SelectItem>
-                    <SelectItem value="cpp">C++</SelectItem>
-                    <SelectItem value="markdown">Markdown</SelectItem>
-                    <SelectItem value="python">Python</SelectItem>
-                    <SelectItem value="json">JSON</SelectItem>
+                    {languageOptions.map((lang) => (
+                      <SelectItem key={lang} value={lang}>
+                        {lang}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="mt-2 flex flex-col gap-1">
                 <span className="text-sm text-muted-foreground">
                   Card Theme
@@ -155,11 +153,9 @@ export default function SettingsFooter() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {availableCardThemes.map((theme) => (
-                      <SelectItem key={theme.value} value={theme.value}>
-                        <div className="flex items-center gap-2">
-                          {theme.label}
-                        </div>
+                    {availableCardThemes.map(({ value, label }) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -196,7 +192,7 @@ export default function SettingsFooter() {
               <div className="flex flex-col gap-1">
                 <span className="text-sm text-muted-foreground">Padding</span>
                 <div className="flex gap-2">
-                  {["4", "6", "12", "20"].map((size) => (
+                  {paddingOptions.map((size) => (
                     <Button
                       key={size}
                       variant={padding == `p-${size}` ? "secondary" : "ghost"}
@@ -209,13 +205,14 @@ export default function SettingsFooter() {
                   ))}
                 </div>
               </div>
+
               <div className="mt-2 flex flex-col gap-1">
                 <span className="text-sm text-muted-foreground">
                   Line index
                 </span>
                 <div className="flex gap-2">
                   <Switch
-                    id="airplane-mode"
+                    id="line-index"
                     checked={withLineIndex}
                     onCheckedChange={setWithLineIndex}
                   />

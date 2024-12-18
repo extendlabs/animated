@@ -1,6 +1,10 @@
 import { Editor } from "@monaco-editor/react";
 
-export const MyEditor = ({ value, handleUpdateSlide }: any) => {
+type Props = {
+  value: string;
+  handleUpdateSlide: (value: string | undefined) => void;
+};
+export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
   const customTheme = {
     base: "vs-dark",
     inherit: true,
