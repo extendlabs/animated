@@ -8,11 +8,11 @@ import { getErrorRedirect } from "@/lib/helpers";
 import { getStripe } from "@/lib/stripe/client";
 import { checkoutWithStripe } from "@/lib/stripe/server";
 import { type User } from "@supabase/supabase-js";
-import cn from "classnames";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { type Tables } from "types_db";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 type Subscription = Tables<"subscriptions">;
 type Product = Tables<"products">;
