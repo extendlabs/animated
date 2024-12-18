@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "./ui/button"
+import { EditButton } from "@/app/_components/edit-button";
 
 export async function ProtectedContent() {
   const supabase = createClient();
@@ -14,8 +15,8 @@ export async function ProtectedContent() {
   }
 
   return (
-    <div>
-      <Button>Subscribe product</Button>
+    <div className="flex gap-2">
+      <EditButton />
     </div>
   )
 }
