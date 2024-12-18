@@ -82,6 +82,10 @@ const getToastRedirect = (
   disableButton = false,
   arbitraryParams = "",
 ): string => {
+  if (!toastKeyMap[toastType]) {
+    throw new Error(`Invalid toastType: ${toastType}`);
+  }
+  
   const [nameKey, descriptionKey] = toastKeyMap[toastType];
 
   let redirectPath = `${path}?${nameKey}=${encodeURIComponent(toastName)}`;
