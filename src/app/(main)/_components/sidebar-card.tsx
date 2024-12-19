@@ -1,8 +1,8 @@
 import React from "react";
-import CodePreview from "@/app/_components/code-preview";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
+import CodePreview from "./code-preview";
 
 type Slide = {
   id: number;

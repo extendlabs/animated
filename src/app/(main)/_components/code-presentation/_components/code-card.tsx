@@ -21,13 +21,13 @@ export const CodeCard = ({
   themeBorder,
   themeText,
 }: Props) => {
-  const { padding, radius, language, fileName, theme, background, cardTheme } =
+  const { padding, radius, language, theme, background, cardTheme } =
     useSettingsStore();
 
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-12",
+        "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500",
         padding,
         "transition-all duration-300 ease-in-out",
       )}
@@ -43,7 +43,6 @@ export const CodeCard = ({
           cardTheme={cardTheme}
           themeBorder={themeBorder}
           themeText={themeText}
-          fileName={fileName}
         />
 
         <HighlightCode

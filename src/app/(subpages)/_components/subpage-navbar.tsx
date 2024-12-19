@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import Navlinks from "./nav-links";
 import Logo from "@/components/logo";
+import Navlinks from "@/app/_components/nav-links";
 
 export default async function SubpageNavbar() {
   const supabase = await createClient();

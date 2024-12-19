@@ -12,7 +12,10 @@ import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
 
-export function AppSidebar() {
+export function AppSidebar({
+  className,
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
     useUIStore();
 
@@ -32,12 +35,12 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar className={className} {...props}>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              <div className="flex h-full flex-col">
+              <div className="z-50 flex h-full flex-col">
                 <div className="space-y-2 p-2">
                   {slides.map((slide, index) => (
                     <SidebarCard

@@ -5,7 +5,7 @@ import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { themes } from "prism-react-renderer";
 import { type DiffResult } from "types/code-presentation.type";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";

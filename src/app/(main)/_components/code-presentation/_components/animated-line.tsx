@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { AnimatedToken } from "./animated-token";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-import { type TokenInputProps, type TokenOutputProps, type LineInputProps, type LineOutputProps, type Token } from "prism-react-renderer";
+import {
+  type TokenInputProps,
+  type TokenOutputProps,
+  type LineInputProps,
+  type LineOutputProps,
+  type Token,
+} from "prism-react-renderer";
 type Props = {
   line: Token[];
   lineIndex: number;
@@ -13,8 +19,8 @@ type Props = {
   diffType?: "new" | "unchanged";
   disableAnimations?: boolean;
   getLineProps: (input: LineInputProps) => LineOutputProps;
-  getTokenProps: (input: TokenInputProps) => TokenOutputProps
-}
+  getTokenProps: (input: TokenInputProps) => TokenOutputProps;
+};
 export const AnimatedLine = React.memo(
   ({
     line,
@@ -28,11 +34,11 @@ export const AnimatedLine = React.memo(
   }: Props) => {
     const { withLineIndex } = useSettingsStore((state) => state);
     const lineVariants = {
-      initial: { opacity: 0, height: 0},
+      initial: { opacity: 0, height: 0 },
       animate: { opacity: 1, height: "auto" },
-      exit: { opacity: 0, height: 0 }
+      exit: { opacity: 0, height: 0 },
     };
-    
+
     return (
       <motion.div
         {...getLineProps({ line })}
@@ -41,9 +47,7 @@ export const AnimatedLine = React.memo(
         initial={isNewLine ? "initial" : false}
         animate="animate"
         exit="exit"
-        transition={
-          !isExiting ? { duration: 0 } : { duration: 0.5}
-        }
+        transition={!isExiting ? { duration: 0 } : { duration: 0.5 }}
       >
         {withLineIndex && (
           <motion.span

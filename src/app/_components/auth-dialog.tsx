@@ -26,9 +26,14 @@ export function AuthDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Login</Button>
+        <Button
+          variant="outline"
+          className="border-[#205a47] hover:bg-[#205a47]"
+        >
+          Login
+        </Button>
       </DialogTrigger>
-      <DialogContent className="border-2 border-[#205a47] sm:max-w-[425px]">
+      <DialogContent className="border-2 border-slate-900 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
             {isLogin ? "Welcome Back" : "Create an Account"}

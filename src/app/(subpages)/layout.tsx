@@ -1,4 +1,4 @@
-import SubpageNavbar from "../_components/subpage-navbar";
+import SubpageNavbar from "./_components/subpage-navbar";
 
 export const metadata = {
   title: "Next.js",
@@ -11,13 +11,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex flex-1 flex-col bg-background">
       <header>
         <SubpageNavbar />
       </header>
-      <main className="flex h-full flex-col">
-        <div className="flex-1 overflow-auto">{children}</div>
+      <main className="flex-1 overflow-auto">
+        <div>{children}</div>
       </main>
-    </>
+    </div>
   );
 }

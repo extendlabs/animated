@@ -1,20 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { type TokenInputProps, type TokenOutputProps, type Token } from "prism-react-renderer";
+import {
+  type TokenInputProps,
+  type TokenOutputProps,
+  type Token,
+} from "prism-react-renderer";
 type Props = {
   token: Token;
   lineIndex: number;
   tokenIndex: number;
   isNewLine: boolean;
   diffType?: "new" | "unchanged" | "default";
-  disableAnimations?: boolean
-  getTokenProps: (input: TokenInputProps) => TokenOutputProps
-}
+  getTokenProps: (input: TokenInputProps) => TokenOutputProps;
+};
 export const AnimatedToken = ({
   token,
   tokenIndex,
   diffType = "default",
-  disableAnimations = false,
   getTokenProps,
 }: Props) => {
   const variants = {
@@ -30,9 +32,7 @@ export const AnimatedToken = ({
       initial={"initial"}
       animate="animate"
       exit="exit"
-      transition={
-        { duration: 0.5, delay: tokenIndex * 0.05 }
-      }
+      transition={{ duration: 0.5, delay: tokenIndex * 0.05 }}
     />
   );
 };

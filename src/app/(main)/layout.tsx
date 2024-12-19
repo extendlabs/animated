@@ -1,26 +1,21 @@
-import { AppSidebar } from "@/app/_components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import "@/styles/globals.css";
-import SettingsFooter from "../_components/settings-footer";
+import { SidebarInset } from "@/components/ui/sidebar";
 import Navbar from "../_components/navbar";
+import { AppSidebar } from "./_components/app-sidebar";
+import SettingsFooter from "./_components/settings-footer";
 
-export default function RootLayout({
+export default function SettingsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <SidebarProvider defaultOpen={true}>
-        <AppSidebar />
-        <SidebarInset className="min-h-screen bg-background">
-          <header>
-            <Navbar />
-          </header>
-          <main className="flex h-full flex-col">
-            <div className="flex-1 overflow-auto">{children}</div>
-          </main>
-          <SettingsFooter />
-        </SidebarInset>
-      </SidebarProvider>
+      <AppSidebar className="h-[calc(100vh-4rem)]" />
+      <SidebarInset className="flex flex-1 flex-col bg-background">
+        <header>
+          <Navbar />
+        </header>
+        <main className="flex-1 overflow-auto">{children}</main>
+        <SettingsFooter />
+      </SidebarInset>
     </>
   );
 }
