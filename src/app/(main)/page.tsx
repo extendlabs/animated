@@ -12,8 +12,6 @@ export default async function Home() {
     getSubscription(supabase),
   ]);
 
-  console.log({ user, products, subscription });
-
   return (
     <div className="h-full p-4 lg:p-6">
       <ProtectedContent />

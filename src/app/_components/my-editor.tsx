@@ -25,7 +25,6 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
   const handleEditorWillMount = (monacoInstance: any) => {
     monacoInstance.editor.defineTheme("customTheme", customTheme);
     monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-      tsx: "react",
       noSemanticValidation: true,
       noSyntaxValidation: true,
     });
@@ -38,7 +37,6 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
       height="400px"
       value={value}
       onChange={handleUpdateSlide}
-      defaultLanguage="typescript"
       beforeMount={handleEditorWillMount}
       options={{
         fontSize: 14,
