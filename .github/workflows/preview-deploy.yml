@@ -20,4 +20,3 @@ jobs:
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           alias-domains: |
             preview.extend-ui.com
-            animated.extend-ui.com
