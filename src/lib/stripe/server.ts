@@ -9,7 +9,7 @@ import {
   getURL,
 } from "../helpers";
 import { stripe } from "./config";
-import { createOrRetrieveCustomer } from "../supabase/admin";
+import { createOrRetrieveCustomer, retriveCustomerId } from "../supabase/admin";
 
 type Price = Tables<"prices">;
 
@@ -179,3 +179,40 @@ export async function createStripePortal(currentPath: string) {
     }
   }
 }
+
+
+export async function cancelStripeSubscription(subscriptionId: string): Promise<{ success: boolean; message: string }> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const customerData = await retriveCustomerId(user.id);
+
+    if (!customerData) {
+      throw new Error("Stripe customer ID not found for the current user");
+    }
+
+    const stripeCustomerId = customerData.stripe_customer_id;
+
+    if (subscription.customer !== stripeCustomerId) {
+      throw new Error("Subscription does not belong to the current user");
+    }
+
+    const canceledSubscription = await stripe.subscriptions.cancel(subscriptionId);
+    
+    if (canceledSubscription.status === "canceled") {
+      return { success: true, message: "Subscription successfully canceled" };
+    } else {
+      throw new Error("Failed to cancel subscription");
+    }
+  } catch (error) {
+    console.error("Error canceling subscription:", error);
+    return { success: false, message: error instanceof Error ? error.message : "An unknown error occurred" };
+  }
+}
+

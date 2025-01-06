@@ -4,10 +4,10 @@
 import { handleRequest } from "@/lib/auth-helpers/client";
 import { useRouter } from "next/navigation";
 import { SignOut } from "@/lib/auth-helpers/server";
-import { LoginButton } from "./login-button";
 import { Button } from "@/components/ui/button";
 import { getRedirectMethod } from "@/lib/auth-helpers/settings";
 import Link from "next/link";
+import { AuthDialog } from "./auth-dialog";
 
 type Props = {
   user: any;
@@ -24,7 +24,7 @@ export default function Navlinks({ user }: Props) {
           <Button type="submit">Sign out</Button>
         </form>
       ) : (
-        <LoginButton />
+        <AuthDialog />
       )}
     </div>
   );

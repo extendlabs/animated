@@ -13,6 +13,9 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { themeStyles } from "@/constants/themes";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { CodeCard } from "./_components/code-card";
+import { getSubscription } from "@/lib/supabase/queries";
+import { createClient } from "@/lib/supabase/client";
+
 
 type Props = {
   autoPlayInterval?: number;
@@ -28,6 +31,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     setIsAutoPlaying,
     updateSlide,
   } = useUIStore();
+
 
   const { theme } = useSettingsStore();
 
@@ -110,6 +114,8 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
       updateSlide(currentSlide, updatedSlide);
     }
   };
+
+
 
   return (
     <div>

@@ -165,3 +165,72 @@ export async function signUp(formData: FormData) {
 
   return redirectPath;
 }
+
+export async function updateEmail(formData: FormData) {
+  const newEmail = String(formData.get('newEmail')).trim();
+  if (!isValidEmail(newEmail)) {
+    return getErrorRedirect(
+      '/account',
+      'Your email could not be updated.',
+      'Invalid email address.'
+    );
+  }
+
+  const supabase = await createClient();
+
+  const callbackUrl = getURL(
+    getStatusRedirect('/account', 'Success!', `Your email has been updated.`)
+  );
+
+  const { error } = await supabase.auth.updateUser(
+    { email: newEmail },
+    {
+      emailRedirectTo: callbackUrl
+    }
+  );
+
+  if (error) {
+    return getErrorRedirect(
+      '/account',
+      'Your email could not be updated.',
+      error.message
+    );
+  } else {
+    return getStatusRedirect(
+      '/account',
+      'Confirmation emails sent.',
+      `You will need to confirm the update by clicking the links sent to both the old and new email addresses.`
+    );
+  }
+}
+
+export async function updateName(formData: FormData) {
+  // Get form data
+  const fullName = String(formData.get('fullName')).trim();
+
+  const supabase = await createClient();
+  const { error, data } = await supabase.auth.updateUser({
+    data: { full_name: fullName }
+  });
+
+  if (error) {
+    return getErrorRedirect(
+      '/account',
+      'Your name could not be updated.',
+      error.message
+    );
+  } else if (data.user) {
+    return getStatusRedirect(
+      '/account',
+      'Success!',
+      'Your name has been updated.'
+    );
+  } else {
+    return getErrorRedirect(
+      '/account',
+      'Hmm... Something went wrong.',
+      'Your name could not be updated.'
+    );
+  }
+}
+

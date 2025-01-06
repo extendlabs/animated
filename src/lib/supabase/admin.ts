@@ -290,6 +290,18 @@ const manageSubscriptionStatusChange = async (
     );
 };
 
+const retriveCustomerId = async (uuid: string) => {
+  const { data: customerData, error: noCustomerError } = await supabaseAdmin
+    .from("customers")
+    .select("stripe_customer_id")
+    .eq("id", uuid)
+    .single();
+  if (noCustomerError)
+    throw new Error(`Customer lookup failed: ${noCustomerError.message}`);
+  return customerData;
+};
+
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -297,4 +309,5 @@ export {
   deletePriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
+  retriveCustomerId
 };

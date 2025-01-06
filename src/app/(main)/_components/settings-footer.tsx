@@ -15,6 +15,8 @@ import { themes } from "prism-react-renderer";
 import { backgroundOptions } from "@/constants/backgroundThemes";
 import { Switch } from "@/components/ui/switch";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { getSubscription } from "@/lib/supabase/queries";
 
 export default function DraggableFooter() {
   const {
@@ -33,6 +35,19 @@ export default function DraggableFooter() {
     setCardTheme,
     setWithLineIndex,
   } = useSettingsStore();
+
+  const supabase = createClient();
+
+  const [subscribed, setSubscribed] = React.useState<any>(false);
+
+  React.useEffect(() => {
+    const fetchSubscription = async () => {
+      const subscription = await getSubscription(supabase);
+      setSubscribed(subscription);
+    };
+
+    fetchSubscription();
+  }, []);
 
   const [isExpanded, setExpanded] = React.useState(false);
 
@@ -80,9 +95,8 @@ export default function DraggableFooter() {
 
   return (
     <footer
-      className={`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500 ${
-        isExpanded ? "h-52" : "h-12"
-      }`}
+      className={`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500 ${isExpanded ? "h-52" : "h-12"
+        }`}
     >
       <div className="m-1 w-full cursor-pointer text-center text-sm font-medium">
         <div className="mx-auto flex items-center justify-center">
@@ -106,7 +120,7 @@ export default function DraggableFooter() {
                   <span className="text-sm text-muted-foreground">
                     Background
                   </span>
-                  <Select value={background} onValueChange={setBackground}>
+                  <Select value={background} onValueChange={setBackground} disabled={!subscribed}>
                     <SelectTrigger className="h-8 w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
@@ -136,7 +150,7 @@ export default function DraggableFooter() {
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">Radius</span>
-                  <Select value={radius} onValueChange={setRadius}>
+                  <Select value={radius} onValueChange={setRadius} disabled={!subscribed}>
                     <SelectTrigger className="h-8 w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
@@ -155,7 +169,7 @@ export default function DraggableFooter() {
                   <span className="text-sm text-muted-foreground">
                     Language
                   </span>
-                  <Select value={language} onValueChange={setLanguage}>
+                  <Select value={language} onValueChange={setLanguage} disabled={!subscribed}>
                     <SelectTrigger className="h-8 w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
@@ -173,7 +187,7 @@ export default function DraggableFooter() {
                   <span className="text-sm text-muted-foreground">
                     Card Theme
                   </span>
-                  <Select value={cardTheme} onValueChange={setCardTheme}>
+                  <Select value={cardTheme} onValueChange={setCardTheme} disabled={!subscribed}>
                     <SelectTrigger className="h-8 w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
@@ -199,6 +213,7 @@ export default function DraggableFooter() {
                     onValueChange={(themeName: keyof typeof themes) =>
                       setTheme(themes[themeName])
                     }
+                    disabled={!subscribed}
                   >
                     <SelectTrigger className="h-8 w-[140px]">
                       <SelectValue />
@@ -224,6 +239,7 @@ export default function DraggableFooter() {
                         className="h-8 px-2 text-xs"
                         onClick={() => setPadding(`p-${size}`)}
                         size={"icon"}
+                        disabled={!subscribed}
                       >
                         {size}
                       </Button>
@@ -240,6 +256,7 @@ export default function DraggableFooter() {
                       id="line-index"
                       checked={withLineIndex}
                       onCheckedChange={setWithLineIndex}
+                      disabled={!subscribed}
                     />
                   </div>
                 </div>

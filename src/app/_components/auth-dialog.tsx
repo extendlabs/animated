@@ -13,15 +13,11 @@ import { Separator } from "@/components/ui/separator";
 import OauthSignIn from "@/components/auth/o-auth-sign-in";
 import PasswordSignIn from "@/components/auth/password-sign-in";
 import PasswordSignUp from "@/components/auth/password-sing-up";
+import { useLoginStore } from "@/zustand/useLoginStore";
 
-export function AuthDialog({
-  isDialogOpen,
-  setIsDialogOpen,
-}: {
-  isDialogOpen: boolean;
-  setIsDialogOpen: (open: boolean) => void;
-}) {
+export function AuthDialog() {
   const [isLogin, setIsLogin] = useState(true);
+  const { isDialogOpen, setIsDialogOpen } = useLoginStore();
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
