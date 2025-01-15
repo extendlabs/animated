@@ -11,6 +11,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
+import { getSubscription } from "@/lib/supabase/queries";
 
 export function AppSidebar({
   className,
@@ -18,6 +21,8 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
     useUIStore();
+  const supabase = createClient();
+  const [subscribed, setSubscribed] = useState<any>(false);
 
   const handleAddSlide = () => {
     const newSlide = {
@@ -33,6 +38,15 @@ export function AppSidebar({
     deleteSlide(id);
     setCurrentSlide(0);
   };
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      const subscription = await getSubscription(supabase);
+      setSubscribed(subscription);
+    };
+
+    fetchSubscription();
+  }, []);
 
   return (
     <Sidebar className={className} {...props}>
@@ -58,6 +72,7 @@ export function AppSidebar({
                     variant="ghost"
                     className="h-[120px] w-full rounded-md bg-slate-600/20 p-2 hover:bg-slate-600/50"
                     onClick={handleAddSlide}
+                    disabled={!subscribed}
                   >
                     <Plus className="text-slate-200" />
                   </Button>

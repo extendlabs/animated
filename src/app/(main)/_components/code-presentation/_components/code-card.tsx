@@ -28,15 +28,15 @@ export const CodeCard = ({
     <div
       className={cn(
         "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500",
-        padding,
         "transition-all duration-300 ease-in-out",
       )}
-      style={{ background: background }}
+      style={{ background: background, padding: padding }}
     >
       <div
-        className={cn("p-1 shadow-xl", radius)}
+        className={cn("p-1 shadow-xl")}
         style={{
           background: themeBackground,
+          borderRadius: radius,
         }}
       >
         <CardHeader

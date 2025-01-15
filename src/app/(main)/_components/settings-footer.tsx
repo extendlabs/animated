@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import {
@@ -17,6 +16,9 @@ import { Switch } from "@/components/ui/switch";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { getSubscription } from "@/lib/supabase/queries";
+import { cn } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
+import { Fragment, useEffect, useState } from "react";
 
 export default function DraggableFooter() {
   const {
@@ -38,9 +40,9 @@ export default function DraggableFooter() {
 
   const supabase = createClient();
 
-  const [subscribed, setSubscribed] = React.useState<any>(false);
+  const [subscribed, setSubscribed] = useState<any>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchSubscription = async () => {
       const subscription = await getSubscription(supabase);
       setSubscribed(subscription);
@@ -49,7 +51,7 @@ export default function DraggableFooter() {
     fetchSubscription();
   }, []);
 
-  const [isExpanded, setExpanded] = React.useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   const toggleFooterSize = () => setExpanded((prev) => !prev);
 
@@ -63,13 +65,6 @@ export default function DraggableFooter() {
     { value: "centerName", label: "Center Name" },
     { value: "rightName", label: "Right Name" },
     { value: "window", label: "Window" },
-  ];
-
-  const radiusOptions = [
-    { value: "rounded-none", label: "None" },
-    { value: "rounded-[10px]", label: "Small" },
-    { value: "rounded-[14px]", label: "Medium" },
-    { value: "rounded-[18px]", label: "Large" },
   ];
 
   const languageOptions = [
@@ -91,14 +86,11 @@ export default function DraggableFooter() {
     "json",
   ];
 
-  const paddingOptions = ["4", "6", "12", "20"];
-
   return (
     <footer
-      className={`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500 ${isExpanded ? "min-h-52" : "h-12"
-        }`}
+      className={cn(`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500`, isExpanded ? "h-full  lg:h-52" : "h-12")}
     >
-      <div className="m-1 w-full cursor-pointer text-center text-sm font-medium">
+      <div className="m-1.5 ontainer mx-auto cursor-pointer text-center text-sm font-medium">
         <div className="mx-auto flex items-center justify-center">
           {!isExpanded ? (
             <Button size="icon" variant="ghost" onClick={toggleFooterSize}>
@@ -111,10 +103,10 @@ export default function DraggableFooter() {
           )}
         </div>
       </div>
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-8 pt-2">
         <div className="flex flex-col items-center justify-center">
-          <div className="">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
@@ -126,7 +118,7 @@ export default function DraggableFooter() {
                     </SelectTrigger>
                     <SelectContent>
                       {backgroundOptions.map(({ group, options }) => (
-                        <React.Fragment key={group}>
+                        <Fragment key={group}>
                           <div className="px-2 py-1 text-sm font-medium text-muted-foreground">
                             {group}
                           </div>
@@ -143,45 +135,32 @@ export default function DraggableFooter() {
                               </div>
                             </SelectItem>
                           ))}
-                        </React.Fragment>
+                        </Fragment>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Radius</span>
-                  <Select value={radius} onValueChange={setRadius} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {radiusOptions.map(({ value, label }) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm text-muted-foreground">
+                      Language
+                    </span>
+                    <Select value={language} onValueChange={setLanguage} disabled={!subscribed}>
+                      <SelectTrigger className="h-8 w-full sm:w-[140px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {languageOptions.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {lang}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">
-                    Language
-                  </span>
-                  <Select value={language} onValueChange={setLanguage} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {languageOptions.map((lang) => (
-                        <SelectItem key={lang} value={lang}>
-                          {lang}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
                     Card Theme
@@ -199,8 +178,6 @@ export default function DraggableFooter() {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">Theme</span>
                   <Select
@@ -229,22 +206,39 @@ export default function DraggableFooter() {
               </div>
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Padding</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">Padding</span>
+                    <output className="text-sm text-muted-foreground tabular-nums">{padding}</output>
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    {paddingOptions.map((size) => (
-                      <Button
-                        key={size}
-                        variant={padding == `p-${size}` ? "secondary" : "ghost"}
-                        className="h-8 px-2 text-xs"
-                        onClick={() => setPadding(`p-${size}`)}
-                        size={"icon"}
-                        disabled={!subscribed}
-                      >
-                        {size}
-                      </Button>
-                    ))}
+                    <Slider
+                      id="padding-slider"
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={[Number(padding)]}
+                      onValueChange={(value) => setPadding(value[0])}
+                      disabled={!subscribed}
+                    />
                   </div>
                 </div>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">Radius</span>
+                    <output className="text-sm text-muted-foreground tabular-nums">{radius}</output>
+                  </div>
+                  <Slider
+                    id="padding-slider"
+                    min={0}
+                    max={35}
+                    step={1}
+                    value={[Number(radius)]}
+                    onValueChange={(value) => setRadius(value[0])}
+                    disabled={!subscribed}
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
                 <div className="flex flex-col gap-1 ">
                   <span className="text-sm text-muted-foreground">
                     Line index
