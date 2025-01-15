@@ -16,7 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { useAuthStore } from "@/zustand/useAuthStore";
 
 export default function DraggableFooter() {

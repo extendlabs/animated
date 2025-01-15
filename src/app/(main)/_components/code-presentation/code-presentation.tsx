@@ -13,8 +13,6 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { themeStyles } from "@/constants/themes";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { CodeCard } from "./_components/code-card";
-import { getSubscription } from "@/lib/supabase/queries";
-import { createClient } from "@/lib/supabase/client";
 
 
 type Props = {

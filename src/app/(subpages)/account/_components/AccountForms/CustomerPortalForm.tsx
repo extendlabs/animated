@@ -4,8 +4,8 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Tables } from 'types_db';
-import { cancelStripeSubscription, createStripePortal } from '@/lib/stripe/server';
+import { type Tables } from 'types_db';
+import { cancelStripeSubscription } from '@/lib/stripe/server';
 import { Button } from '@/components/ui/button';
 import Card from '@/components/card';
 import { getErrorRedirect, getStatusRedirect } from '@/lib/helpers';
@@ -30,7 +30,7 @@ interface Props {
 export default function CustomerPortalForm({ subscription }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting,] = useState(false);
   const { setSubscribed } = useAuthStore()
 
   const subscriptionPrice =

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getSubscription } from "@/lib/supabase/queries";
 import { useAuthStore } from "@/zustand/useAuthStore";
 
@@ -42,7 +42,7 @@ export function AppSidebar({
 
   useEffect(() => {
     const fetchSubscription = async () => {
-      const subscription = await getSubscription(supabase);
+      const subscription: boolean = await getSubscription(supabase);
       setSubscribed(subscription);
     };
 
