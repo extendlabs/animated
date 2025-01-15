@@ -3,6 +3,8 @@ import { HighlightCode } from "./highlight-code";
 import { type DiffResult } from "types/code-presentation.type";
 import { CardHeader } from "./card-header";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
+import ExtendUILogo from "@/app/_components/logo";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 type Props = {
   currentCode: string;
@@ -24,6 +26,8 @@ export const CodeCard = ({
   const { padding, radius, language, theme, background, cardTheme } =
     useSettingsStore();
 
+  const { subscribed } = useAuthStore()
+
   return (
     <div
       className={cn(
@@ -32,6 +36,11 @@ export const CodeCard = ({
       )}
       style={{ background: background, padding: padding }}
     >
+      {!subscribed && (
+        <div className="absolute bottom-2 right-2 text-white">
+          <ExtendUILogo />
+        </div>
+      )}
       <div
         className={cn("p-1 shadow-xl")}
         style={{

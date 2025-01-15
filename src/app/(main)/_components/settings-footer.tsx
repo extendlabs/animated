@@ -14,11 +14,10 @@ import { themes } from "prism-react-renderer";
 import { backgroundOptions } from "@/constants/backgroundThemes";
 import { Switch } from "@/components/ui/switch";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { getSubscription } from "@/lib/supabase/queries";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
 import { Fragment, useEffect, useState } from "react";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 export default function DraggableFooter() {
   const {
@@ -38,18 +37,7 @@ export default function DraggableFooter() {
     setWithLineIndex,
   } = useSettingsStore();
 
-  const supabase = createClient();
-
-  const [subscribed, setSubscribed] = useState<any>(false);
-
-  useEffect(() => {
-    const fetchSubscription = async () => {
-      const subscription = await getSubscription(supabase);
-      setSubscribed(subscription);
-    };
-
-    fetchSubscription();
-  }, []);
+  const { subscribed } = useAuthStore()
 
   const [isExpanded, setExpanded] = useState(false);
 

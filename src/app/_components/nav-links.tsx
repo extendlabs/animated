@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getRedirectMethod } from "@/lib/auth-helpers/settings";
 import Link from "next/link";
 import { AuthDialog } from "./auth-dialog";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 type Props = {
   user: any;
@@ -15,12 +16,16 @@ type Props = {
 
 export default function Navlinks({ user }: Props) {
   const router = getRedirectMethod() === "client" ? useRouter() : null;
+  const { setSubscribed } = useAuthStore();
   return (
     <div className="flex items-center gap-5">
       <Link href="/pricing">Pricing</Link>
       {user && <Link href="/account">Account</Link>}
       {user ? (
-        <form onSubmit={(e) => handleRequest(e, SignOut, router)}>
+        <form onSubmit={(e) => {
+          handleRequest(e, SignOut, router)
+          setSubscribed(false)
+        }}>
           <Button type="submit">Sign out</Button>
         </form>
       ) : (

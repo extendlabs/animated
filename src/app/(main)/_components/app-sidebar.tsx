@@ -14,6 +14,7 @@ import { SidebarCard } from "./sidebar-card";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { getSubscription } from "@/lib/supabase/queries";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 export function AppSidebar({
   className,
@@ -22,7 +23,7 @@ export function AppSidebar({
   const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
     useUIStore();
   const supabase = createClient();
-  const [subscribed, setSubscribed] = useState<any>(false);
+  const { subscribed, setSubscribed } = useAuthStore()
 
   const handleAddSlide = () => {
     const newSlide = {
