@@ -12,7 +12,6 @@ export default async function Account() {
     const supabase = await createClient();
     const [user, subscription] = await Promise.all([
         getUser(supabase),
-        getUserDetails(supabase),
         getSubscription(supabase)
     ]);
 
