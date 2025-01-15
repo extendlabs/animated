@@ -5,6 +5,7 @@ import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { signInWithOAuth } from "@/lib/auth-helpers/client";
+import { Github } from "lucide-react";
 
 type OAuthProviders = {
   name: Provider;
@@ -19,6 +20,11 @@ export default function OauthSignIn() {
       displayName: "Google",
       icon: <FaGoogle className="h-5 w-5" />,
     },
+    {
+      name: 'github',
+      displayName: 'GitHub',
+      icon: <Github className="h-5 w-5" />
+    }
     /* Add desired OAuth providers here */
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);

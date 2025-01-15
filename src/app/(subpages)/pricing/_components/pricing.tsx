@@ -167,7 +167,7 @@ export default function Pricing({ user, products, subscription }: Props) {
             </FadeUp>
             <div className="gradient pointer-events-none absolute inset-0 -z-10 block opacity-30 blur-3xl"></div>
           </div>
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-12 px-4">
+          <div className="mx-auto grid max-w-6xl  grid-cols-1 md:grid-cols-2 gap-12 px-4">
             <div
               className={cn(
                 "relative mt-12 flex h-full flex-col pb-2 text-start",

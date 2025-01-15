@@ -9,6 +9,9 @@ import { getRedirectMethod } from "@/lib/auth-helpers/settings";
 import Link from "next/link";
 import { AuthDialog } from "./auth-dialog";
 import { useAuthStore } from "@/zustand/useAuthStore";
+import { LogOut } from "lucide-react";
+import { usePathname } from 'next/navigation';
+import { cn } from "@/lib/utils";
 
 type Props = {
   user: any;
@@ -16,17 +19,35 @@ type Props = {
 
 export default function Navlinks({ user }: Props) {
   const router = getRedirectMethod() === "client" ? useRouter() : null;
+  const pathname = usePathname();
   const { setSubscribed } = useAuthStore();
+
   return (
     <div className="flex items-center gap-5">
-      <Link href="/pricing">Pricing</Link>
-      {user && <Link href="/account">Account</Link>}
+      <Link
+        href="/pricing"
+        className={cn("hover:text-accent transition-colors duration-200", pathname === "/pricing" && "text-accent")}
+      >
+        Pricing
+      </Link>
+      {user && (
+        <Link
+          href="/account"
+          className={cn("hover:text-accent transition-colors duration-200", pathname === "/account" && "text-accent")}
+        >
+          Account
+        </Link>
+      )}
       {user ? (
-        <form onSubmit={(e) => {
-          handleRequest(e, SignOut, router)
-          setSubscribed(false)
-        }}>
-          <Button type="submit">Sign out</Button>
+        <form
+          onSubmit={(e) => {
+            handleRequest(e, SignOut, router);
+            setSubscribed(false);
+          }}
+        >
+          <Button variant="ghost" size="icon" type="submit">
+            <LogOut size={20} />
+          </Button>
         </form>
       ) : (
         <AuthDialog />
