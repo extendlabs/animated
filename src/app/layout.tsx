@@ -1,19 +1,10 @@
-import { AppSidebar } from "@/app/_components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import "@/styles/globals.css";
-
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { EditButton } from "./_components/edit-button";
-import SettingsFooter from "./_components/settings-footer";
 import { Toaster } from "@/components/ui/toaster";
-import { DynamicAuthButton } from "@/components/dynamic-auth-button";
-import { AuthProvider } from "@/contexts/auth-context";
-
+import { Suspense } from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import Footer from "./_components/footer";
 
 export const metadata: Metadata = {
   title: "Code Animation Presentation",
@@ -29,28 +20,15 @@ export default function RootLayout({
       className={`${GeistSans.variable}`}
       suppressHydrationWarning
     >
-      <body>
-      <AuthProvider>
+      <body className="flex min-h-screen flex-col">
         <SidebarProvider defaultOpen={true}>
-          <AppSidebar />
-          <SidebarInset className="min-h-screen bg-background">
-            <header className="flex h-16 items-center justify-between border-b px-4 lg:px-6">
-              <SidebarTrigger />
-              <div>
-                <EditButton />
-                <DynamicAuthButton />
-              </div>
-            </header>
-            <main className="flex h-full flex-col">
-              <div className="flex-1 overflow-auto">{children}</div>
-            </main>
-            <SettingsFooter />
-          </SidebarInset>
-          <Toaster />
+          <div className="flex flex-1 overflow-hidden">{children}</div>
         </SidebarProvider>
-        </AuthProvider>
+        <Footer />
+        <Suspense>
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );
 }
-

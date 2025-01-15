@@ -1,21 +1,19 @@
-'use client'
+import { createClient } from "@/lib/supabase/server";
+import { EditButton } from "@/app/(main)/_components/edit-button";
 
-import { useAuth } from "@/contexts/auth-context"
-
-
-
-export function ProtectedContent() {
-  const { user } = useAuth()
+export async function ProtectedContent() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await (await supabase).auth.getUser();
 
   if (!user) {
-    return <p>Please log in to see additional content.</p>
+    return;
   }
 
   return (
-    <div>
-      <h2>Protected Content</h2>
-      <p>Welcome, {user.email}! This content is only visible to logged-in users.</p>
+    <div className="flex gap-2">
+      <EditButton />
     </div>
-  )
+  );
 }
-

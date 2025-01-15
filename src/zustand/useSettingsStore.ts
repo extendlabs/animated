@@ -7,8 +7,8 @@ import { immer } from "zustand/middleware/immer";
 
 type SettingsStoreTypes = {
   background: string;
-  padding: string;
-  radius: string;
+  padding?: number;
+  radius?: number;
   language: string;
   fileName: string;
   theme: PrismTheme;
@@ -18,8 +18,8 @@ type SettingsStoreTypes = {
 
 type SettingsStoreActions = {
   setBackground: (background: string) => void;
-  setPadding: (padding: string) => void;
-  setRadius: (radius: string) => void;
+  setPadding: (padding?: number) => void;
+  setRadius: (radius?: number) => void;
   setLanguage: (language: string) => void;
   setFileName: (fileName: string) => void;
   setTheme: (theme: PrismTheme) => void;
@@ -30,8 +30,8 @@ type SettingsStoreActions = {
 export const useSettingsStore = create(
   immer<SettingsStoreTypes & SettingsStoreActions>((set) => ({
     background: "linear-gradient(to right, #3b82f6, #9333ea, #ec4899)",
-    padding: "p-4",
-    radius: "rounded-[10px]",
+    padding: 50,
+    radius: 10,
     language: "tsx",
     fileName: "Undefined-1.tsx",
     theme: themes.vsDark,
