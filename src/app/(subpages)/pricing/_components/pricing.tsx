@@ -17,6 +17,7 @@ import { PRICING_FREE_DATA } from "@/constants/pricing";
 import { Check } from "lucide-react";
 import { useLoginStore } from "@/zustand/useLoginStore";
 import { handleRequest } from "@/lib/auth-helpers/client";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 type Subscription = Tables<"subscriptions">;
 type Product = Tables<"products">;
@@ -70,6 +71,7 @@ export default function Pricing({ user, products, subscription }: Props) {
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const currentPath = usePathname();
   const { setIsDialogOpen } = useLoginStore();
+  const { setSubscribed } = useAuthStore()
 
   const handleStripeCheckout = async (price: Price) => {
     setPriceIdLoading(price.id);
@@ -111,8 +113,9 @@ export default function Pricing({ user, products, subscription }: Props) {
     const result = await cancelStripeSubscription(subscriptionId);
     let redirectPath
     if (result.success) {
+      setSubscribed(false)
       redirectPath = getStatusRedirect(
-        currentPath,
+        '/',
         "Success!",
         result.message,
       )

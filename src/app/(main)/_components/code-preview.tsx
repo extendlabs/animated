@@ -37,9 +37,9 @@ const CodePreview = ({ currentSlide }: Props) => {
     <div className="absolute inset-0 flex items-center justify-center">
       <div
         className={cn(
-          "relative h-[120px] w-full overflow-hidden rounded-md p-2",
+          "relative h-[120px] w-full overflow-hidden rounded-md py-1 px-2",
         )}
-        style={{ background: background }}
+
       >
         <div
           className="h-full rounded-sm"

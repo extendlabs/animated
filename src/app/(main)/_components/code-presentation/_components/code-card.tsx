@@ -28,6 +28,8 @@ export const CodeCard = ({
 
   const { subscribed } = useAuthStore()
 
+  console.log(subscribed)
+
   return (
     <div
       className={cn(

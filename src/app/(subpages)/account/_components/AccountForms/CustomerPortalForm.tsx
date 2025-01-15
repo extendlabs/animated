@@ -9,6 +9,7 @@ import { cancelStripeSubscription, createStripePortal } from '@/lib/stripe/serve
 import { Button } from '@/components/ui/button';
 import Card from '@/components/card';
 import { getErrorRedirect, getStatusRedirect } from '@/lib/helpers';
+import { useAuthStore } from '@/zustand/useAuthStore';
 
 type Subscription = Tables<'subscriptions'>;
 type Price = Tables<'prices'>;
@@ -30,6 +31,7 @@ export default function CustomerPortalForm({ subscription }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setSubscribed } = useAuthStore()
 
   const subscriptionPrice =
     subscription &&
@@ -43,8 +45,9 @@ export default function CustomerPortalForm({ subscription }: Props) {
     const result = await cancelStripeSubscription(subscriptionId);
     let redirectPath
     if (result.success) {
+      setSubscribed(false)
       redirectPath = getStatusRedirect(
-        currentPath,
+        '/',
         "Success!",
         result.message,
       )
@@ -69,13 +72,14 @@ export default function CustomerPortalForm({ subscription }: Props) {
       footer={
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <p className="pb-4 sm:pb-0">Manage your subscription.</p>
-          <Button
-            onClick={() => handleCancelSubscription(subscription?.id!)}
-            loading={isSubmitting}
-            disabled={!subscription}
-          >
-            Cancel Subscription
-          </Button>
+          {subscription && (
+            <Button
+              onClick={() => handleCancelSubscription(subscription?.id!)}
+              loading={isSubmitting}
+            >
+              Cancel Subscription
+            </Button>
+          )}
         </div>
       }
     >

@@ -1,8 +1,9 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import CodePreview from "./code-preview";
+import { useSettingsStore } from "@/zustand/useSettingsStore";
+import { useState } from "react";
 
 type Slide = {
   id: number;
@@ -25,32 +26,32 @@ export const SidebarCard = ({
   setCurrentSlide,
   handleDeleteSlide,
 }: Props) => {
-  const [hoveredSlide, setHoveredSlide] = React.useState<number | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const isCurrent = currentSlide === slide.id;
+
+  const { background } = useSettingsStore();
 
   return (
     <div
       key={slide.id}
       onClick={() => setCurrentSlide(slide.id)}
-      onMouseEnter={() => setHoveredSlide(slide.id)}
-      onMouseLeave={() => setHoveredSlide(null)}
-      className={cn(
-        "relative cursor-pointer overflow-hidden rounded-md",
-        "group transition-all duration-200",
-      )}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative cursor-pointer overflow-hidden rounded-md transition-all duration-200"
     >
-      <div className="relative aspect-[16/9] w-full">
+      <div className="relative aspect-[16/9] w-full" style={{ background: background }}>
         <CodePreview currentSlide={index} />
         <div
           className={cn(
-            "absolute inset-0 bg-black bg-opacity-0 transition-opacity duration-200 hover:bg-slate-300/30",
-            !isCurrent && "bg-opacity-50",
+            "absolute inset-0 transition-opacity duration-200",
+            !isCurrent && "bg-black/50",
+            isHovered && "bg-slate-300/30"
           )}
         />
         <div
           className={cn(
-            "absolute right-0 top-0 p-2 opacity-0 transition-opacity duration-200",
-            hoveredSlide !== null && hoveredSlide >= 0 && "opacity-100",
+            "absolute right-0 top-0 p-2 transition-opacity duration-200",
+            isHovered ? "opacity-100" : "opacity-0"
           )}
         >
           <Button
