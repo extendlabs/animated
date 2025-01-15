@@ -95,7 +95,7 @@ export default function DraggableFooter() {
 
   return (
     <footer
-      className={`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500 ${isExpanded ? "h-52" : "h-12"
+      className={`bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500 ${isExpanded ? "min-h-52" : "h-12"
         }`}
     >
       <div className="m-1 w-full cursor-pointer text-center text-sm font-medium">
@@ -111,17 +111,17 @@ export default function DraggableFooter() {
           )}
         </div>
       </div>
-      <div className="container mx-auto px-8 py-4">
-        <div className="flex flex-col items-center justify-center gap-8 sm:flex-row">
-          <div className="flex flex-wrap items-center justify-center gap-12 sm:gap-8">
-            <div className="grid grid-cols-4 gap-8">
-              <div>
+      <div className="container mx-auto p-8">
+        <div className="flex flex-col items-center justify-center">
+          <div className="">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
                     Background
                   </span>
                   <Select value={background} onValueChange={setBackground} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-[140px]">
+                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -148,10 +148,10 @@ export default function DraggableFooter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="mt-2 flex flex-col gap-1">
+                <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">Radius</span>
                   <Select value={radius} onValueChange={setRadius} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-[140px]">
+                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -164,13 +164,13 @@ export default function DraggableFooter() {
                   </Select>
                 </div>
               </div>
-              <div>
+              <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
                     Language
                   </span>
                   <Select value={language} onValueChange={setLanguage} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-[140px]">
+                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -182,13 +182,12 @@ export default function DraggableFooter() {
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="mt-2 flex flex-col gap-1">
+                <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
                     Card Theme
                   </span>
                   <Select value={cardTheme} onValueChange={setCardTheme} disabled={!subscribed}>
-                    <SelectTrigger className="h-8 w-[140px]">
+                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -201,7 +200,7 @@ export default function DraggableFooter() {
                   </Select>
                 </div>
               </div>
-              <div>
+              <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">Theme</span>
                   <Select
@@ -215,7 +214,7 @@ export default function DraggableFooter() {
                     }
                     disabled={!subscribed}
                   >
-                    <SelectTrigger className="h-8 w-[140px]">
+                    <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -228,10 +227,10 @@ export default function DraggableFooter() {
                   </Select>
                 </div>
               </div>
-              <div>
+              <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">Padding</span>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {paddingOptions.map((size) => (
                       <Button
                         key={size}
@@ -246,8 +245,7 @@ export default function DraggableFooter() {
                     ))}
                   </div>
                 </div>
-
-                <div className="mt-2 flex flex-col gap-1">
+                <div className="flex flex-col gap-1 ">
                   <span className="text-sm text-muted-foreground">
                     Line index
                   </span>
