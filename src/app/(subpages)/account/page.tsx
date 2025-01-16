@@ -1,7 +1,7 @@
 
 import { redirect } from 'next/navigation';
 
-import { getSubscription, getUser, getUserDetails } from '@/lib/supabase/queries';
+import { getSubscription, getUser } from '@/lib/supabase/queries';
 import { createClient } from '@/lib/supabase/server';
 import CustomerPortalForm from './_components/AccountForms/CustomerPortalForm';
 import EmailForm from './_components/AccountForms/EmailForm';

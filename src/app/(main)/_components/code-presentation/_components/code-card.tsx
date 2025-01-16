@@ -27,9 +27,7 @@ export const CodeCard = ({
   const { padding, radius, language, theme, background, cardTheme } =
     useSettingsStore();
 
-  const { subscribed } = useAuthStore()
-
-  console.log(subscribed)
+  const { subscription } = useAuthStore()
 
   return (
     <>
@@ -40,7 +38,7 @@ export const CodeCard = ({
           )}
           style={{ background: background, padding: padding }}
         >
-          {!subscribed && (
+          {!subscription && (
             <div className="absolute bottom-2 right-2 text-white">
               <ExtendUILogo />
             </div>

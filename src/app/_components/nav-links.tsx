@@ -20,7 +20,7 @@ type Props = {
 export default function Navlinks({ user }: Props) {
   const router = getRedirectMethod() === "client" ? useRouter() : null;
   const pathname = usePathname();
-  const { setSubscribed } = useAuthStore();
+  const { setSubscription } = useAuthStore();
 
   return (
     <div className="flex items-center gap-5">
@@ -42,7 +42,7 @@ export default function Navlinks({ user }: Props) {
         <form
           onSubmit={(e) => {
             handleRequest(e, SignOut, router);
-            setSubscribed(false);
+            setSubscription(null);
           }}
         >
           <Button variant="ghost" size="icon" type="submit">

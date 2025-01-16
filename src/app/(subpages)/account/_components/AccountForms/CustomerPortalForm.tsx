@@ -31,9 +31,7 @@ export default function CustomerPortalForm({ subscription }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setSubscribed } = useAuthStore()
-
-  console.log(subscription)
+  const { setSubscription } = useAuthStore()
 
   const subscriptionPrice =
     subscription &&
@@ -47,9 +45,9 @@ export default function CustomerPortalForm({ subscription }: Props) {
     const result = await cancelStripeSubscription(subscriptionId);
     let redirectPath
     if (result.success) {
-      setSubscribed(false)
+      setSubscription(null);
       redirectPath = getStatusRedirect(
-        '/',
+        currentPath,
         "Success!",
         result.message,
       )
@@ -60,7 +58,7 @@ export default function CustomerPortalForm({ subscription }: Props) {
         result.message
       )
     }
-    return router.push(redirectPath);
+    return setTimeout(() => router.push(redirectPath), 1000);
   };
 
   return (

@@ -23,9 +23,27 @@ export function AppSidebar({
   const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
     useUIStore();
   const supabase = createClient();
-  const { subscribed, setSubscribed } = useAuthStore()
+  const { subscription, setSubscription } = useAuthStore();
+
+  const getMaxSlides = () => {
+    switch (subscription) {
+      case null:
+        return 2;
+      case 'Hobby':
+        return 5;
+      case 'Premium':
+        return Infinity;
+      default:
+        return 0;
+    }
+  };
 
   const handleAddSlide = () => {
+    const maxSlides = getMaxSlides();
+    if (slides.length >= maxSlides) {
+      return;
+    }
+
     const newSlide = {
       id: slides.length,
       code: "function newSlide() {}",
@@ -42,12 +60,16 @@ export function AppSidebar({
 
   useEffect(() => {
     const fetchSubscription = async () => {
-      const subscription: boolean = await getSubscription(supabase);
-      setSubscribed(subscription);
+      const subscription = await getSubscription(supabase);
+      setSubscription(subscription?.prices?.products?.name || null);
     };
 
     fetchSubscription();
   }, []);
+
+  const isAddDisabled = () => {
+    return slides.length >= getMaxSlides();
+  };
 
   return (
     <Sidebar className={className} {...props}>
@@ -73,7 +95,7 @@ export function AppSidebar({
                     variant="ghost"
                     className="h-[120px] w-full rounded-md bg-slate-600/20 p-2 hover:bg-slate-600/50"
                     onClick={handleAddSlide}
-                    disabled={!subscribed}
+                    disabled={isAddDisabled()}
                   >
                     <Plus className="text-slate-200" />
                   </Button>

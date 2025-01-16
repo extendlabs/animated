@@ -1,21 +1,23 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
+type SubscriptionPlans = 'Hobby' | 'Premium' | null;
+
 type AuthState = {
-    subscribed: boolean;
+    subscription: SubscriptionPlans
 };
 
 type AuthActions = {
-  setSubscribed: (subscribed: boolean) => void;
+  setSubscription: (subscription: SubscriptionPlans) => void;
 };
 
 export const useAuthStore = create(
   immer<AuthState & AuthActions>((set) => ({
-    subscribed: false,
-    setSubscribed: (open) => set({ subscribed: open }),
+    subscription: null,
+    setSubscription: (subscription) => set({ subscription }),
   }),
 ));
 
 export const {
-    setSubscribed,
+  setSubscription,
 } = useAuthStore.getState();
