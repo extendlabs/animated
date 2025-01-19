@@ -136,7 +136,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
               />
             )}
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center max-sm:hidden">
             <div className="mt-4 flex items-center space-x-4">
               <Button
                 onClick={() => {

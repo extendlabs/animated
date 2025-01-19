@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 
 export default function PrivacyPolicy() {
-  const lastUpdated = "December 19, 2024";
+  const lastUpdated = "January 19, 2025";
 
   return (
     <div className="mx-auto min-h-screen py-12">
@@ -28,9 +28,9 @@ export default function PrivacyPolicy() {
           <CardContent>
             <Alert className="mb-6">
               <AlertDescription>
-                This privacy policy applies to all users of our code animation
-                subscription service. We are committed to protecting your
-                privacy and handling your data transparently.
+                This privacy policy applies to users of the "Animated" code
+                animation app, created by ExtendUI. We are committed to protecting
+                your privacy and handling your data responsibly and transparently.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -46,21 +46,13 @@ export default function PrivacyPolicy() {
                 <h3 className="text-lg font-medium">Account Information</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>Email address and password for account creation</li>
-                  <li>Billing information for subscription processing</li>
-                  <li>Usage patterns of our animation features</li>
-                </ul>
-
-                <h3 className="text-lg font-medium">Technical Data</h3>
-                <ul className="list-disc space-y-2 pl-6">
-                  <li>IP address and device information</li>
-                  <li>Browser type and operating system</li>
-                  <li>Time zone and language preferences</li>
+                  <li>Subscription information for payment processing via Stripe</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Content Data</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>Code snippets uploaded for animation</li>
-                  <li>Generated animations and related metadata</li>
+                  <li>Generated animations and associated metadata</li>
                   <li>Custom settings and preferences</li>
                 </ul>
               </AccordionContent>
@@ -73,16 +65,15 @@ export default function PrivacyPolicy() {
               <AccordionContent className="space-y-4">
                 <h3 className="text-lg font-medium">Service Provision</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Processing and storing your code animations</li>
-                  <li>Managing your subscription and payments</li>
+                  <li>Creating and managing your animation content</li>
+                  <li>Managing your subscription and payments through Stripe</li>
                   <li>Providing customer support and service updates</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Service Improvement</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Analyzing usage patterns to improve features</li>
-                  <li>Debugging and optimizing performance</li>
-                  <li>Personalizing your experience</li>
+                  <li>Improving user experience based on usage patterns</li>
+                  <li>Debugging and optimizing app performance</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -93,28 +84,25 @@ export default function PrivacyPolicy() {
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <p>
-                  We process subscription-related data through secure payment
-                  processors. Your payment information is never stored directly
-                  on our servers.
+                  Payments and subscriptions are processed securely through Stripe. We
+                  do not store payment information. We only collect the necessary
+                  subscription-related data.
                 </p>
 
                 <h3 className="text-lg font-medium">
                   Subscription Information We Store
                 </h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Subscription tier and status</li>
+                  <li>Subscription type and status</li>
                   <li>Subscription history and usage metrics</li>
-                  <li>Billing cycle information</li>
+                  <li>Billing cycle and payment history</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Payment Processing</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>
-                    All payments are processed through secure third-party
-                    providers
-                  </li>
-                  <li>We maintain industry-standard security practices</li>
-                  <li>Subscription data is encrypted in transit and at rest</li>
+                  <li>All payment processing is handled by Stripe</li>
+                  <li>We do not store your credit card or payment information</li>
+                  <li>Stripe ensures all payment data is processed securely</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -124,24 +112,23 @@ export default function PrivacyPolicy() {
                 4. Data Retention & Deletion
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
-                <h3 className="text-lg font-medium">Active Subscriptions</h3>
+                <h3 className="text-lg font-medium">Data Retention</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>
-                    Your data is retained while your subscription is active
-                  </li>
-                  <li>
-                    Generated animations are stored securely in your account
-                  </li>
-                  <li>You can delete your content at any time</li>
+                  <li>Your data is retained while your subscription is active</li>
+                  <li>Generated animations are stored in your account</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">After Cancellation</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>
-                    Account data is retained for 30 days after cancellation
-                  </li>
-                  <li>Generated animations are archived for 30 days</li>
+                  <li>Account and content data is retained for 30 days after cancellation</li>
+                  <li>Animations are archived for 30 days before deletion</li>
                   <li>You can request complete data deletion at any time</li>
+                </ul>
+
+                <h3 className="text-lg font-medium">Content Deletion</h3>
+                <ul className="list-disc space-y-2 pl-6">
+                  <li>You may delete your account and associated data at any time</li>
+                  <li>Deleted content cannot be recovered</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -151,12 +138,13 @@ export default function PrivacyPolicy() {
                 5. Your Rights & Controls
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
-                <p>You have the right to:</p>
+                <p>You have the following rights regarding your personal data:</p>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Access your personal data and animation history</li>
+                  <li>Access your account data, including email, animations, and settings</li>
                   <li>Export your data in a machine-readable format</li>
                   <li>Request corrections to your account information</li>
-                  <li>Delete your account and associated data</li>
+                  <li>Delete your account and all associated data at any time</li>
+                  <li>Request the deletion of your animations after cancellation</li>
                   <li>Opt-out of non-essential communications</li>
                 </ul>
               </AccordionContent>
@@ -168,13 +156,12 @@ export default function PrivacyPolicy() {
           <CardContent className="pt-6">
             <div className="text-sm">
               <p>
-                For any privacy-related questions or concerns, please contact us
-                at:
+                For any privacy-related questions or concerns, please contact us at:
               </p>
-              <p className="mt-2">privacy@yourcompany.com</p>
-              <p className="mt-4">Your Company Name</p>
-              <p>123 Privacy Street</p>
-              <p>Tech City, TC 12345</p>
+              <p className="mt-2">privacy@extendui.com</p>
+              <p className="mt-4">Krzysztof Wicki App Developer</p>
+              <p>Antoniego Suchanka 11/8</p>
+              <p>Gdańsk, 80-772</p>
             </div>
           </CardContent>
         </Card>

@@ -47,23 +47,23 @@ export default function TermsOfService() {
                 <ul className="list-disc space-y-2 pl-6">
                   <li>
                     Various subscription tiers with different feature sets and
-                    usage limits
+                    usage limits.
                   </li>
                   <li>
                     Automatic renewal unless cancelled before the billing period
-                    ends
+                    ends.
                   </li>
                   <li>
-                    Pro-rated refunds available within 14 days of subscription
+                    Pro-rated refunds available within 14 days of subscription.
                   </li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Usage Limits</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Fair usage policies apply to animation rendering</li>
-                  <li>Storage limits vary by subscription tier</li>
+                  <li>Fair usage policies apply to animation rendering.</li>
+                  <li>Storage limits vary by subscription tier.</li>
                   <li>
-                    Additional usage charges may apply for exceeding limits
+                    Additional usage charges may apply for exceeding limits.
                   </li>
                 </ul>
               </AccordionContent>
@@ -76,19 +76,13 @@ export default function TermsOfService() {
               <AccordionContent className="space-y-4">
                 <p>You agree not to:</p>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Share account credentials or transfer subscriptions</li>
-                  <li>Use the service for illegal or unauthorized purposes</li>
+                  <li>Share account credentials or transfer subscriptions.</li>
+                  <li>Use the service for illegal or unauthorized purposes.</li>
                   <li>
-                    Attempt to reverse engineer or copy our animation technology
+                    Attempt to reverse engineer or copy our animation technology.
                   </li>
-                  <li>
-                    Upload malicious code or content that violates others&apos;
-                    rights
-                  </li>
-                  <li>
-                    Resell or redistribute generated animations without
-                    permission
-                  </li>
+                  <li>Upload malicious code or content that violates others&apos; rights.</li>
+                  <li>Resell generated animations without permission.</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -100,22 +94,16 @@ export default function TermsOfService() {
               <AccordionContent className="space-y-4">
                 <h3 className="text-lg font-medium">Your Content</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>You retain rights to your uploaded code and content</li>
-                  <li>
-                    You grant us license to process and store your content
-                  </li>
-                  <li>Generated animations are your intellectual property</li>
+                  <li>You retain rights to your uploaded code and content.</li>
+                  <li>You grant us license to process and store your content.</li>
+                  <li>Generated animations are your intellectual property.</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Our Service</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>
-                    Our animation technology and platform remain our property
-                  </li>
-                  <li>
-                    Service features and UI elements are protected by copyright
-                  </li>
-                  <li>Usage analytics and aggregated data belong to us</li>
+                  <li>Our animation technology and platform remain our property.</li>
+                  <li>Service features and UI elements are protected by copyright.</li>
+                  <li>Usage analytics and aggregated data belong to us.</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -127,16 +115,16 @@ export default function TermsOfService() {
               <AccordionContent className="space-y-4">
                 <h3 className="text-lg font-medium">Account Security</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>You are responsible for maintaining account security</li>
-                  <li>Notify us immediately of any unauthorized access</li>
-                  <li>Strong passwords and 2FA are recommended</li>
+                  <li>You are responsible for maintaining account security.</li>
+                  <li>Notify us immediately of any unauthorized access.</li>
+                  <li>Strong passwords and 2FA are recommended.</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Account Termination</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>We may suspend accounts for terms violations</li>
-                  <li>You can cancel your subscription at any time</li>
-                  <li>Data retention policies apply after termination</li>
+                  <li>We may suspend accounts for terms violations.</li>
+                  <li>You can cancel your subscription at any time.</li>
+                  <li>Data retention policies apply after termination.</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -147,14 +135,10 @@ export default function TermsOfService() {
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>
-                    We reserve the right to modify or discontinue features
-                  </li>
-                  <li>Pricing changes will be communicated in advance</li>
-                  <li>
-                    Service availability and performance are not guaranteed
-                  </li>
-                  <li>We may update these terms with notice to users</li>
+                  <li>We reserve the right to modify or discontinue features.</li>
+                  <li>Pricing changes will be communicated in advance.</li>
+                  <li>Service availability and performance are not guaranteed.</li>
+                  <li>We may update these terms with notice to users.</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -166,11 +150,11 @@ export default function TermsOfService() {
               <AccordionContent className="space-y-4">
                 <p>We are not liable for:</p>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Service interruptions or data loss</li>
-                  <li>Accuracy of generated animations</li>
-                  <li>Third-party content or integrations</li>
-                  <li>Indirect or consequential damages</li>
-                  <li>Issues arising from your use of the service</li>
+                  <li>Service interruptions or data loss.</li>
+                  <li>Accuracy of generated animations.</li>
+                  <li>Third-party content or integrations.</li>
+                  <li>Indirect or consequential damages.</li>
+                  <li>Issues arising from your use of the service.</li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -181,10 +165,10 @@ export default function TermsOfService() {
           <CardContent className="pt-6">
             <div className="text-sm">
               <p>For questions about these terms, please contact us at:</p>
-              <p className="mt-2">legal@yourcompany.com</p>
-              <p className="mt-4">Your Company Name</p>
-              <p>123 Legal Street</p>
-              <p>Tech City, TC 12345</p>
+              <p className="mt-2">privacy@extendui.com</p>
+              <p className="mt-4">Krzysztof Wicki App Developer</p>
+              <p>Antoniego Suchanka 11/8</p>
+              <p>Gdańsk, 80-772</p>
             </div>
           </CardContent>
         </Card>
