@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { Minus, Square, X } from "lucide-react";
-import { type CardTheme } from "types/code-presentation.type";
-import { useSettingsStore } from "@/zustand/useSettingsStore";
+import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
   themeBorder?: string;
   themeText?: string;
-  cardTheme: CardTheme;
+  cardTheme: string;
 };
 
 export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { fileName, setFileName } = useSettingsStore();
+  const { fileName, setFileName } = useUIStore();
 
   const headerStyles = {
     borderColor: themeBorder,

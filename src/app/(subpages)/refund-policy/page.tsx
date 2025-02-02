@@ -9,7 +9,6 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 export default function RefundPolicy() {
   const lastUpdated = "January 19, 2025";

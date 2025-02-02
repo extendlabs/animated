@@ -10,8 +10,9 @@ import { useState } from "react";
 import { PRICING_FREE_DATA } from "@/constants/pricing";
 import { useLoginStore } from "@/zustand/useLoginStore";
 import { useAuthStore } from "@/zustand/useAuthStore";
-import { BillingInterval, Price, ProductWithPrices, SubscriptionWithProduct } from "@/types/pricing.type";
+import { type BillingInterval, type Price, type ProductWithPrices, type SubscriptionWithProduct } from "@/types/pricing.type";
 import { PricingCard } from "./pricing-card";
+import { type Json } from "types_db";
 
 type Props = {
   user: User | null | undefined;
@@ -21,7 +22,7 @@ type Props = {
 
 export default function Pricing({ user, products, subscription }: Props) {
   const router = useRouter();
-  const [billingInterval, setBillingInterval] = useState<BillingInterval>("month");
+  const [billingInterval,] = useState<BillingInterval>("month");
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const currentPath = usePathname();
   const { setIsDialogOpen } = useLoginStore();
@@ -95,11 +96,10 @@ export default function Pricing({ user, products, subscription }: Props) {
   }
 
   const sortedProducts = [...products].sort((a, b) => {
-    const aPopular = a.metadata?.most_popular === 'true';
-    const bPopular = b.metadata?.most_popular === 'true';
+    const aPopular = (a.metadata as Record<string, Json | undefined>)?.most_popular === 'true';
+    const bPopular = (b.metadata as Record<string, Json | undefined>)?.most_popular === 'true';
     return bPopular ? 1 : aPopular ? -1 : 0;
   });
-
 
 
   return (
@@ -128,9 +128,9 @@ export default function Pricing({ user, products, subscription }: Props) {
             buttonText="Get started"
             onButtonClick={() => router.push("/")}
           />
-          {sortedProducts.map((product) => {
+          {sortedProducts.map((product: any) => {
             const price = product?.prices?.find(
-              (price) => price.interval === billingInterval,
+              (price: any) => price.interval === billingInterval,
             );
             if (!price) return null;
 
@@ -163,7 +163,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                 )}
                 onButtonClick={() =>
                   subscription?.prices?.id === price.id
-                    ? handleCancelSubscription(subscription?.id)
+                    ? handleCancelSubscription(subscription?.id as string)
                     : handleStripeCheckout(price)
                 }
               />

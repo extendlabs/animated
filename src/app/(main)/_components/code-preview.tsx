@@ -1,32 +1,24 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { themes } from "prism-react-renderer";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
-import { cn } from "@/lib/utils";
-import { themeStyles } from "@/constants/themes";
 import { HighlightCode } from "./code-presentation/_components/highlight-code";
+import { getThemeStyles } from "@/helpers/get-theme-styles";
+import PreviewCardHeader from "./preview-card-header";
+import { CardTheme } from "types/code-presentation.type";
 
 type Props = {
   currentSlide: number;
 };
 
 const CodePreview = ({ currentSlide }: Props) => {
-  const { slides } = useUIStore();
-  const { language, theme, fileName } = useSettingsStore();
+  const { slides, fileName } = useUIStore();
+  const { language, themeName, cardTheme } = useSettingsStore();
 
-  const currentThemeName =
-    Object.keys(themes).find(
-      (key) => themes[key as keyof typeof themes] === theme,
-    ) ?? "vsDark";
+  const themeStyles = getThemeStyles(themeName);
 
-  const themeBackground =
-    themeStyles[currentThemeName]?.bg ?? themeStyles.vsDark?.bg;
-  const themeBorder =
-    themeStyles[currentThemeName]?.border ?? themeStyles.vsDark?.border;
-  const themeText =
-    themeStyles[currentThemeName]?.text ?? themeStyles.vsDark?.text;
+
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
@@ -35,35 +27,15 @@ const CodePreview = ({ currentSlide }: Props) => {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div
-        className={cn(
-          "relative h-[120px] w-full overflow-hidden rounded-md py-1 px-2"
-        )}
-      >
-        <div
-          className="h-full rounded-sm"
-          style={{
-            background: themeBackground,
-          }}
-        >
-          <div
-            className={cn(
-              "flex items-center justify-between border-b px-2 py-0 leading-3",
-            )}
-            style={{ borderColor: themeBorder }}
-          >
-            <div className="flex items-center gap-1">
-              <div className="h-1 w-1 rounded-full bg-red-500" />
-              <div className="h-1 w-1 rounded-full bg-yellow-500" />
-              <div className="h-1 w-1 rounded-full bg-green-500" />
-            </div>
-            <div className={cn("text-[4px]")} style={{ color: themeText }}>
-              {fileName}
-            </div>
-            <div className="w-[20px]" />
-          </div>
+      <div className="relative h-[120px] w-full overflow-hidden rounded-md py-1 px-2">
+        <div className="h-full rounded-sm" style={{ background: themeStyles.styles?.bg }}>
+          <PreviewCardHeader
+            cardTheme={cardTheme as CardTheme}
+            themeBorder={themeStyles.styles?.border}
+            themeText={themeStyles.styles?.text}
+            fileName={fileName}
+          />
           <HighlightCode
-            theme={theme}
             currentCode={currentCode}
             language={language}
             currentSlide={currentSlide}
@@ -75,5 +47,4 @@ const CodePreview = ({ currentSlide }: Props) => {
     </div>
   );
 };
-
 export default CodePreview;

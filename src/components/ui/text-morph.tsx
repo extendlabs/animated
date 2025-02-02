@@ -22,7 +22,7 @@ export function TextMorph({
     const charCounts: Record<string, number> = {};
 
     return children.split("").map((char, index) => {
-      const lowerChar = char.toLowerCase();
+      const lowerChar = char?.toLowerCase();
       charCounts[lowerChar] = (charCounts[lowerChar] ?? 0) + 1;
 
       return {

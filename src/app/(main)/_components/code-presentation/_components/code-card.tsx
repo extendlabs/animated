@@ -1,33 +1,32 @@
-import { cn } from "@/lib/utils";
-import { HighlightCode } from "./highlight-code";
-import { type DiffResult } from "types/code-presentation.type";
-import { CardHeader } from "./card-header";
-import { useSettingsStore } from "@/zustand/useSettingsStore";
 import ExtendUILogo from "@/app/_components/logo";
+import { CardHeader } from "./card-header";
+import { HighlightCode } from "./highlight-code";
+import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/zustand/useAuthStore";
-import FadeUp from "@/components/fadeup";
+import { useSettingsStore } from "@/zustand/useSettingsStore";
+import { type DiffResult } from "types/code-presentation.type";
 
 type Props = {
   currentCode: string;
   currentSlide: number;
   diffMap: DiffResult | null;
-  themeBackground?: string;
-  themeBorder?: string;
-  themeText?: string;
 };
 
 export const CodeCard = ({
   currentCode,
   currentSlide,
   diffMap,
-  themeBackground,
-  themeBorder,
-  themeText,
 }: Props) => {
-  const { padding, radius, language, theme, background, cardTheme } =
-    useSettingsStore();
+  const {
+    padding,
+    radius,
+    language,
+    background,
+    cardTheme,
+    themeStyles
+  } = useSettingsStore();
 
-  const { subscription } = useAuthStore()
+  const { subscription } = useAuthStore();
 
   return (
     <>
@@ -46,18 +45,17 @@ export const CodeCard = ({
           <div
             className={cn("p-1 shadow-xl")}
             style={{
-              background: themeBackground,
+              background: themeStyles?.bg,
               borderRadius: radius,
             }}
           >
             <CardHeader
               cardTheme={cardTheme}
-              themeBorder={themeBorder}
-              themeText={themeText}
+              themeBorder={themeStyles?.border}
+              themeText={themeStyles?.text}
             />
 
             <HighlightCode
-              theme={theme}
               currentCode={currentCode}
               language={language}
               currentSlide={currentSlide}

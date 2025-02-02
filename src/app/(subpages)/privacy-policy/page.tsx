@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
           <CardContent>
             <Alert className="mb-6">
               <AlertDescription>
-                This privacy policy applies to users of the "Animated" code
+                This privacy policy applies to users of the &quot;Animated&quot; code
                 animation app, created by ExtendUI. We are committed to protecting
                 your privacy and handling your data responsibly and transparently.
               </AlertDescription>

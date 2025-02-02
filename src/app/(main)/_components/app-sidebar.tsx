@@ -47,7 +47,8 @@ export function AppSidebar({
     const newSlide = {
       id: slides.length,
       code: "function newSlide() {}",
-      description: "New slide description",
+      file_name: "",
+      description: "",
     };
     addSlide(newSlide);
     setCurrentSlide(newSlide.id);

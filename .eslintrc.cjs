@@ -42,6 +42,8 @@ const config = {
     "@typescript-eslint/prefer-regexp-exec": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-arguments": "off",
+    "@typescript-eslint/non-nullable-type-assertion-style": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-misused-promises": [
       "error",
       {

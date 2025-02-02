@@ -31,12 +31,21 @@ export default function Navlinks({ user }: Props) {
         Pricing
       </Link>
       {user && (
-        <Link
-          href="/account"
-          className={cn("hover:text-accent transition-colors duration-200", pathname === "/account" && "text-accent")}
-        >
-          Account
-        </Link>
+        <>
+          <Link
+            href="/animations"
+            className={cn("hover:text-accent transition-colors duration-200", pathname === "/animations" && "text-accent")}
+          >
+            Animations
+          </Link>
+          <Link
+            href="/account"
+            className={cn("hover:text-accent transition-colors duration-200", pathname === "/account" && "text-accent")}
+          >
+            Account
+          </Link>
+        </>
+
       )}
       {user ? (
         <form

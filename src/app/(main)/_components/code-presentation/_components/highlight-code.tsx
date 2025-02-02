@@ -1,13 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Highlight, type PrismTheme } from "prism-react-renderer";
+import { Highlight, themes } from "prism-react-renderer";
 import { AnimatePresence } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
 import { AnimatedLine } from "./animated-line";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 type Props = {
-  theme: PrismTheme;
   currentCode: string;
   language: string;
   currentSlide: number;
@@ -15,7 +14,6 @@ type Props = {
   thumbnail?: boolean;
 };
 export const HighlightCode = ({
-  theme,
   currentCode,
   language,
   diffMap,
@@ -37,7 +35,13 @@ export const HighlightCode = ({
   }, [currentCode]);
 
   const { isAutoPlaying } = useUIStore();
+  const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
+
+
+
+  const theme = themes[themeName as keyof typeof themes] || themes.vsDark;
+
   return (
     <Highlight theme={theme} code={currentCode} language={language}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => {
@@ -49,7 +53,7 @@ export const HighlightCode = ({
             className={cn(
               className,
               "overflow-hidden pl-5 pt-4 text-sm",
-              thumbnail && "pl-1 pt-1 text-[4px] leading-[6px]",
+              thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
             )}
             style={style}
           >
