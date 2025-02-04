@@ -1,5 +1,5 @@
 import { SidebarInset } from "@/components/ui/sidebar";
-import Navbar from "../_components/navbar";
+import Navbar from "../../_components/navbar";
 import { AppSidebar } from "./_components/app-sidebar";
 import SettingsFooter from "./_components/settings-footer";
 

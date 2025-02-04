@@ -1,8 +1,8 @@
 "use client";
 
-import { Blocks } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function Logo({ className }: { className?: string }) {
   return (
@@ -14,8 +14,14 @@ export default function Logo({ className }: { className?: string }) {
       )}
     >
       <div className="mr-4 flex items-center justify-center gap-2 font-bold">
-        <Blocks className="h-6 w-6 text-accent-foreground" />
-        <span className="text-base font-bold">Animated</span>
+        <Image
+          src="/logo.svg"
+          alt="logo"
+          width={500}
+          height={500}
+          className="size-6"
+        />
+        <span className="text-lg font-semibold tracking-tight">Animated</span>
       </div>
     </Link>
   );

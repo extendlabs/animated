@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { EditButton } from "@/app/(main)/_components/edit-button";
+import { EditButton } from "@/app/dashboard/(main)/_components/edit-button";
 
 export async function ProtectedContent() {
   const supabase = createClient();

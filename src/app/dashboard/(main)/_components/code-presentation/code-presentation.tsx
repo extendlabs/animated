@@ -1,7 +1,13 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from "react";
 import { motion } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "../../../../../components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
@@ -9,7 +15,6 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { PauseIcon, PlayIcon, Video, StopCircle } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
-
 
 type Props = {
   autoPlayInterval?: number;
@@ -65,7 +70,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
 
   // Effect to auto-start animation after recording begins
   useEffect(() => {
-    if (recordingState.status === 'recording') {
+    if (recordingState.status === "recording") {
       const timer = setTimeout(() => {
         setCurrentSlide(0);
         setIsAutoPlaying(true);
@@ -79,14 +84,24 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
 
   // Effect to stop recording after animation ends
   useEffect(() => {
-    if (recordingState.status === 'recording' && !isAutoPlaying && currentSlide === slides.length - 1) {
+    if (
+      recordingState.status === "recording" &&
+      !isAutoPlaying &&
+      currentSlide === slides.length - 1
+    ) {
       const timer = setTimeout(() => {
         stopRecording();
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [recordingState.status, isAutoPlaying, currentSlide, slides.length, stopRecording]);
+  }, [
+    recordingState.status,
+    isAutoPlaying,
+    currentSlide,
+    slides.length,
+    stopRecording,
+  ]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -165,7 +180,9 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
                   setIsAutoPlaying(!isAutoPlaying);
                 }}
                 aria-label={isAutoPlaying ? "Pause" : "Play"}
-                disabled={isAutoPlaying || recordingState.status === 'recording'}
+                disabled={
+                  isAutoPlaying || recordingState.status === "recording"
+                }
                 variant="ghost"
                 size="icon"
               >
@@ -175,7 +192,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
                   <PlayIcon className="h-4 w-4" />
                 )}
               </Button>
-              {recordingState.status === 'idle' ? (
+              {recordingState.status === "idle" ? (
                 <Button
                   onClick={handleStartRecording}
                   variant="ghost"
