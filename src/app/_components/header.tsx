@@ -1,9 +1,14 @@
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
-import { Github } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 
-export default function Header() {
+export default async function Header() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   return (
     <header className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 lg:px-6">
       <Logo />
@@ -38,6 +43,16 @@ export default function Header() {
             ></path>
           </svg>
         </Link>
+        {user && (
+          <Link
+            href={"/dashboard"}
+            className={cn(
+              "rounded-3xl bg-emerald-400/10 px-3.5 py-1.5 text-sm transition-colors duration-200 hover:bg-emerald-400/20",
+            )}
+          >
+            Dashboard
+          </Link>
+        )}
       </nav>
     </header>
   );

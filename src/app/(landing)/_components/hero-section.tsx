@@ -1,11 +1,34 @@
-import { ChevronRight, Star } from "lucide-react";
-import Link from "next/link";
-
+"use client";
 import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
-import { AuthDialog } from "@/app/_components/auth-dialog";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
+  const [scale, setScale] = useState(1.1);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Get scroll position
+      const scrollPosition = window.scrollY;
+
+      // Calculate scale based on scroll position
+      // You can adjust these values to control the scaling effect
+      const minScale = 0.8; // Minimum scale
+      const scrollFactor = 0.001; // How fast it scales down
+
+      const newScale = Math.max(minScale, 1.1 - scrollPosition * scrollFactor);
+      setScale(newScale);
+    };
+
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <section id="hero" className="space-y-10">
       <div className="min-h-[calc(100dvh-4rem)] md:h-[100dvh] md:space-y-24">
@@ -34,6 +57,34 @@ export default function HeroSection() {
                   Get started for free
                 </Button>
               </div>
+            </FadeUp>
+            <FadeUp delay={0.8} duration={1}>
+              <p className="mt-2 text-xs text-muted-foreground">
+                No credit card required.
+              </p>
+            </FadeUp>
+          </div>
+
+          <div
+            className="relative mx-auto flex w-full items-center justify-center"
+            style={{
+              transform: `scale(${scale})`,
+              transition: "transform 0.1s ease-out",
+            }}
+          >
+            <FadeUp delay={1} duration={1.2}>
+              <div className="relative mt-16 max-w-screen-lg rounded-lg border shadow-lg">
+                <div className="group relative cursor-pointer rounded-md p-2 ring-1 ring-slate-200/50 backdrop-blur-md dark:bg-gray-900/70 dark:ring-white/10">
+                  <Image
+                    src="/screen.png"
+                    alt="screen"
+                    width={1000}
+                    height={1000}
+                    className="rounded-md border transition-all duration-200 ease-out group-hover:brightness-[0.8]"
+                  />
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4"></div>
             </FadeUp>
           </div>
         </div>
