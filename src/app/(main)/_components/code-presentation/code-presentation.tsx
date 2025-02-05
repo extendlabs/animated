@@ -10,7 +10,6 @@ import { Camera, PauseIcon, PlayIcon, Video } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
-import html2canvas from 'html2canvas';
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
 
 type Props = {
