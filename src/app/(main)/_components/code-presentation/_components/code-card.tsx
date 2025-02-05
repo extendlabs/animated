@@ -16,10 +16,10 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
   return (
     <>
       <div className="hidden sm:block">
-        <div className="relative overflow-hidden will-change-[height] my-10  px-2 mx-auto transition-all duration-500 ease-in-out"
-          style={{ width: width }}>
+        <div className="relative overflow-hidden will-change-[height] my-10 shadow-lg mx-auto transition-all duration-500 ease-in-out"
+          style={{ width: width, borderRadius: radius, }}>
 
-          <div className="p-1 shadow-xl will-change-[height] transition-[height] duration-500 ease-in-out"
+          <div className="p-1   will-change-[height] transition-[height] duration-500 ease-in-out"
             style={{
               background: themeStyles?.bg,
               borderRadius: radius,

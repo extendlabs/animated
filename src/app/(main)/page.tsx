@@ -16,20 +16,23 @@ export default function Home() {
   return (
     <div
       className={cn(
-        "p-4 lg:p-6",
+        "p-4",
         isRecordingMode && 'h-screen overflow-hidden'
-      )}>
+      )}
+    >
       {!isRecordingMode && (
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2 mb-4">
           <EditButton />
-          {limitations.proUser === true || limitations.subUser === true &&
-            <SaveCodeDialog key={animationId ? 'update' : 'create'} />
-          }
-          {animationId && (
-            <SaveCodeDialog
-              key="create-new"
-              forceCreate
-            />
+          {(limitations.proUser === true || limitations.subUser === true) && (
+            <>
+              <SaveCodeDialog key={animationId ? 'update' : 'create'} />
+              {animationId && (
+                <SaveCodeDialog
+                  key="create-new"
+                  forceCreate
+                />
+              )}
+            </>
           )}
         </div>
       )}

@@ -33,10 +33,10 @@ export default function Navlinks({ user }: Props) {
       {user && (
         <>
           <Link
-            href="/animations"
-            className={cn("hover:text-accent transition-colors duration-200", pathname === "/animations" && "text-accent")}
+            href="/settings"
+            className={cn("hover:text-accent transition-colors duration-200", pathname === "/settings" && "text-accent")}
           >
-            Animations
+            Settings
           </Link>
           <Link
             href="/account"

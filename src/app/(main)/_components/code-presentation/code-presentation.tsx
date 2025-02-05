@@ -6,10 +6,12 @@ import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
-import { PauseIcon, PlayIcon, Video } from "lucide-react";
+import { Camera, PauseIcon, PlayIcon, Video } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
+import html2canvas from 'html2canvas';
+import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
 
 type Props = {
   autoPlayInterval?: number;
@@ -170,6 +172,15 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     }
   };
 
+  const { takeScreenshot } = useComponentScreenshot({
+    fileName: 'code-presentation',
+    background: background
+  });
+
+  const handleScreenshot = () => {
+    takeScreenshot(componentRef.current);
+  };
+
   return (
     <>
       <div
@@ -188,7 +199,6 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
           style={isRecordingMode && containerHeight ? { height: containerHeight } : undefined}
         >
           <motion.div
-            ref={containerRef}
             className="w-full space-y-4 rounded-lg"
           >
             <div className="flex justify-center items-center">
@@ -236,6 +246,15 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
               disabled={recordingState.status === 'recording' || isEditing}
             >
               <Video className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={handleScreenshot}
+              variant="ghost"
+              size="icon"
+              disabled={recordingState.status === 'recording' || isEditing}
+              aria-label="Take Screenshot"
+            >
+              <Camera className="h-4 w-4" />
             </Button>
           </div>
         </div>

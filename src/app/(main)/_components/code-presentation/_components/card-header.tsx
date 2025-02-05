@@ -86,12 +86,19 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
             className="flex items-center justify-between border-b px-4 py-3"
             style={headerStyles}
           >
-            <div className="flex items-center gap-2">
+            {/* Left section with dots */}
+            <div className="flex items-center gap-2 w-[62px]">
               <div className="h-3 w-3 rounded-full bg-red-500" />
               <div className="h-3 w-3 rounded-full bg-yellow-500" />
               <div className="h-3 w-3 rounded-full bg-green-500" />
             </div>
-            {renderFileName()}
+
+            {/* Center section with filename - now with flex-1 and proper centering */}
+            <div className="flex-1 flex items-center justify-center">
+              {renderFileName()}
+            </div>
+
+            {/* Right spacer matching left width */}
             <div className="w-[62px]" />
           </div>
         );

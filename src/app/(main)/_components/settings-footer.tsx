@@ -101,11 +101,16 @@ export default function DraggableFooter() {
           </div>
         </div>
         <div className="container mx-auto p-8 pt-2">
-          <SaveThemeDialog />
-          {name && (
-            <SaveThemeDialog
-              forceCreate
-            />
+          {(limitations.proUser === true || limitations.subUser === true) && (
+            <div className="flex gap-2 mb-2">
+
+              <SaveThemeDialog />
+              {name && (
+                <SaveThemeDialog
+                  forceCreate
+                />
+              )}
+            </div>
           )}
           <div className="flex flex-col items-center justify-center">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-12  max-lg:gap-y-4">
