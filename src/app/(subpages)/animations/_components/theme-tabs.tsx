@@ -21,7 +21,7 @@ export const ThemeTab = ({ themes, loading, onDelete }: Props) => {
             background: theme.background,
             cardTheme: theme.cardTheme,
             language: theme.language,
-            padding: theme.padding,
+            width: theme.width,
             radius: theme.radius,
             theme: theme.theme,
             themeName: theme.themeName,

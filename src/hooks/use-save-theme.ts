@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   themeName: string;
   background: string;
-  padding: number;
+  width: number;
   radius: number;
   language: string;
   withLineIndex: boolean;
@@ -36,7 +36,7 @@ export function useSaveTheme() {
         name,
         themeName: settings.themeName,
         background: settings.background,
-        padding: settings.padding,
+        width: settings.width,
         radius: settings.radius,
         language: settings.language,
         withLineIndex: settings.withLineIndex,

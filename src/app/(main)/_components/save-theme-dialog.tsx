@@ -79,8 +79,8 @@ export function SaveThemeDialog({ forceCreate = false }: Props) {
                                 <p>{settings.themeName}</p>
                             </div>
                             <div>
-                                <p className="font-medium">Padding:</p>
-                                <p>{settings.padding}px</p>
+                                <p className="font-medium">Width:</p>
+                                <p>{settings.width}px</p>
                             </div>
                             <div>
                                 <p className="font-medium">Radius:</p>

@@ -1,27 +1,31 @@
 import React from 'react';
 import { CodeCard } from './code-card';
 import { type DiffResult } from 'types/code-presentation.type';
+import { cn } from '@/lib/utils';
+
 
 type Props = {
     currentCode: string;
     currentSlide: number;
     diffMap: DiffResult | null;
-    containerRef: React.RefObject<HTMLDivElement>;
 };
 
 export const RecordableCodeCard = ({
     currentCode,
     currentSlide,
     diffMap,
-    containerRef,
 }: Props) => {
     return (
-        <div ref={containerRef}>
-            <CodeCard
-                currentCode={currentCode}
-                currentSlide={currentSlide}
-                diffMap={diffMap}
-            />
+        <div className={cn(
+            "flex justify-center items-center w-full"
+        )}>
+            <div className="w-full">
+                <CodeCard
+                    currentCode={currentCode}
+                    currentSlide={currentSlide}
+                    diffMap={diffMap}
+                />
+            </div>
         </div>
     );
 };

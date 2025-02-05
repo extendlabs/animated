@@ -6,10 +6,10 @@ import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
-import { PauseIcon, PlayIcon, Video, StopCircle } from "lucide-react";
+import { PauseIcon, PlayIcon, Video } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
-
+import { cn } from "@/lib/utils";
 
 type Props = {
   autoPlayInterval?: number;
@@ -24,12 +24,15 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     setCurrentSlide,
     setIsAutoPlaying,
     updateSlide,
-    name,
-    description,
+    isRecordingMode,
+    setIsRecordingMode
   } = useUIStore();
 
+  const { background } = useSettingsStore();
   const componentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { recordingState, startRecording, stopRecording } = useRecording();
+  const [containerHeight, setContainerHeight] = useState<number>(0);
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -41,6 +44,29 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     () => slides[currentSlide]?.code ?? "",
     [slides, currentSlide],
   );
+
+  // Calculate max height across all slides
+  useEffect(() => {
+    if (isRecordingMode && containerRef.current) {
+      const calculateMaxHeight = () => {
+        let maxHeight = 0;
+        const codeContainer = containerRef.current?.querySelector('.code-container');
+        const containerWidth = codeContainer ? codeContainer.clientWidth : containerRef.current?.clientWidth || 0;
+
+        slides.forEach((slide) => {
+          const tempDiv = document.createElement('div');
+          tempDiv.style.cssText = `position: absolute; visibility: hidden; width: ${containerWidth}px;`;
+          tempDiv.className = 'code-container';
+          tempDiv.innerHTML = `<pre>${slide.code}</pre>`;
+          document.body.appendChild(tempDiv);
+          maxHeight = Math.max(maxHeight, tempDiv.offsetHeight);
+          document.body.removeChild(tempDiv);
+        });
+        setContainerHeight(maxHeight + 48); // Add padding
+      };
+      calculateMaxHeight();
+    }
+  }, [isRecordingMode, slides]);
 
   const handleSlideChange = useCallback(
     (direction: "next" | "prev") => {
@@ -63,7 +89,6 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     [currentSlide, slides, setCurrentSlide],
   );
 
-  // Effect to auto-start animation after recording begins
   useEffect(() => {
     if (recordingState.status === 'recording') {
       const timer = setTimeout(() => {
@@ -77,16 +102,16 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     }
   }, [recordingState.status, setCurrentSlide, setIsAutoPlaying]);
 
-  // Effect to stop recording after animation ends
   useEffect(() => {
     if (recordingState.status === 'recording' && !isAutoPlaying && currentSlide === slides.length - 1) {
       const timer = setTimeout(() => {
+        setIsRecordingMode(false);
         stopRecording();
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [recordingState.status, isAutoPlaying, currentSlide, slides.length, stopRecording]);
+  }, [recordingState.status, isAutoPlaying, currentSlide, slides.length, stopRecording, setIsRecordingMode]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -114,15 +139,30 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     handleSlideChange,
     setIsAutoPlaying,
   ]);
-
   const handleStartRecording = async () => {
     if (componentRef.current) {
-      setCurrentSlide(0);
-      setIsAutoPlaying(false);
-      await startRecording(componentRef.current);
+      try {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        setIsRecordingMode(true);
+        setCurrentSlide(0);
+        setIsAutoPlaying(false);
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        await startRecording(componentRef.current, () => {
+          setIsRecordingMode(false);
+          setIsAutoPlaying(false);
+          setCurrentSlide(0);
+          setContainerHeight(0);
+          setDiffMap({
+            lineDiff: {},
+            oldTokens: [],
+            newTokens: [],
+          });
+        });
+      } catch (error) {
+        console.error('Failed to start recording:', error);
+      }
     }
-  };
-
+  }
   const handleUpdateSlide = (value: string | undefined) => {
     if (value !== undefined) {
       const updatedSlide = { code: value, description: "Updated description" };
@@ -131,74 +171,75 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   };
 
   return (
-    <div>
-      <div className="mx-auto w-full max-w-3xl">
-        <motion.div className="space-y-4 rounded-lg p-4">
-          {name && (
-            <div className="mb-4 space-y-2">
-              <h2 className="text-2xl font-bold">{name}</h2>
-              {description && (
-                <p className="text-muted-foreground">{description}</p>
-              )}
-            </div>
+    <>
+      <div
+        style={{ background }}
+        className={cn(
+          'w-full flex flex-col items-center transition-all duration-200',
+          isRecordingMode ? 'fixed inset-0 z-50 bg-background overflow-y-auto' : 'py-2'
+        )}
+      >
+        <div
+          ref={componentRef}
+          className={cn(
+            "w-full max-w-3xl mx-auto",
+            isRecordingMode && "my-auto"
           )}
-          <div className="relative overflow-hidden rounded-sm">
-            {isEditing ? (
-              <MyEditor
-                value={currentCode}
-                handleUpdateSlide={handleUpdateSlide}
-              />
-            ) : (
-              <RecordableCodeCard
-                currentCode={currentCode}
-                currentSlide={currentSlide}
-                diffMap={diffMap}
-                containerRef={componentRef}
-              />
-            )}
-          </div>
-          <div className="flex justify-center max-sm:hidden">
-            <div className="mt-4 flex items-center space-x-4">
-              <Button
-                onClick={() => {
-                  setCurrentSlide(0);
-                  setIsAutoPlaying(!isAutoPlaying);
-                }}
-                aria-label={isAutoPlaying ? "Pause" : "Play"}
-                disabled={isAutoPlaying || recordingState.status === 'recording'}
-                variant="ghost"
-                size="icon"
-              >
-                {isAutoPlaying ? (
-                  <PauseIcon className="h-4 w-4" />
+          style={isRecordingMode && containerHeight ? { height: containerHeight } : undefined}
+        >
+          <motion.div
+            ref={containerRef}
+            className="w-full space-y-4 rounded-lg"
+          >
+            <div className="flex justify-center items-center">
+              <div className="w-full">
+                {isEditing ? (
+                  <MyEditor
+                    value={currentCode}
+                    handleUpdateSlide={handleUpdateSlide}
+                  />
                 ) : (
-                  <PlayIcon className="h-4 w-4" />
+                  <RecordableCodeCard
+                    currentCode={currentCode}
+                    currentSlide={currentSlide}
+                    diffMap={diffMap}
+                  />
                 )}
-              </Button>
-              {recordingState.status === 'idle' ? (
-                <Button
-                  onClick={handleStartRecording}
-                  variant="ghost"
-                  size="icon"
-                  disabled={isAutoPlaying}
-                  aria-label="Start Recording"
-                >
-                  <Video className="h-4 w-4" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={stopRecording}
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Stop Recording"
-                >
-                  <StopCircle className="h-4 w-4 text-red-500" />
-                </Button>
-              )}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
-    </div>
+      {!isRecordingMode && (
+        <div className="flex justify-center max-sm:hidden">
+          <div className="mt-4 flex items-center space-x-4">
+            <Button
+              onClick={() => {
+                setCurrentSlide(0);
+                setIsAutoPlaying(!isAutoPlaying);
+              }}
+              aria-label={isAutoPlaying ? "Pause" : "Play"}
+              disabled={isAutoPlaying || recordingState.status === 'recording' || isEditing}
+              variant="ghost"
+              size="icon"
+            >
+              {isAutoPlaying ? (
+                <PauseIcon className="h-4 w-4" />
+              ) : (
+                <PlayIcon className="h-4 w-4" />
+              )}
+            </Button>
+            <Button
+              onClick={handleStartRecording}
+              variant="ghost"
+              size="icon"
+              disabled={recordingState.status === 'recording' || isEditing}
+            >
+              <Video className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

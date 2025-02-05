@@ -1,8 +1,5 @@
-import ExtendUILogo from "@/app/_components/logo";
 import { CardHeader } from "./card-header";
 import { HighlightCode } from "./highlight-code";
-import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/zustand/useAuthStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { type DiffResult } from "types/code-presentation.type";
 
@@ -12,55 +9,34 @@ type Props = {
   diffMap: DiffResult | null;
 };
 
-export const CodeCard = ({
-  currentCode,
-  currentSlide,
-  diffMap,
-}: Props) => {
-  const {
-    padding,
-    radius,
-    language,
-    background,
-    cardTheme,
-    themeStyles
-  } = useSettingsStore();
+export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
+  const { width, radius, language, cardTheme, themeStyles } = useSettingsStore();
 
-  const { subscription } = useAuthStore();
 
   return (
     <>
       <div className="hidden sm:block">
-        <div
-          className={cn(
-            "relative overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300 ease-in-out",
-          )}
-          style={{ background: background, padding: padding }}
-        >
-          {!subscription && (
-            <div className="absolute bottom-2 right-2 text-white">
-              <ExtendUILogo />
-            </div>
-          )}
-          <div
-            className={cn("p-1 shadow-xl")}
+        <div className="relative overflow-hidden will-change-[height] my-10  px-2 mx-auto transition-all duration-500 ease-in-out"
+          style={{ width: width }}>
+
+          <div className="p-1 shadow-xl will-change-[height] transition-[height] duration-500 ease-in-out"
             style={{
               background: themeStyles?.bg,
               borderRadius: radius,
-            }}
-          >
+            }}>
             <CardHeader
               cardTheme={cardTheme}
               themeBorder={themeStyles?.border}
               themeText={themeStyles?.text}
             />
-
-            <HighlightCode
-              currentCode={currentCode}
-              language={language}
-              currentSlide={currentSlide}
-              diffMap={diffMap}
-            />
+            <div className="will-change-[height] transition-[height] duration-500 ease-in-out">
+              <HighlightCode
+                currentCode={currentCode}
+                language={language}
+                currentSlide={currentSlide}
+                diffMap={diffMap}
+              />
+            </div>
             <div className="py-2" />
           </div>
         </div>

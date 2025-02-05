@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { getThemeStyles } from '@/helpers/get-theme-styles';
-import { CardTheme } from 'types/code-presentation.type';
+import { type CardTheme } from 'types/code-presentation.type';
 
 interface Settings {
   name: string;
   background: string;
-  padding: number;
+  width: number;
   radius: number;
   language: string;
   withLineIndex: boolean;
@@ -22,7 +22,7 @@ interface Settings {
 
 interface SettingsStore extends Settings {
   setSettings: (settings: Partial<Settings>) => void;
-  setPadding: (padding: number) => void;
+  setWidth: (width: number) => void;
   setRadius: (radius: number) => void;
   setLanguage: (language: string) => void;
   setBackground: (background: string) => void;
@@ -39,7 +39,7 @@ const initialThemeStyles = getThemeStyles(DEFAULT_THEME_NAME);
 
 const initialState: Settings = {
   background: 'linear-gradient(to right, #3b82f6, #9333ea, #ec4899)',
-  padding: 50,
+  width: 500,
   radius: 10,
   language: 'tsx',
   withLineIndex: true,
@@ -68,7 +68,7 @@ export const useSettingsStore = create<SettingsStore>()(
           set((state) => ({ ...state, ...settings }));
         }
       },
-      setPadding: (padding) => set({ padding }),
+      setWidth: (width) => set({ width }),
       setRadius: (radius) => set({ radius }),
       setLanguage: (language) => set({ language }),
       setBackground: (background) => set({ background }),

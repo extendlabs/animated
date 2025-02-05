@@ -1,4 +1,5 @@
 import { Editor } from "@monaco-editor/react";
+import { CardHeader } from "./code-presentation/_components/card-header";
 
 type Props = {
   value: string;
@@ -31,41 +32,55 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
   };
 
   return (
-    <Editor
-      width="100%"
-      theme="customTheme"
-      height="400px"
-      value={value}
-      onChange={handleUpdateSlide}
-      beforeMount={handleEditorWillMount}
-      options={{
-        fontSize: 14,
-        lineHeight: 20,
-        fontFamily: "JetBrains Mono",
-        fontLigatures: true,
-        wordWrap: "on",
-        glyphMargin: true,
-        lineNumbersMinChars: 1,
-        minimap: {
-          enabled: false,
-        },
-        lineNumbers: (lineNumber: number) => {
-          return lineNumber < 10 ? ` 0${lineNumber}` : ` ${lineNumber}`;
-        },
-        padding: {
-          top: 16,
-          bottom: 12,
-        },
-        bracketPairColorization: {
-          enabled: true,
-        },
-        suggest: {
-          showFields: false,
-          showFunctions: false,
-        },
-        scrollBeyondLastLine: false,
-        wordWrapColumn: 80,
-      }}
-    />
+    <div className="p-1 m-2 shadow-xl will-change-[height] transition-[height] duration-500 ease-in-out"
+      style={{
+        background: 'hsl(0deg 0% 11.76%)',
+        borderRadius: 15,
+      }}>
+      <CardHeader
+        cardTheme={'defaultColorLess'}
+        themeBorder={'hsl(0deg 0% 11.76%)'}
+        themeText={'#f0f0f0'}
+      />
+      <div className="will-change-[height] transition-[height] duration-500 ease-in-out"></div>
+      <Editor
+        width="100%"
+        theme="customTheme"
+        height="400px"
+        value={value}
+        onChange={handleUpdateSlide}
+        beforeMount={handleEditorWillMount}
+        options={{
+          fontSize: 14,
+          lineHeight: 20,
+          fontFamily: "JetBrains Mono",
+          fontLigatures: true,
+          wordWrap: "on",
+          glyphMargin: true,
+          lineNumbersMinChars: 1,
+          minimap: {
+            enabled: false,
+          },
+          lineNumbers: (lineNumber: number) => {
+            return lineNumber < 10 ? ` 0${lineNumber}` : ` ${lineNumber}`;
+          },
+          padding: {
+            top: 16,
+            bottom: 12,
+          },
+          bracketPairColorization: {
+            enabled: true,
+          },
+          suggest: {
+            showFields: false,
+            showFunctions: false,
+          },
+          scrollBeyondLastLine: false,
+          wordWrapColumn: 80,
+        }}
+      />
+    </div>
+
+
   );
 };

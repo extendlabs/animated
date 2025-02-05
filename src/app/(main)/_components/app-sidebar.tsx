@@ -7,6 +7,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
@@ -24,6 +25,7 @@ export function AppSidebar({
     useUIStore();
   const supabase = createClient();
   const { subscription, setSubscription } = useAuthStore();
+  const { isRecordingMode } = useUIStore();
 
   const getMaxSlides = () => {
     switch (subscription) {
@@ -71,6 +73,12 @@ export function AppSidebar({
   const isAddDisabled = () => {
     return slides.length >= getMaxSlides();
   };
+  const { toggleSidebar, open } = useSidebar();
+  useEffect(() => {
+    if (isRecordingMode && open) {
+      toggleSidebar();
+    }
+  }, [isRecordingMode]);
 
   return (
     <Sidebar className={className} {...props}>

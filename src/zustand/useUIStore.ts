@@ -17,6 +17,8 @@ type EngineSettingsSlidesState = {
   currentSlide: number;
   isEditing: boolean;
   isAutoPlaying: boolean;
+  isRecordingMode: boolean;
+
 };
 
 type UIStore = {
@@ -29,6 +31,7 @@ type UIStore = {
   deleteSlide: (id: number) => void;
   updateSlide: (id: number, updatedSlide: Partial<Slide>) => void;
   resetSlides: (slides: Slide[]) => void;
+  setIsRecordingMode: (isRecordingMode: boolean) => void;
 };
 
 export const useUIStore = create(
@@ -37,6 +40,7 @@ export const useUIStore = create(
     name: "",
     description: "",
     fileName: "Undefined-1.tsx",
+    isRecordingMode: false,
     slides: [
       {
           "id": 0,
@@ -62,6 +66,7 @@ export const useUIStore = create(
         state.name = name;
         state.description = description;
       }),
+      setIsRecordingMode: (isRecordingMode) => set({ isRecordingMode }),
 
     setCurrentSlide: (currentSlide) => set((state) => { state.currentSlide = currentSlide; }),
 

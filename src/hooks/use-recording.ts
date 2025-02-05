@@ -12,127 +12,141 @@ export const useRecording = () => {
   });
   const recorderRef = useRef<any>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const displayStreamRef = useRef<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const startRecording = useCallback(async (elementToRecord: HTMLElement) => {
+  const cleanup = useCallback((animationFrameId?: number) => {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    if (displayStreamRef.current) {
+      displayStreamRef.current.getTracks().forEach(track => track.stop());
+      displayStreamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+      videoRef.current = null;
+    }
+    recorderRef.current = null;
+    setState(prev => ({ ...prev, status: 'idle' }));
+  }, []);
+
+  const startRecording = useCallback(async (elementToRecord: HTMLElement, onCancel?: () => void) => {
     try {
       const rect = elementToRecord.getBoundingClientRect();
-      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const absoluteLeft = rect.left + scrollLeft;
-      const absoluteTop = rect.top + scrollTop;
-
-      const cursorStyle = document.createElement('style');
-      cursorStyle.textContent = `.recording-in-progress * { cursor: none !important; }`;
-      document.head.appendChild(cursorStyle);
       
-      elementToRecord.classList.add('recording-in-progress');
-
       const mediaConfig = {
         video: {
           displaySurface: 'browser',
-          width: { ideal: 15360 },
-          height: { ideal: 8640 },
-          frameRate: { ideal: 240 },
+          width: { ideal: 3840 },
+          height: { ideal: 2160 },
+          frameRate: { ideal: 60 },
           cursor: 'never',
-          resizeMode: 'none',
-          contentHint: 'detail',
-          mouseCursor: 'never',
-          showMouseCursor: false
         },
         audio: false,
         preferCurrentTab: true,
         selfBrowserSurface: 'include',
       };
 
-      const stream = await navigator.mediaDevices.getDisplayMedia(mediaConfig);
+      let displayStream;
+      try {
+        displayStream = await navigator.mediaDevices.getDisplayMedia(mediaConfig);
+      } catch (err) {
+        onCancel?.();
+        return;
+      }
+      
+      displayStreamRef.current = displayStream;
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       const canvas = document.createElement('canvas');
-      canvas.width = rect.width * 4;
-      canvas.height = rect.height * 4;
+      const targetWidth = Math.min(rect.width * 2, 3840);
+      const targetHeight = Math.min(rect.height * 2, 2160);
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
       
       const ctx = canvas.getContext('2d', {
         alpha: false,
         desynchronized: true,
-        willReadFrequently: false
       });
-      
       if (!ctx) throw new Error('Failed to get canvas context');
       
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
       const video = document.createElement('video');
-      video.srcObject = stream;
+      videoRef.current = video;
+      video.srcObject = displayStream;
       await video.play();
 
-      const canvasStream = canvas.captureStream(240);
+      const canvasStream = canvas.captureStream(60);
       streamRef.current = canvasStream;
 
-      const getScaleFactor = () => {
-        return video.videoWidth / window.screen.width;
-      };
-
+      let animationFrameId: number;
       const drawVideo = () => {
         if (video.paused || video.ended) return;
         
-        const scaleFactor = getScaleFactor();
-        const scaledLeft = absoluteLeft * scaleFactor;
-        const scaledTop = absoluteTop * scaleFactor;
-        const scaledWidth = rect.width * scaleFactor;
-        const scaledHeight = rect.height * scaleFactor;
+        const currentRect = elementToRecord.getBoundingClientRect();
+        const sourceX = Math.round(window.scrollX + currentRect.left);
+        const sourceY = Math.round(window.scrollY + currentRect.top);
+        const sourceWidth = Math.round(currentRect.width);
+        const sourceHeight = Math.round(currentRect.height);
+
+        const scaleFactor = video.videoWidth / window.innerWidth;
+        const scaledX = sourceX * scaleFactor;
+        const scaledY = sourceY * scaleFactor;
+        const scaledWidth = sourceWidth * scaleFactor;
+        const scaledHeight = sourceHeight * scaleFactor;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
         ctx.drawImage(
           video,
-          Math.round(scaledLeft),
-          Math.round(scaledTop),
-          Math.round(scaledWidth),
-          Math.round(scaledHeight),
+          scaledX,
+          scaledY,
+          scaledWidth,
+          scaledHeight,
           0,
           0,
           canvas.width,
           canvas.height
         );
         
-        requestAnimationFrame(drawVideo);
+        animationFrameId = requestAnimationFrame(drawVideo);
       };
 
       drawVideo();
 
       const { default: RecordRTC } = await import('recordrtc');
-      const recorder: any = new RecordRTC(canvasStream, {
-        type: 'video',
-        mimeType: 'video/webm;codecs=vp9',
-        frameRate: 240,
-        quality: 100,
-        videoBitsPerSecond: 800000,
-        videoConstraints: {
-          width: canvas.width,
-          height: canvas.height,
-          frameRate: 240
-        },
-        bitsPerSecond: 800000,
-        frameInterval: 1,
-        numberOfAudioChannels: undefined,
-        disableLogs: true,
-        checkForInactiveTracks: false,
-        timeSlice: 250
-      } as any);
+     const recorder = new RecordRTC(canvasStream, {
+  type: 'video',
+  mimeType: 'video/webm;codecs=vp9',
+  frameRate: 60,
+  quality: 100,
+  videoBitsPerSecond: 5000000,
+  canvas: {
+    width: targetWidth,
+    height: targetHeight
+  }
+} as any);
 
       recorderRef.current = recorder;
       recorder.startRecording();
       setState({ status: 'recording', recordedVideo: null });
 
-      (stream as any).getVideoTracks()[0].onended = () => {
+      (displayStream as any).getVideoTracks()[0].onended = () => {
         stopRecording();
-        stream.getTracks().forEach(track => track.stop());
+        cleanup(animationFrameId);
       };
     } catch (error) {
       console.error('Recording error:', error);
       cleanup();
+      onCancel?.();
     }
-  }, []);
+  }, [cleanup]);
 
   const stopRecording = useCallback(() => {
     if (!recorderRef.current) return;
@@ -143,29 +157,13 @@ export const useRecording = () => {
       
       const a = document.createElement('a');
       a.href = url;
-      a.download = `recording-${Date.now()}-uhd.webm`;
+      a.download = `recording-${Date.now()}.webm`;
       a.click();
 
-      setState({ status: 'idle', recordedVideo: url });
+      setState(prev => ({ ...prev, recordedVideo: url }));
       cleanup();
     });
-  }, []);
-
-  const cleanup = useCallback(() => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
-    recorderRef.current = null;
-    
-    const cursorStyle = document.querySelector('style');
-    if (cursorStyle?.textContent?.includes('recording-in-progress')) {
-      cursorStyle.remove();
-    }
-    document.querySelectorAll('.recording-in-progress').forEach(el => {
-      el.classList.remove('recording-in-progress');
-    });
-  }, []);
+  }, [cleanup]);
 
   return {
     recordingState: state,

@@ -32,7 +32,7 @@ export type GradientStop = {
 
 export default function DraggableFooter() {
   const {
-    padding,
+    width,
     radius,
     language,
     name,
@@ -40,7 +40,7 @@ export default function DraggableFooter() {
     background,
     withLineIndex,
     cardTheme,
-    setPadding,
+    setWidth,
     setRadius,
     setLanguage,
     setThemeName,
@@ -212,15 +212,15 @@ export default function DraggableFooter() {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-muted-foreground">Padding</span>
-                    <output className="text-sm text-muted-foreground tabular-nums">{padding}</output>
+                    <span className="text-sm text-muted-foreground">Width</span>
+                    <output className="text-sm text-muted-foreground tabular-nums">{width}</output>
                   </div>
                   <Slider
-                    min={0}
-                    max={100}
+                    min={400}
+                    max={750}
                     step={1}
-                    value={[Number(padding)]}
-                    onValueChange={([value]) => setPadding(value!)}
+                    value={[Number(width)]}
+                    onValueChange={([value]) => setWidth(value!)}
                     disabled={!limitations.subUser}
                   />
                 </div>

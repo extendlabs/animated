@@ -24,8 +24,8 @@ export const ThemeCard = ({ theme, onSelect, onDelete }: Props) => {
             <CardContent>
                 <dl className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                        <dt className="font-medium">Padding:</dt>
-                        <dd>{theme.padding}px</dd>
+                        <dt className="font-medium">Width:</dt>
+                        <dd>{theme.width}px</dd>
                     </div>
                     <div>
                         <dt className="font-medium">Radius:</dt>
