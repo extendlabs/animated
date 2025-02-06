@@ -24,10 +24,7 @@ export const useComponentScreenshot = (options: UseComponentScreenshotOptions = 
     if (!element) return;
 
     try {
-      // Store original scroll position
       const originalScroll = window.scrollY;
-
-      // Create wrapper with absolute positioning
       const wrapper = document.createElement('div');
       wrapper.style.position = 'absolute';
       wrapper.style.top = '0';
@@ -38,67 +35,53 @@ export const useComponentScreenshot = (options: UseComponentScreenshotOptions = 
       wrapper.style.boxSizing = 'border-box';
       wrapper.style.overflow = 'hidden';
 
-      // Clone the element
       const clone = element.cloneNode(true) as HTMLElement;
       
-      // Calculate dimensions
       const originalWidth = element.offsetWidth;
       const originalHeight = element.offsetHeight;
       const aspectRatio = originalHeight / originalWidth;
       const scaledWidth = Math.min(originalWidth, maxWidth);
       const scaledHeight = scaledWidth * aspectRatio;
 
-      // Set clone styles
       clone.style.width = `${scaledWidth}px`;
       clone.style.height = `${scaledHeight}px`;
       clone.style.position = 'relative';
       clone.style.transform = 'none';
       clone.style.margin = '0';
+      clone.style.wordBreak = 'break-word';
+      clone.style.whiteSpace = 'pre-wrap';
 
-      // Remove screenshot controls
       const controls = clone.querySelector('.max-sm\\:hidden');
       if (controls) {
         controls.remove();
       }
 
-      // Add to DOM outside viewport
       wrapper.appendChild(clone);
       wrapper.style.transform = 'translateY(-99999px)';
       document.body.appendChild(wrapper);
 
-      // Ensure proper rendering
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Workaround for stylesheet access issues
-      const cloneStylesheets = async () => {
-        const stylesheets = document.styleSheets;
-        const styleElements = document.createElement('style');
-        
-        for (let i = 0; i < stylesheets.length; i++) {
-          try {
-            const stylesheet = stylesheets[i];
-            const rules = Array.from(stylesheet?.cssRules || []);
-            
-            rules.forEach(rule => {
-              try {
-                styleElements.textContent += rule.cssText + '\n';
-              } catch (ruleError) {
-                console.warn('Could not copy rule:', ruleError);
-              }
-            });
-          } catch (stylesheetError) {
-            console.warn('Could not access stylesheet:', stylesheetError);
+      // Safe stylesheet copying
+      const styleElement = document.createElement('style');
+      Array.from(document.styleSheets).forEach(sheet => {
+        try {
+          // Handle both same-origin and cross-origin stylesheets
+          if (sheet.href) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = sheet.href;
+            clone.appendChild(link);
+          } else if (sheet.ownerNode instanceof HTMLStyleElement) {
+            styleElement.textContent += sheet.ownerNode.textContent + '\n';
           }
+        } catch (e) {
+          console.warn('Skipping stylesheet:', e);
         }
-        
-        clone.appendChild(styleElements);
-      };
+      });
+      clone.appendChild(styleElement);
 
-      // Attempt to copy stylesheets
-      await cloneStylesheets();
-
-      // Take the screenshot
-      const dataUrl = await htmlToImage?.toPng(wrapper, {
+      const dataUrl = await htmlToImage.toPng(wrapper, {
         quality,
         cacheBust: true,
         pixelRatio: scale,
@@ -113,13 +96,9 @@ export const useComponentScreenshot = (options: UseComponentScreenshotOptions = 
         } as any
       });
 
-      // Clean up
       document.body.removeChild(wrapper);
-
-      // Restore scroll position
       window.scrollTo(0, originalScroll);
 
-      // Create and trigger download
       const link = document.createElement('a');
       link.download = `${fileName}-${Date.now()}.png`;
       link.href = dataUrl;
