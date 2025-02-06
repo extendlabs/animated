@@ -73,12 +73,6 @@ export function AppSidebar({
   const isAddDisabled = () => {
     return slides.length >= getMaxSlides();
   };
-  const { toggleSidebar, open } = useSidebar();
-  useEffect(() => {
-    if (isRecordingMode && open) {
-      toggleSidebar();
-    }
-  }, [isRecordingMode]);
 
   return (
     <Sidebar className={className} {...props}>

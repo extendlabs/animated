@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
@@ -29,11 +29,15 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     setIsRecordingMode
   } = useUIStore();
 
-  const { background } = useSettingsStore();
+  const { background, withLineIndex } = useSettingsStore();
   const componentRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const { recordingState, startRecording, stopRecording } = useRecording();
   const [containerHeight, setContainerHeight] = useState<number>(0);
+
+  const currentCode = useMemo(
+    () => slides[currentSlide]?.code ?? "",
+    [slides, currentSlide]
+  );
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -41,33 +45,64 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     newTokens: [],
   });
 
-  const currentCode = useMemo(
-    () => slides[currentSlide]?.code ?? "",
-    [slides, currentSlide],
-  );
+  const calculateMaxHeight = useCallback(() => {
+    if (!componentRef.current) return 0;
 
-  // Calculate max height across all slides
-  useEffect(() => {
-    if (isRecordingMode && containerRef.current) {
-      const calculateMaxHeight = () => {
-        let maxHeight = 0;
-        const codeContainer = containerRef.current?.querySelector('.code-container');
-        const containerWidth = codeContainer ? codeContainer.clientWidth : containerRef.current?.clientWidth || 0;
+    // Create virtual container
+    const container = document.createElement('div');
+    container.style.cssText = `
+      position: absolute;
+      visibility: hidden;
+      width: ${componentRef.current.clientWidth}px;
+      padding: 0;
+      margin: 0;
+    `;
+    document.body.appendChild(container);
 
-        slides.forEach((slide) => {
-          const tempDiv = document.createElement('div');
-          tempDiv.style.cssText = `position: absolute; visibility: hidden; width: ${containerWidth}px;`;
-          tempDiv.className = 'code-container';
-          tempDiv.innerHTML = `<pre>${slide.code}</pre>`;
-          document.body.appendChild(tempDiv);
-          maxHeight = Math.max(maxHeight, tempDiv.offsetHeight);
-          document.body.removeChild(tempDiv);
-        });
-        setContainerHeight(maxHeight + 48); // Add padding
-      };
-      calculateMaxHeight();
-    }
-  }, [isRecordingMode, slides]);
+    // Create card mock
+    const card = document.createElement('div');
+    card.style.cssText = `
+      width: 100%;
+      padding: 4px;
+      margin: 40px 0;
+    `;
+    container.appendChild(card);
+
+    // Create header mock (40px fixed height)
+    const header = document.createElement('div');
+    header.style.height = '40px';
+    card.appendChild(header);
+
+    // Create code container
+    const codeContainer = document.createElement('pre');
+    codeContainer.style.cssText = `
+      margin: 0;
+      padding: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+      line-height: 21px;
+      white-space: pre;
+      tab-size: 2;
+    `;
+    card.appendChild(codeContainer);
+
+    // Find max height across all slides
+    const maxHeight = slides.reduce((max, slide) => {
+      codeContainer.textContent = slide.code;
+
+      if (withLineIndex) {
+        const lineCount = slide.code.split('\n').length;
+        const lineNumberWidth = String(lineCount).length * 8 + 32;
+        codeContainer.style.paddingLeft = `${lineNumberWidth}px`;
+      }
+
+      const totalHeight = container.offsetHeight + (isRecordingMode ? 32 : 0);
+      return Math.max(max, totalHeight);
+    }, 0);
+
+    document.body.removeChild(container);
+    return maxHeight;
+  }, [slides, withLineIndex, isRecordingMode]);
 
   const handleSlideChange = useCallback(
     (direction: "next" | "prev") => {
@@ -106,13 +141,12 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   useEffect(() => {
     if (recordingState.status === 'recording' && !isAutoPlaying && currentSlide === slides.length - 1) {
       const timer = setTimeout(() => {
-        setIsRecordingMode(false);
-        stopRecording();
+        handleRecordingComplete();
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [recordingState.status, isAutoPlaying, currentSlide, slides.length, stopRecording, setIsRecordingMode]);
+  }, [recordingState.status, isAutoPlaying, currentSlide, slides.length]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -140,30 +174,44 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     handleSlideChange,
     setIsAutoPlaying,
   ]);
+
   const handleStartRecording = async () => {
-    if (componentRef.current) {
-      try {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        setIsRecordingMode(true);
-        setCurrentSlide(0);
-        setIsAutoPlaying(false);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        await startRecording(componentRef.current, () => {
-          setIsRecordingMode(false);
-          setIsAutoPlaying(false);
-          setCurrentSlide(0);
-          setContainerHeight(0);
-          setDiffMap({
-            lineDiff: {},
-            oldTokens: [],
-            newTokens: [],
-          });
-        });
-      } catch (error) {
-        console.error('Failed to start recording:', error);
-      }
+    if (!componentRef.current) return;
+
+    try {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      const height = calculateMaxHeight();
+      setContainerHeight(height);
+      setIsRecordingMode(true);
+      setCurrentSlide(0);
+      setIsAutoPlaying(false);
+
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      await startRecording(componentRef.current, handleRecordingCancel);
+    } catch (error) {
+      console.error('Recording failed:', error);
+      handleRecordingCancel();
     }
-  }
+  };
+
+  const handleRecordingCancel = () => {
+    setContainerHeight(0);
+    setIsRecordingMode(false);
+    setIsAutoPlaying(false);
+    setCurrentSlide(0);
+  };
+
+  const handleRecordingComplete = () => {
+    setIsRecordingMode(false);
+    setContainerHeight(0);
+    stopRecording();
+    setDiffMap({
+      lineDiff: {},
+      oldTokens: [],
+      newTokens: [],
+    });
+  };
+
   const handleUpdateSlide = (value: string | undefined) => {
     if (value !== undefined) {
       const updatedSlide = { code: value, description: "Updated description" };
@@ -195,7 +243,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
             "w-full max-w-3xl mx-auto",
             isRecordingMode && "my-auto"
           )}
-          style={isRecordingMode && containerHeight ? { height: containerHeight } : undefined}
+          style={{ height: containerHeight || 'auto' }}
         >
           <motion.div
             className="w-full space-y-4 rounded-lg"
