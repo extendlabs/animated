@@ -1,5 +1,4 @@
 import type Stripe from "stripe";
-
 import {
   upsertProductRecord,
   upsertPriceRecord,
@@ -20,6 +19,18 @@ const relevantEvents = new Set([
   "customer.subscription.created",
   "customer.subscription.updated",
   "customer.subscription.deleted",
+  "invoice.paid",
+  "invoice.payment_succeeded",
+  "invoice.payment_failed",
+  "invoice.upcoming",
+  "invoice.created",
+  "invoice.finalized",
+  "invoice.updated",
+  "payment_intent.succeeded",
+  "payment_intent.created",
+  "payment_intent.payment_failed",
+  "payment_method.attached",
+  "charge.succeeded",
 ]);
 
 export async function POST(req: Request) {
@@ -29,12 +40,15 @@ export async function POST(req: Request) {
   let event: Stripe.Event;
 
   try {
-    if (!sig || !webhookSecret)
+    if (!sig || !webhookSecret) {
+      console.error("Webhook secret not found.");
       return new Response("Webhook secret not found.", { status: 400 });
+    }
+    
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    console.log(`🔔  Webhook received: ${event.type}`);
+    console.log(`🔔 Webhook received: ${event.type}`);
   } catch (err: any) {
-    console.log(`❌ Error message: ${err.message}`);
+    console.error(`❌ Error message: ${err.message}`);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
@@ -43,55 +57,101 @@ export async function POST(req: Request) {
       switch (event.type) {
         case "product.created":
         case "product.updated":
-          await upsertProductRecord(event.data.object);
+          await upsertProductRecord(event.data.object as Stripe.Product);
           break;
+          
+        case "product.deleted":
+          await deleteProductRecord(event.data.object as Stripe.Product);
+          break;
+          
         case "price.created":
         case "price.updated":
-          await upsertPriceRecord(event.data.object);
+          await upsertPriceRecord(event.data.object as Stripe.Price);
           break;
+          
         case "price.deleted":
-          await deletePriceRecord(event.data.object);
+          await deletePriceRecord(event.data.object as Stripe.Price);
           break;
-        case "product.deleted":
-          await deleteProductRecord(event.data.object);
+
+        case "invoice.payment_succeeded":
+        case "invoice.paid":
+          const invoice = event.data.object as Stripe.Invoice;
+          // Handle successful payment
+          if (invoice.subscription) {
+            await manageSubscriptionStatusChange(
+              invoice.subscription as string,
+              invoice.customer as string,
+              false
+            );
+          }
           break;
+
+        case "invoice.payment_failed":
+          const failedInvoice = event.data.object as Stripe.Invoice;
+          // Handle failed payment - you might want to notify the customer
+          if (failedInvoice.subscription) {
+            await manageSubscriptionStatusChange(
+              failedInvoice.subscription as string,
+              failedInvoice.customer as string,
+              false
+            );
+          }
+          break;
+
+        case "payment_intent.succeeded":
+        case "payment_intent.created":
+        case "payment_intent.payment_failed":
+          const paymentIntent = event.data.object as Stripe.PaymentIntent;
+          // Handle payment intent status changes
+          if (paymentIntent.invoice) {
+            // If this payment intent is associated with an invoice
+            const invoice = await stripe.invoices.retrieve(paymentIntent.invoice as string);
+            if (invoice.subscription) {
+              await manageSubscriptionStatusChange(
+                invoice.subscription as string,
+                invoice.customer as string,
+                false
+              );
+            }
+          }
+          break;
+
         case "customer.subscription.created":
         case "customer.subscription.updated":
         case "customer.subscription.deleted":
-          const subscription = event.data.object;
+          const subscription = event.data.object as Stripe.Subscription;
           await manageSubscriptionStatusChange(
             subscription.id,
             subscription.customer as string,
-            event.type === "customer.subscription.created",
+            event.type === "customer.subscription.created"
           );
           break;
+
         case "checkout.session.completed":
-          const checkoutSession = event.data.object;
+          const checkoutSession = event.data.object as Stripe.Checkout.Session;
           if (checkoutSession.mode === "subscription") {
             const subscriptionId = checkoutSession.subscription;
             await manageSubscriptionStatusChange(
               subscriptionId as string,
               checkoutSession.customer as string,
-              true,
+              true
             );
           }
           break;
+
         default:
-          throw new Error("Unhandled relevant event!");
+          console.warn(`Unhandled relevant event type: ${event.type}`);
       }
     } catch (error) {
-      console.log(error);
+      console.error(`Error processing webhook: ${error}`);
       return new Response(
         "Webhook handler failed. View your Next.js function logs.",
-        {
-          status: 400,
-        },
+        { status: 400 }
       );
     }
   } else {
-    return new Response(`Unsupported event type: ${event.type}`, {
-      status: 400,
-    });
+    return new Response(`Unsupported event type: ${event.type}`, { status: 400 });
   }
+
   return new Response(JSON.stringify({ received: true }));
 }
