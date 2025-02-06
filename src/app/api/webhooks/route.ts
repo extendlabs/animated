@@ -5,6 +5,8 @@ import {
   manageSubscriptionStatusChange,
   deleteProductRecord,
   deletePriceRecord,
+  upsertCustomerRecord,
+  deleteCustomerRecord,
 } from "@/lib/supabase/admin";
 import { stripe } from "@/lib/stripe/config";
 
@@ -31,6 +33,9 @@ const relevantEvents = new Set([
   "payment_intent.payment_failed",
   "payment_method.attached",
   "charge.succeeded",
+  "customer.created",
+  "customer.updated",
+  "customer.deleted"
 ]);
 
 export async function POST(req: Request) {
@@ -115,7 +120,17 @@ export async function POST(req: Request) {
             }
           }
           break;
-
+        case "customer.created":
+        case "customer.updated":
+          const customer = event.data.object as Stripe.Customer;
+          // You'll need to create these functions in your admin.ts
+          await upsertCustomerRecord(customer);
+          break;
+        
+        case "customer.deleted":
+          const deletedCustomer = event.data.object as Stripe.Customer;
+          await deleteCustomerRecord(deletedCustomer);
+          break;
         case "customer.subscription.created":
         case "customer.subscription.updated":
         case "customer.subscription.deleted":

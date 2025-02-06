@@ -190,14 +190,51 @@ const createOrRetrieveCustomer = async ({
   }
 };
 
-/**
- * Copies the billing details from the payment method to the customer object.
- */
+export const upsertCustomerRecord = async (customer: Stripe.Customer) => {
+  const customerData = {
+    id: customer.metadata.supabaseUUID || '',
+    stripe_customer_id: customer.id,
+    email: customer.email,
+    name: customer.name,
+    metadata: customer.metadata
+  };
+
+  const { error: upsertError } = await supabaseAdmin
+    .from("customers")
+    .upsert([customerData]);
+
+  if (upsertError)
+    throw new Error(`Customer insert/update failed: ${upsertError.message}`);
+  console.log(`Customer inserted/updated: ${customer.id}`);
+};
+
+export const deleteCustomerRecord = async (customer: Stripe.Customer) => {
+  const { data: customerData, error: lookupError } = await supabaseAdmin
+    .from("customers")
+    .select("id")
+    .eq("stripe_customer_id", customer.id)
+    .single();
+
+  if (lookupError)
+    throw new Error(`Customer lookup failed: ${lookupError.message}`);
+
+  // Then delete the customer record
+  const { error: deletionError } = await supabaseAdmin
+    .from("customers")
+    .delete()
+    .eq("id", customerData.id);
+
+  if (deletionError)
+    throw new Error(`Customer deletion failed: ${deletionError.message}`);
+  
+  console.log(`Customer deleted: ${customer.id}`);
+};
+
+
 const copyBillingDetailsToCustomer = async (
   uuid: string,
   payment_method: Stripe.PaymentMethod,
 ) => {
-  //Todo: check this assertion
   const customer = payment_method.customer as string;
   const { name, phone, address } = payment_method.billing_details;
   if (!name || !phone || !address) return;
