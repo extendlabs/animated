@@ -142,8 +142,7 @@ export async function POST(req: Request) {
         default:
           console.warn(`Unhandled relevant event type: ${event.type}`);
       }
-    } catch (error) {
-      console.error(`Error processing webhook: ${error}`);
+    } catch (error: any) {
       return new Response(
         "Webhook handler failed. View your Next.js function logs.",
         { status: 400 }
