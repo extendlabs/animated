@@ -81,9 +81,8 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col">
-        <Header />
         {children}
-        {/* <Footer /> */}
+        <Footer />
         <Suspense>
           <Toaster />
         </Suspense>

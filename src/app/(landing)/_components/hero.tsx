@@ -30,7 +30,7 @@ export default function HeroSection() {
     };
   }, []);
   return (
-    <section id="hero" className="space-y-10">
+    <section id="hero" className="mb-44 space-y-10">
       <div className="min-h-[calc(100dvh-4rem)] md:h-[100dvh] md:space-y-24">
         <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 py-[32dvh] text-center">
           <div className="relative">
@@ -74,7 +74,7 @@ export default function HeroSection() {
           >
             <FadeUp delay={1} duration={1.2}>
               <div className="relative mt-16 max-w-screen-lg rounded-lg border shadow-lg">
-                <div className="group relative cursor-pointer rounded-md p-2 ring-1 ring-slate-200/50 backdrop-blur-md dark:bg-gray-900/70 dark:ring-white/10">
+                <div className="group relative cursor-pointer rounded-md bg-slate-500/50 p-2 ring-1 ring-slate-200/50 backdrop-blur-md dark:bg-gray-900/70 dark:ring-white/10">
                   <Image
                     src="/screen.png"
                     alt="screen"
@@ -84,7 +84,7 @@ export default function HeroSection() {
                   />
                 </div>
               </div>
-              <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4"></div>
+              {/* <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4"></div> */}
             </FadeUp>
           </div>
         </div>
