@@ -18,8 +18,6 @@ const CodePreview = ({ currentSlide }: Props) => {
 
   const themeStyles = getThemeStyles(themeName);
 
-
-
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
     [slides, currentSlide],
@@ -27,8 +25,11 @@ const CodePreview = ({ currentSlide }: Props) => {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="relative h-[120px] w-full overflow-hidden rounded-md py-1 px-2">
-        <div className="h-full rounded-sm" style={{ background: themeStyles.styles?.bg }}>
+      <div className="relative h-[120px] w-full overflow-hidden rounded-md px-2 py-1">
+        <div
+          className="h-full rounded-sm"
+          style={{ background: themeStyles.styles?.bg }}
+        >
           <PreviewCardHeader
             cardTheme={cardTheme as CardTheme}
             themeBorder={themeStyles.styles?.border}

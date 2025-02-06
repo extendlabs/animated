@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import Card from '@/components/card';
-import { Button } from '@/components/ui/button';
-import { handleRequest } from '@/lib/auth-helpers/client';
-import { updateEmail } from '@/lib/auth-helpers/server';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import Card from "@/components/card";
+import { Button } from "@/components/ui/button";
+import { handleRequest } from "@/lib/auth-helpers/client";
+import { updateEmail } from "@/lib/auth-helpers/server";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function EmailForm({
-  userEmail
+  userEmail,
 }: {
   userEmail: string | undefined;
 }) {
@@ -47,13 +47,13 @@ export default function EmailForm({
         </div>
       }
     >
-      <div className="mt-8 mb-4 text-xl font-semibold">
+      <div className="mb-4 mt-8 text-xl font-semibold">
         <form id="emailForm" onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
             name="newEmail"
-            className="w-full sm:w-1/2 p-3 rounded-md bg-zinc-800"
-            defaultValue={userEmail ?? ''}
+            className="w-full rounded-md bg-zinc-800 p-3 sm:w-1/2"
+            defaultValue={userEmail ?? ""}
             placeholder="Your email"
             maxLength={64}
           />

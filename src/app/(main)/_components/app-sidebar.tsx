@@ -31,9 +31,9 @@ export function AppSidebar({
     switch (subscription) {
       case null:
         return 2;
-      case 'Hobby':
+      case "Hobby":
         return 5;
-      case 'Premium':
+      case "Premium":
         return Infinity;
       default:
         return 0;

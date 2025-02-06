@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Blocks } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Blocks } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function ExtendUILogo({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'flex items-center justify-center gap-2  rounded-md p-1.5 pr-0 text-zinc-100/30',
+        "flex items-center justify-center gap-2 rounded-md p-1.5 pr-0 text-zinc-100/30",
         className,
       )}
     >

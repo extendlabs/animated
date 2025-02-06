@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from "react";
 import { motion } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
 import { Button } from "@/components/ui/button";
@@ -26,7 +32,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     setIsAutoPlaying,
     updateSlide,
     isRecordingMode,
-    setIsRecordingMode
+    setIsRecordingMode,
   } = useUIStore();
 
   const { background, withLineIndex } = useSettingsStore();
@@ -36,7 +42,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
-    [slides, currentSlide]
+    [slides, currentSlide],
   );
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
@@ -49,7 +55,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     if (!componentRef.current) return 0;
 
     // Create virtual container
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     container.style.cssText = `
       position: absolute;
       visibility: hidden;
@@ -60,7 +66,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     document.body.appendChild(container);
 
     // Create card mock
-    const card = document.createElement('div');
+    const card = document.createElement("div");
     card.style.cssText = `
       width: 100%;
       padding: 4px;
@@ -69,12 +75,12 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     container.appendChild(card);
 
     // Create header mock (40px fixed height)
-    const header = document.createElement('div');
-    header.style.height = '40px';
+    const header = document.createElement("div");
+    header.style.height = "40px";
     card.appendChild(header);
 
     // Create code container
-    const codeContainer = document.createElement('pre');
+    const codeContainer = document.createElement("pre");
     codeContainer.style.cssText = `
       margin: 0;
       padding: 16px;
@@ -91,7 +97,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
       codeContainer.textContent = slide.code;
 
       if (withLineIndex) {
-        const lineCount = slide.code.split('\n').length;
+        const lineCount = slide.code.split("\n").length;
         const lineNumberWidth = String(lineCount).length * 8 + 32;
         codeContainer.style.paddingLeft = `${lineNumberWidth}px`;
       }
@@ -126,7 +132,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   );
 
   useEffect(() => {
-    if (recordingState.status === 'recording') {
+    if (recordingState.status === "recording") {
       const timer = setTimeout(() => {
         setCurrentSlide(0);
         setIsAutoPlaying(true);
@@ -139,7 +145,11 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   }, [recordingState.status, setCurrentSlide, setIsAutoPlaying]);
 
   useEffect(() => {
-    if (recordingState.status === 'recording' && !isAutoPlaying && currentSlide === slides.length - 1) {
+    if (
+      recordingState.status === "recording" &&
+      !isAutoPlaying &&
+      currentSlide === slides.length - 1
+    ) {
       const timer = setTimeout(() => {
         handleRecordingComplete();
       }, 1000);
@@ -179,17 +189,17 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     if (!componentRef.current) return;
 
     try {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, behavior: "instant" });
       const height = calculateMaxHeight();
       setContainerHeight(height);
       setIsRecordingMode(true);
       setCurrentSlide(0);
       setIsAutoPlaying(false);
 
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       await startRecording(componentRef.current, handleRecordingCancel);
     } catch (error) {
-      console.error('Recording failed:', error);
+      console.error("Recording failed:", error);
       handleRecordingCancel();
     }
   };
@@ -220,8 +230,8 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
   };
 
   const { takeScreenshot } = useComponentScreenshot({
-    fileName: 'code-presentation',
-    background: background
+    fileName: "code-presentation",
+    background: background,
   });
 
   const handleScreenshot = () => {
@@ -233,22 +243,22 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
       <div
         style={{ background }}
         className={cn(
-          'w-full flex flex-col items-center transition-all duration-200',
-          isRecordingMode ? 'fixed inset-0 z-50 bg-background overflow-y-auto' : 'py-2'
+          "flex w-full flex-col items-center transition-all duration-200",
+          isRecordingMode
+            ? "fixed inset-0 z-50 overflow-y-auto bg-background"
+            : "py-2",
         )}
       >
         <div
           ref={componentRef}
           className={cn(
-            "w-full max-w-3xl mx-auto",
-            isRecordingMode && "my-auto"
+            "mx-auto w-full max-w-3xl",
+            isRecordingMode && "my-auto",
           )}
-          style={{ height: containerHeight || 'auto' }}
+          style={{ height: containerHeight || "auto" }}
         >
-          <motion.div
-            className="w-full space-y-4 rounded-lg"
-          >
-            <div className="flex justify-center items-center">
+          <motion.div className="w-full space-y-4 rounded-lg">
+            <div className="flex items-center justify-center">
               <div className="w-full">
                 {isEditing ? (
                   <MyEditor
@@ -276,7 +286,11 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
                 setIsAutoPlaying(!isAutoPlaying);
               }}
               aria-label={isAutoPlaying ? "Pause" : "Play"}
-              disabled={isAutoPlaying || recordingState.status === 'recording' || isEditing}
+              disabled={
+                isAutoPlaying ||
+                recordingState.status === "recording" ||
+                isEditing
+              }
               variant="ghost"
               size="icon"
             >
@@ -290,7 +304,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
               onClick={handleStartRecording}
               variant="ghost"
               size="icon"
-              disabled={recordingState.status === 'recording' || isEditing}
+              disabled={recordingState.status === "recording" || isEditing}
             >
               <Video className="h-4 w-4" />
             </Button>
@@ -298,7 +312,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
               onClick={handleScreenshot}
               variant="ghost"
               size="icon"
-              disabled={recordingState.status === 'recording' || isEditing}
+              disabled={recordingState.status === "recording" || isEditing}
               aria-label="Take Screenshot"
             >
               <Camera className="h-4 w-4" />

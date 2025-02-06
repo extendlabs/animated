@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { getThemeStyles } from '@/helpers/get-theme-styles';
-import { type CardTheme } from 'types/code-presentation.type';
+import { create } from "zustand";
+import { getThemeStyles } from "@/helpers/get-theme-styles";
+import { type CardTheme } from "types/code-presentation.type";
 
 interface Settings {
   name: string;
@@ -34,53 +34,49 @@ interface SettingsStore extends Settings {
   resetSettings: () => void;
 }
 
-const DEFAULT_THEME_NAME = 'vsDark';
+const DEFAULT_THEME_NAME = "vsDark";
 const initialThemeStyles = getThemeStyles(DEFAULT_THEME_NAME);
 
 const initialState: Settings = {
-  background: 'linear-gradient(to right, #3b82f6, #9333ea, #ec4899)',
+  background: "linear-gradient(to right, #3b82f6, #9333ea, #ec4899)",
   width: 500,
   radius: 10,
-  language: 'tsx',
+  language: "tsx",
   withLineIndex: true,
-  cardTheme: 'default',
+  cardTheme: "default",
   themeName: DEFAULT_THEME_NAME,
   theme: initialThemeStyles.theme,
   themeStyles: initialThemeStyles.styles,
-  name: '',
+  name: "",
   selectedThemeId: null,
 };
 
-export const useSettingsStore = create<SettingsStore>()(
-  (
-    (set) => ({
-      ...initialState,
-      setSettings: (settings) => {
-        if (settings.themeName) {
-          const { theme, styles } = getThemeStyles(settings.themeName);
-          set((state) => ({
-            ...state,
-            ...settings,
-            theme,
-            themeStyles: styles
-          }));
-        } else {
-          set((state) => ({ ...state, ...settings }));
-        }
-      },
-      setWidth: (width) => set({ width }),
-      setRadius: (radius) => set({ radius }),
-      setLanguage: (language) => set({ language }),
-      setBackground: (background) => set({ background }),
-      setWithLineIndex: (withLineIndex) => set({ withLineIndex }),
-      setCardTheme: (cardTheme) => set({ cardTheme }),
-      setThemeName: (themeName) => {
-        const { theme, styles } = getThemeStyles(themeName);
-        set({ themeName, theme, themeStyles: styles });
-      },
-      setName: (name) => set({ name }),
-      setSelectedThemeId: (id) => set({ selectedThemeId: id }),
-      resetSettings: () => set(initialState),
-    })
-  )
-);
+export const useSettingsStore = create<SettingsStore>()((set) => ({
+  ...initialState,
+  setSettings: (settings) => {
+    if (settings.themeName) {
+      const { theme, styles } = getThemeStyles(settings.themeName);
+      set((state) => ({
+        ...state,
+        ...settings,
+        theme,
+        themeStyles: styles,
+      }));
+    } else {
+      set((state) => ({ ...state, ...settings }));
+    }
+  },
+  setWidth: (width) => set({ width }),
+  setRadius: (radius) => set({ radius }),
+  setLanguage: (language) => set({ language }),
+  setBackground: (background) => set({ background }),
+  setWithLineIndex: (withLineIndex) => set({ withLineIndex }),
+  setCardTheme: (cardTheme) => set({ cardTheme }),
+  setThemeName: (themeName) => {
+    const { theme, styles } = getThemeStyles(themeName);
+    set({ themeName, theme, themeStyles: styles });
+  },
+  setName: (name) => set({ name }),
+  setSelectedThemeId: (id) => set({ selectedThemeId: id }),
+  resetSettings: () => set(initialState),
+}));

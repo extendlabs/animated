@@ -19,7 +19,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "./use-toast";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 
-
 export function useSaveTheme() {
   const [isLoading, setIsLoading] = useState(false);
   const supabase = createClient();
@@ -29,10 +28,12 @@ export function useSaveTheme() {
   const saveTheme = async (name: string, themeId?: string) => {
     setIsLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
 
-      const themeData: Omit<Theme, 'id' | 'created_at'> = {
+      const themeData: Omit<Theme, "id" | "created_at"> = {
         name,
         themeName: settings.themeName,
         background: settings.background,
@@ -47,43 +48,44 @@ export function useSaveTheme() {
 
       if (themeId) {
         const { data, error } = await supabase
-          .from('themes')
-          .update({ 
-            ...themeData
+          .from("themes")
+          .update({
+            ...themeData,
           })
-          .eq('id', themeId)
-          .eq('user_id', user.id)
+          .eq("id", themeId)
+          .eq("user_id", user.id)
           .select()
           .single();
 
         if (error) throw error;
-        toast({ 
-          title: "Success", 
-          description: "Theme updated successfully"
+        toast({
+          title: "Success",
+          description: "Theme updated successfully",
         });
         return data;
       } else {
         const { data, error } = await supabase
-          .from('themes')
-          .insert({ 
-            ...themeData, 
-            created_at: new Date().toISOString() 
+          .from("themes")
+          .insert({
+            ...themeData,
+            created_at: new Date().toISOString(),
           })
           .select()
           .single();
 
         if (error) throw error;
-        toast({ 
-          title: "Success", 
-          description: "Theme saved successfully"
+        toast({
+          title: "Success",
+          description: "Theme saved successfully",
         });
         return data;
       }
     } catch (err) {
       toast({
         title: "Error",
-        description: err instanceof Error ? err.message : 'Failed to save theme',
-        variant: "destructive"
+        description:
+          err instanceof Error ? err.message : "Failed to save theme",
+        variant: "destructive",
       });
       throw err;
     } finally {

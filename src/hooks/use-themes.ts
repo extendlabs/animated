@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 import { createClient } from "@/lib/supabase/client";
-import { type Theme } from './use-save-theme';
+import { type Theme } from "./use-save-theme";
 
 export function useThemes() {
   const [themes, setThemes] = useState<Theme[]>([]);
@@ -12,20 +12,22 @@ export function useThemes() {
   const fetchThemes = useCallback(async () => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
 
       const { data, error: themesError } = await supabase
-        .from('themes')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("themes")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (themesError) throw themesError;
       setThemes(data || []);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch themes');
+      setError(err instanceof Error ? err.message : "Failed to fetch themes");
     } finally {
       setLoading(false);
     }
@@ -33,17 +35,14 @@ export function useThemes() {
 
   const deleteTheme = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('themes')
-        .delete()
-        .eq('id', id);
-      
+      const { error } = await supabase.from("themes").delete().eq("id", id);
+
       if (error) throw error;
-      
+
       // Optimistic update
-      setThemes(prev => prev.filter(theme => theme.id !== id));
+      setThemes((prev) => prev.filter((theme) => theme.id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete theme');
+      setError(err instanceof Error ? err.message : "Failed to delete theme");
       throw err;
     }
   };
@@ -51,17 +50,17 @@ export function useThemes() {
   // Set up real-time subscription
   useEffect(() => {
     const channel = supabase
-      .channel('themes_changes')
+      .channel("themes_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'themes'
+          event: "*",
+          schema: "public",
+          table: "themes",
         },
         () => {
           fetchThemes();
-        }
+        },
       )
       .subscribe();
 
@@ -80,6 +79,6 @@ export function useThemes() {
     loading,
     error,
     deleteTheme,
-    refreshThemes: fetchThemes
+    refreshThemes: fetchThemes,
   };
 }

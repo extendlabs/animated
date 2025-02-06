@@ -10,7 +10,7 @@ import Link from "next/link";
 import { AuthDialog } from "./auth-dialog";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { LogOut } from "lucide-react";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -26,7 +26,10 @@ export default function Navlinks({ user }: Props) {
     <div className="flex items-center gap-5">
       <Link
         href="/pricing"
-        className={cn("hover:text-accent transition-colors duration-200", pathname === "/pricing" && "text-accent")}
+        className={cn(
+          "transition-colors duration-200 hover:text-accent",
+          pathname === "/pricing" && "text-accent",
+        )}
       >
         Pricing
       </Link>
@@ -34,18 +37,23 @@ export default function Navlinks({ user }: Props) {
         <>
           <Link
             href="/settings"
-            className={cn("hover:text-accent transition-colors duration-200", pathname === "/settings" && "text-accent")}
+            className={cn(
+              "transition-colors duration-200 hover:text-accent",
+              pathname === "/settings" && "text-accent",
+            )}
           >
             Settings
           </Link>
           <Link
             href="/account"
-            className={cn("hover:text-accent transition-colors duration-200", pathname === "/account" && "text-accent")}
+            className={cn(
+              "transition-colors duration-200 hover:text-accent",
+              pathname === "/account" && "text-accent",
+            )}
           >
             Account
           </Link>
         </>
-
       )}
       {user ? (
         <form

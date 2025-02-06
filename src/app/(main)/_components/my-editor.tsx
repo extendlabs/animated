@@ -32,17 +32,19 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
   };
 
   return (
-    <div className="p-1 m-2 shadow-xl will-change-[height] transition-[height] duration-500 ease-in-out"
+    <div
+      className="m-2 p-1 shadow-xl transition-[height] duration-500 ease-in-out will-change-[height]"
       style={{
-        background: 'hsl(0deg 0% 11.76%)',
+        background: "hsl(0deg 0% 11.76%)",
         borderRadius: 15,
-      }}>
+      }}
+    >
       <CardHeader
-        cardTheme={'defaultColorLess'}
-        themeBorder={'hsl(0deg 0% 11.76%)'}
-        themeText={'#f0f0f0'}
+        cardTheme={"defaultColorLess"}
+        themeBorder={"hsl(0deg 0% 11.76%)"}
+        themeText={"#f0f0f0"}
       />
-      <div className="will-change-[height] transition-[height] duration-500 ease-in-out"></div>
+      <div className="transition-[height] duration-500 ease-in-out will-change-[height]"></div>
       <Editor
         width="100%"
         theme="customTheme"
@@ -80,7 +82,5 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
         }}
       />
     </div>
-
-
   );
 };

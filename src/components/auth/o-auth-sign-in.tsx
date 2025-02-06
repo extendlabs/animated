@@ -21,10 +21,10 @@ export default function OauthSignIn() {
       icon: <FaGoogle className="h-5 w-5" />,
     },
     {
-      name: 'github',
-      displayName: 'GitHub',
-      icon: <Github className="h-5 w-5" />
-    }
+      name: "github",
+      displayName: "GitHub",
+      icon: <Github className="h-5 w-5" />,
+    },
     /* Add desired OAuth providers here */
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);

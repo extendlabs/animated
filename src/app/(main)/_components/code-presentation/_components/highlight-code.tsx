@@ -56,12 +56,11 @@ export const HighlightCode = ({
             <pre
               className={cn(
                 className,
-                "overflow-hidden pl-5 pt-4 text-sm will-change-[height] transition-[height] duration-500 ease-in-out",
-                thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]"
+                "overflow-hidden pl-5 pt-4 text-sm transition-[height] duration-500 ease-in-out will-change-[height]",
+                thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
               )}
               style={style}
             >
-
               {!isAutoPlaying ? (
                 <div>
                   {tokens.map((line, index) => {
@@ -119,7 +118,7 @@ export const HighlightCode = ({
           );
         }}
       </Highlight>
-      {(!subscription && !thumbnail) && (
+      {!subscription && !thumbnail && (
         <div className="absolute -bottom-3 right-1 text-white">
           <ExtendUILogo />
         </div>

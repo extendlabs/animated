@@ -17,50 +17,48 @@ export const metadata: Metadata = {
   keywords: siteConfig.keywords,
   authors: [
     {
-      name: 'extendui',
+      name: "extendui",
       url: siteConfig.links.github,
     },
   ],
-  creator: 'extendui',
+  creator: "extendui",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    type: "website",
+    locale: "en_US",
     url: siteConfig.url,
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
   },
   twitter: {
-    title: 'extendui_pro',
-    card: 'summary_large_image',
+    title: "extendui_pro",
+    card: "summary_large_image",
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
 };
 
 function generateSiteStructure() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Animated',
-    url: 'https://animated.extend-ui.com',
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Animated",
+    url: "https://animated.extend-ui.com",
     description: siteConfig.description,
     potentialAction: {
-      '@type': 'SearchAction',
+      "@type": "SearchAction",
       target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://animated.extend-ui.com/search?q={search_term_string}',
+        "@type": "EntryPoint",
+        urlTemplate:
+          "https://animated.extend-ui.com/search?q={search_term_string}",
       },
-      'query-input': 'required name=search_term_string',
+      "query-input": "required name=search_term_string",
     },
-    sameAs: [
-      'https://github.com/extendui',
-      'https://x.com/extendui_pro',
-    ],
+    sameAs: ["https://github.com/extendui", "https://x.com/extendui_pro"],
   };
 }
 

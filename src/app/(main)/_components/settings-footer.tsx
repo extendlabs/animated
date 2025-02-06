@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { Fragment, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import { AVAILABLE_CARD_THEMES, LANGUAGE_OPTIONS } from "@/constants/themes";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { SaveThemeDialog } from "./save-theme-dialog";
 
-const CUSTOM_GRADIENT = 'custom';
+const CUSTOM_GRADIENT = "custom";
 
 export type GradientStop = {
   color: string;
@@ -56,44 +56,48 @@ export default function DraggableFooter() {
 
   const handleGradientChange = (newGradient: GradientStop[]) => {
     setGradient(newGradient);
-    const newBackground = `linear-gradient(to right, ${newGradient.map(({ color }) => color).join(', ')})`;
+    const newBackground = `linear-gradient(to right, ${newGradient.map(({ color }) => color).join(", ")})`;
     setBackground(newBackground);
   };
 
   const handleBackgroundSelect = (value: string) => {
     setBackground(value);
-    if (value.includes('linear-gradient')) {
+    if (value.includes("linear-gradient")) {
       const colors = value.match(/#[a-fA-F0-9]{6}/g) || [];
       const maxColors = Math.min(colors.length, 5);
       if (colors.length >= 2) {
-        const gradientColors = colors.slice(0, maxColors).map((color: any, index: number) => {
-          const position = Math.floor((index / (maxColors - 1)) * 100);
-          return { color, position };
-        });
+        const gradientColors = colors
+          .slice(0, maxColors)
+          .map((color: any, index: number) => {
+            const position = Math.floor((index / (maxColors - 1)) * 100);
+            return { color, position };
+          });
         setGradient(gradientColors);
       }
     }
   };
 
-  const toggleFooterSize = () => setExpanded(prev => !prev);
+  const toggleFooterSize = () => setExpanded((prev) => !prev);
 
   const limitations = useSubscriptionLimitations(subscription);
 
   const selectedOption = useMemo(() => {
-    const allOptions = backgroundOptions.flatMap(group => group.options);
-    return allOptions.find(option => option.value === background)?.value || CUSTOM_GRADIENT;
+    const allOptions = backgroundOptions.flatMap((group) => group.options);
+    return (
+      allOptions.find((option) => option.value === background)?.value ||
+      CUSTOM_GRADIENT
+    );
   }, [background]);
 
   return (
     <>
-
       <footer
         className={cn(
           "bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500",
-          isExpanded ? "h-full lg:h-64" : "h-12"
+          isExpanded ? "h-full lg:h-64" : "h-12",
         )}
       >
-        <div className="m-1.5 container mx-auto cursor-pointer text-center text-sm font-medium">
+        <div className="container m-1.5 mx-auto cursor-pointer text-center text-sm font-medium">
           <div className="mx-auto flex items-center justify-center">
             <Button size="icon" variant="ghost" onClick={toggleFooterSize}>
               {isExpanded ? <ChevronsDown /> : <ChevronsUp />}
@@ -102,28 +106,31 @@ export default function DraggableFooter() {
         </div>
         <div className="container mx-auto p-8 pt-2">
           {(limitations.proUser === true || limitations.subUser === true) && (
-            <div className="flex gap-2 mb-2">
-
+            <div className="mb-2 flex gap-2">
               <SaveThemeDialog />
-              {name && (
-                <SaveThemeDialog
-                  forceCreate
-                />
-              )}
+              {name && <SaveThemeDialog forceCreate />}
             </div>
           )}
           <div className="flex flex-col items-center justify-center">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12  max-lg:gap-y-4">
+            <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-4">
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Card Theme</span>
-                  <Select value={cardTheme} onValueChange={setCardTheme} disabled={!limitations.subUser}>
+                  <span className="text-sm text-muted-foreground">
+                    Card Theme
+                  </span>
+                  <Select
+                    value={cardTheme}
+                    onValueChange={setCardTheme}
+                    disabled={!limitations.subUser}
+                  >
                     <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {AVAILABLE_CARD_THEMES.map(({ value, label }) => (
-                        <SelectItem key={value} value={value}>{label}</SelectItem>
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -139,8 +146,10 @@ export default function DraggableFooter() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableThemes.map(themeName => (
-                        <SelectItem key={themeName} value={themeName}>{themeName}</SelectItem>
+                      {availableThemes.map((themeName) => (
+                        <SelectItem key={themeName} value={themeName}>
+                          {themeName}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -148,13 +157,22 @@ export default function DraggableFooter() {
               </div>
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Background</span>
-                  <Select value={selectedOption} onValueChange={handleBackgroundSelect} disabled={!limitations.subUser}>
+                  <span className="text-sm text-muted-foreground">
+                    Background
+                  </span>
+                  <Select
+                    value={selectedOption}
+                    onValueChange={handleBackgroundSelect}
+                    disabled={!limitations.subUser}
+                  >
                     <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue placeholder="Select background">
-                        {selectedOption === CUSTOM_GRADIENT ? 'Custom' : backgroundOptions
-                          .flatMap(group => group.options)
-                          .find(opt => opt.value === selectedOption)?.label}
+                        {selectedOption === CUSTOM_GRADIENT
+                          ? "Custom"
+                          : backgroundOptions
+                              .flatMap((group) => group.options)
+                              .find((opt) => opt.value === selectedOption)
+                              ?.label}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -180,7 +198,9 @@ export default function DraggableFooter() {
                   </Select>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Gradient picker</span>
+                  <span className="text-sm text-muted-foreground">
+                    Gradient picker
+                  </span>
                   <GradientPicker
                     value={gradient}
                     onChange={handleGradientChange}
@@ -193,20 +213,30 @@ export default function DraggableFooter() {
 
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Language</span>
-                  <Select value={language} onValueChange={setLanguage} disabled={!limitations.subUser}>
+                  <span className="text-sm text-muted-foreground">
+                    Language
+                  </span>
+                  <Select
+                    value={language}
+                    onValueChange={setLanguage}
+                    disabled={!limitations.subUser}
+                  >
                     <SelectTrigger className="h-8 w-full sm:w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {LANGUAGE_OPTIONS.map(lang => (
-                        <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                      {LANGUAGE_OPTIONS.map((lang) => (
+                        <SelectItem key={lang} value={lang}>
+                          {lang}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-muted-foreground">Line index</span>
+                  <span className="text-sm text-muted-foreground">
+                    Line index
+                  </span>
                   <Switch
                     checked={withLineIndex}
                     onCheckedChange={setWithLineIndex}
@@ -218,11 +248,13 @@ export default function DraggableFooter() {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm text-muted-foreground">Width</span>
-                    <output className="text-sm text-muted-foreground tabular-nums">{width}</output>
+                    <output className="text-sm tabular-nums text-muted-foreground">
+                      {width}
+                    </output>
                   </div>
                   <Slider
                     min={400}
-                    max={750}
+                    max={700}
                     step={1}
                     value={[Number(width)]}
                     onValueChange={([value]) => setWidth(value!)}
@@ -232,8 +264,12 @@ export default function DraggableFooter() {
 
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-muted-foreground">Radius</span>
-                    <output className="text-sm text-muted-foreground tabular-nums">{radius}</output>
+                    <span className="text-sm text-muted-foreground">
+                      Radius
+                    </span>
+                    <output className="text-sm tabular-nums text-muted-foreground">
+                      {radius}
+                    </output>
                   </div>
                   <Slider
                     min={0}
@@ -245,13 +281,10 @@ export default function DraggableFooter() {
                   />
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
-      </footer >
+      </footer>
     </>
-
   );
 }

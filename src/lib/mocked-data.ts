@@ -1,30 +1,30 @@
-import { type PrismTheme, themes } from "prism-react-renderer"
-import type { CardTheme } from "types/code-presentation.type"
+import { type PrismTheme, themes } from "prism-react-renderer";
+import type { CardTheme } from "types/code-presentation.type";
 
 export type Slide = {
-  id: number
-  code: string
-  description?: string
-}
+  id: number;
+  code: string;
+  description?: string;
+};
 
 export type Animation = {
-  id: number
-  name: string
-  description: string
-  slides: Slide[]
-}
+  id: number;
+  name: string;
+  description: string;
+  slides: Slide[];
+};
 
 export type Theme = {
-  id: number
-  name: string
-  background: string
-  cardTheme: CardTheme
-  codeTheme: PrismTheme
-  padding: number
-  radius: number
-  language: string
-  withLineIndex: boolean
-}
+  id: number;
+  name: string;
+  background: string;
+  cardTheme: CardTheme;
+  codeTheme: PrismTheme;
+  padding: number;
+  radius: number;
+  language: string;
+  withLineIndex: boolean;
+};
 
 export const mockedAnimations: Animation[] = [
   {
@@ -61,7 +61,7 @@ export const mockedAnimations: Animation[] = [
       },
     ],
   },
-]
+];
 
 export const mockedThemes: Theme[] = [
   {
@@ -97,4 +97,4 @@ export const mockedThemes: Theme[] = [
     language: "python",
     withLineIndex: true,
   },
-]
+];

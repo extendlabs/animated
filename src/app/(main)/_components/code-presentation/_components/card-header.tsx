@@ -87,14 +87,14 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
             style={headerStyles}
           >
             {/* Left section with dots */}
-            <div className="flex items-center gap-2 w-[62px]">
+            <div className="flex w-[62px] items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-red-500" />
               <div className="h-3 w-3 rounded-full bg-yellow-500" />
               <div className="h-3 w-3 rounded-full bg-green-500" />
             </div>
 
             {/* Center section with filename - now with flex-1 and proper centering */}
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex flex-1 items-center justify-center">
               {renderFileName()}
             </div>
 

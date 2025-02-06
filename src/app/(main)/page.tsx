@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { SaveCodeDialog } from "./_components/save-code-dialog";
 import { CodePresentation } from "./_components/code-presentation/code-presentation";
 import { EditButton } from "./_components/edit-button";
@@ -14,24 +14,14 @@ export default function Home() {
   const { isRecordingMode } = useUIStore();
 
   return (
-    <div
-      className={cn(
-        "p-4",
-        isRecordingMode && 'h-screen overflow-hidden'
-      )}
-    >
+    <div className={cn("p-4", isRecordingMode && "h-screen overflow-hidden")}>
       {!isRecordingMode && (
-        <div className="flex gap-2 mb-4">
+        <div className="mb-4 flex gap-2">
           <EditButton />
           {(limitations.proUser === true || limitations.subUser === true) && (
             <>
-              <SaveCodeDialog key={animationId ? 'update' : 'create'} />
-              {animationId && (
-                <SaveCodeDialog
-                  key="create-new"
-                  forceCreate
-                />
-              )}
+              <SaveCodeDialog key={animationId ? "update" : "create"} />
+              {animationId && <SaveCodeDialog key="create-new" forceCreate />}
             </>
           )}
         </div>

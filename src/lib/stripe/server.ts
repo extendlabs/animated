@@ -180,11 +180,14 @@ export async function createStripePortal(currentPath: string) {
   }
 }
 
-
-export async function cancelStripeSubscription(subscriptionId: string): Promise<{ success: boolean; message: string }> {
+export async function cancelStripeSubscription(
+  subscriptionId: string,
+): Promise<{ success: boolean; message: string }> {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     if (!user) {
       throw new Error("User not found");
@@ -203,8 +206,9 @@ export async function cancelStripeSubscription(subscriptionId: string): Promise<
       throw new Error("Subscription does not belong to the current user");
     }
 
-    const canceledSubscription = await stripe.subscriptions.cancel(subscriptionId);
-    
+    const canceledSubscription =
+      await stripe.subscriptions.cancel(subscriptionId);
+
     if (canceledSubscription.status === "canceled") {
       return { success: true, message: "Subscription successfully canceled" };
     } else {
@@ -212,7 +216,10 @@ export async function cancelStripeSubscription(subscriptionId: string): Promise<
     }
   } catch (error) {
     console.error("Error canceling subscription:", error);
-    return { success: false, message: error instanceof Error ? error.message : "An unknown error occurred" };
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
   }
 }
-

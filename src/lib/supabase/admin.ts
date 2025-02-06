@@ -301,7 +301,6 @@ const retriveCustomerId = async (uuid: string) => {
   return customerData;
 };
 
-
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -309,5 +308,5 @@ export {
   deletePriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
-  retriveCustomerId
+  retriveCustomerId,
 };
