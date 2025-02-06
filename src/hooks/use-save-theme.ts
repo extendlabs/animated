@@ -10,6 +10,9 @@ export interface Theme {
   cardTheme: string;
   theme: any;
   user_id: string;
+  autoPlayInterval: number;
+  transitionDuration: number;
+  transitionDelay: number;
   created_at?: string;
 }
 
@@ -43,6 +46,9 @@ export function useSaveTheme() {
         withLineIndex: settings.withLineIndex,
         cardTheme: settings.cardTheme,
         theme: settings.theme,
+        autoPlayInterval: settings.autoPlayInterval,
+        transitionDuration: settings.transitionDuration,
+        transitionDelay: settings.transitionDelay,
         user_id: user.id,
       };
 

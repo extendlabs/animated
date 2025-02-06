@@ -34,7 +34,7 @@ export const SlideCard = ({ animation, onSelectSlides }: Props) => (
     </CardContent>
     <CardFooter>
       <div className="w-full text-right">
-        <Button onClick={() => onSelectSlides(animation)}>Use This Code</Button>
+        <Button onClick={() => onSelectSlides(animation)}>Select Code</Button>
       </div>
     </CardFooter>
   </Card>

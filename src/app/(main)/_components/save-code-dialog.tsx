@@ -80,11 +80,11 @@ export function SaveCodeDialog({ forceCreate = false }: Props) {
             />
           </div>
           <div className="space-y-4">
-            {slides.map((slide, index) => (
+            <h3 className="text-lg font-medium">Slides</h3>
+            {slides.map((slide) => (
               <div key={slide.id} className="space-y-2">
-                <h3 className="font-semibold">Slide {index + 1}</h3>
                 <Input
-                  placeholder="Name"
+                  placeholder={`Slide ${slide.id + 1} name`}
                   value={slide.file_name || ""}
                   onChange={(e) =>
                     updateSlide(slide.id, { file_name: e.target.value })

@@ -21,28 +21,41 @@ export const ThemeCard = ({ theme, onSelect, onDelete }: Props) => {
         <CardTitle>{theme.name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <dl className="grid grid-cols-2 gap-2 text-sm">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <dt className="font-medium">Width:</dt>
-            <dd>{theme.width}px</dd>
+            <p>Theme</p>
+            <p className="font-extralight">{theme.themeName}</p>
           </div>
           <div>
-            <dt className="font-medium">Radius:</dt>
-            <dd>{theme.radius}px</dd>
+            <p>Width</p>
+            <p className="font-extralight">{theme.width}px</p>
           </div>
           <div>
-            <dt className="font-medium">Language:</dt>
-            <dd>{theme.language}</dd>
+            <p>Radius</p>
+            <p className="font-extralight">{theme.radius}px</p>
           </div>
           <div>
-            <dt className="font-medium">Line Numbers:</dt>
-            <dd>{theme.withLineIndex ? "Yes" : "No"}</dd>
+            <p>Language</p>
+            <p className="font-extralight">{theme.language}</p>
           </div>
           <div>
-            <dt className="font-medium">Card Theme:</dt>
-            <dd>{theme.cardTheme}</dd>
+            <p>Interval</p>
+            <p className="font-extralight">{theme.autoPlayInterval}</p>
           </div>
-        </dl>
+          <div>
+            <p>Line duration</p>
+            <p className="font-extralight">{theme.transitionDuration}</p>
+          </div>
+          <div>
+            <p>Token delay</p>
+            <p className="font-extralight">{theme.transitionDelay}</p>
+          </div>
+          <div>
+            <p>Line Numbers</p>
+            <p className="font-extralight">{theme.withLineIndex ? "Yes" : "No"}</p>
+          </div>
+
+        </div>
         <div className="mt-4 space-y-2">
           <Button
             onClick={() => onSelect(theme)}

@@ -40,6 +40,9 @@ export default function DraggableFooter() {
     background,
     withLineIndex,
     cardTheme,
+    autoPlayInterval,
+    transitionDuration,
+    transitionDelay,
     setWidth,
     setRadius,
     setLanguage,
@@ -47,6 +50,9 @@ export default function DraggableFooter() {
     setBackground,
     setCardTheme,
     setWithLineIndex,
+    setAutoPlayInterval,
+    setTransitionDuration,
+    setTransitionDelay
   } = useSettingsStore();
 
   const { subscription } = useAuthStore();
@@ -112,7 +118,7 @@ export default function DraggableFooter() {
             </div>
           )}
           <div className="flex flex-col items-center justify-center">
-            <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-muted-foreground">
@@ -170,9 +176,9 @@ export default function DraggableFooter() {
                         {selectedOption === CUSTOM_GRADIENT
                           ? "Custom"
                           : backgroundOptions
-                              .flatMap((group) => group.options)
-                              .find((opt) => opt.value === selectedOption)
-                              ?.label}
+                            .flatMap((group) => group.options)
+                            .find((opt) => opt.value === selectedOption)
+                            ?.label}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -277,6 +283,61 @@ export default function DraggableFooter() {
                     step={1}
                     value={[Number(radius)]}
                     onValueChange={([value]) => setRadius(value!)}
+                    disabled={!limitations.subUser}
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">Interval</span>
+                    <output className="text-sm tabular-nums text-muted-foreground">
+                      {autoPlayInterval}
+                    </output>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={5}
+                    step={0.1}
+                    value={[autoPlayInterval]}
+                    onValueChange={([value]) => setAutoPlayInterval(value!)}
+                    disabled={!limitations.subUser}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      Line duration
+                    </span>
+                    <output className="text-sm tabular-nums text-muted-foreground">
+                      {transitionDuration}
+                    </output>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={[transitionDuration]}
+                    onValueChange={([value]) => setTransitionDuration(value!)}
+                    disabled={!limitations.subUser}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      Token delay
+                    </span>
+                    <output className="text-sm tabular-nums text-muted-foreground">
+                      {transitionDelay}
+                    </output>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={0.25}
+                    step={0.01}
+                    value={[transitionDelay]}
+                    onValueChange={([value]) => setTransitionDelay(value!)}
                     disabled={!limitations.subUser}
                   />
                 </div>

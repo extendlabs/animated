@@ -74,38 +74,51 @@ export function SaveThemeDialog({ forceCreate = false }: Props) {
             />
           </div>
           <div className="space-y-2 text-sm">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <p className="font-medium">Background:</p>
+                <p className="font-medium">Background</p>
                 <div
                   className="h-6 w-full rounded"
                   style={{ background: settings.background }}
                 />
               </div>
               <div>
-                <p className="font-medium">Theme:</p>
+                <p className="font-medium">Theme</p>
                 <p>{settings.themeName}</p>
               </div>
               <div>
-                <p className="font-medium">Width:</p>
+                <p className="font-medium">Card Theme</p>
+                <p>{settings.cardTheme}</p>
+              </div>
+              <div>
+                <p className="font-medium">Width</p>
                 <p>{settings.width}px</p>
               </div>
               <div>
-                <p className="font-medium">Radius:</p>
+                <p className="font-medium">Radius</p>
                 <p>{settings.radius}px</p>
               </div>
               <div>
-                <p className="font-medium">Language:</p>
+                <p className="font-medium">Language</p>
                 <p>{settings.language}</p>
               </div>
               <div>
-                <p className="font-medium">Line Numbers:</p>
-                <p>{settings.withLineIndex ? "Yes" : "No"}</p>
+                <p className="font-medium">Interval</p>
+                <p>{settings.autoPlayInterval}</p>
               </div>
               <div>
-                <p className="font-medium">Card Theme:</p>
-                <p>{settings.cardTheme}</p>
+                <p className="font-medium">Line duration</p>
+                <p>{settings.transitionDuration}</p>
               </div>
+              <div>
+                <p className="font-medium">Token delay</p>
+                <p>{settings.transitionDelay}</p>
+              </div>
+              <div>
+                <p className="font-medium">Line Numbers</p>
+                <p>{settings.withLineIndex ? "Yes" : "No"}</p>
+              </div>
+
             </div>
           </div>
           <Button type="submit" disabled={isLoading} className="w-full">

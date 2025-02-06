@@ -18,11 +18,9 @@ import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
 
-type Props = {
-  autoPlayInterval?: number;
-};
 
-export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
+
+export const CodePresentation = () => {
   const {
     slides,
     currentSlide,
@@ -44,6 +42,9 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     () => slides[currentSlide]?.code ?? "",
     [slides, currentSlide],
   );
+
+  const { autoPlayInterval } = useSettingsStore((state) => state);
+
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -172,7 +173,7 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
             newTokens: [],
           });
         }
-      }, autoPlayInterval);
+      }, autoPlayInterval * 1000);
     }
 
     return () => clearInterval(interval);
@@ -196,7 +197,6 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
       setCurrentSlide(0);
       setIsAutoPlaying(false);
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
       await startRecording(componentRef.current, handleRecordingCancel);
     } catch (error) {
       console.error("Recording failed:", error);

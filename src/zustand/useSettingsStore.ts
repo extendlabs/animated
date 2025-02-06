@@ -18,6 +18,9 @@ interface Settings {
     text: string;
   };
   selectedThemeId: string | null;
+  autoPlayInterval: number;
+  transitionDuration: number;
+  transitionDelay: number;
 }
 
 interface SettingsStore extends Settings {
@@ -32,6 +35,9 @@ interface SettingsStore extends Settings {
   setName: (name: string) => void;
   setSelectedThemeId: (id: string | null) => void;
   resetSettings: () => void;
+  setAutoPlayInterval: (interval: number) => void;
+  setTransitionDuration: (duration: number) => void;
+  setTransitionDelay: (delay: number) => void;
 }
 
 const DEFAULT_THEME_NAME = "vsDark";
@@ -49,6 +55,9 @@ const initialState: Settings = {
   themeStyles: initialThemeStyles.styles,
   name: "",
   selectedThemeId: null,
+  autoPlayInterval: 2,
+  transitionDuration: 0.6,
+  transitionDelay: 0.1
 };
 
 export const useSettingsStore = create<SettingsStore>()((set) => ({
@@ -79,4 +88,7 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
   setName: (name) => set({ name }),
   setSelectedThemeId: (id) => set({ selectedThemeId: id }),
   resetSettings: () => set(initialState),
+  setAutoPlayInterval: (interval) => set({ autoPlayInterval: interval }),
+  setTransitionDuration: (duration) => set({ transitionDuration: duration }),
+  setTransitionDelay: (delay) => set({ transitionDelay: delay }),
 }));
