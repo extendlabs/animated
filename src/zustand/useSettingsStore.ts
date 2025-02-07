@@ -92,3 +92,5 @@ export const useSettingsStore = create<SettingsStore>()((set) => ({
   setTransitionDuration: (duration) => set({ transitionDuration: duration }),
   setTransitionDelay: (delay) => set({ transitionDelay: delay }),
 }));
+
+export const { setSelectedThemeId } = useSettingsStore.getState();

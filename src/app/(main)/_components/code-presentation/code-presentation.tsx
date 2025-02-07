@@ -17,6 +17,10 @@ import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
+import { EditButton } from "../edit-button";
+import { SaveCodeDialog } from "../save-code-dialog";
+import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
+import { useAuthStore } from "@/zustand/useAuthStore";
 
 
 
@@ -238,17 +242,34 @@ export const CodePresentation = () => {
     takeScreenshot(componentRef.current);
   };
 
+  const { subscription } = useAuthStore();
+  const animationId = useUIStore((state) => state.id);
+  const limitations = useSubscriptionLimitations(subscription);
+
   return (
     <>
       <div
         style={{ background }}
         className={cn(
-          "flex w-full flex-col items-center transition-all duration-200",
+          "flex flex-col  items-center transition-all duration-200 rounded-md relative",
           isRecordingMode
             ? "fixed inset-0 z-50 overflow-y-auto bg-background"
-            : "py-2",
+            : "py-12 mt-4 max-w-3xl mx-auto ",
         )}
       >
+        {!isRecordingMode && (
+          <div className="absolute top-4 right-4">
+            <div className="flex items-center gap-2">
+              <EditButton />
+              {(limitations.proUser === true || limitations.subUser === true) && (
+                <>
+                  <SaveCodeDialog key={animationId ? "update" : "create"} />
+                  {animationId && <SaveCodeDialog key="create-new" forceCreate />}
+                </>
+              )}
+            </div>
+          </div>
+        )}
         <div
           ref={componentRef}
           className={cn(

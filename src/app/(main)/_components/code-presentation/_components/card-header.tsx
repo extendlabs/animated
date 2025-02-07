@@ -11,7 +11,7 @@ type Props = {
 export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { fileName, setFileName } = useUIStore();
+  const { fileName, setFileName, isAutoPlaying } = useUIStore();
 
   const headerStyles = {
     borderColor: themeBorder,
@@ -48,13 +48,22 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
       );
     }
     return (
-      <div
-        className="cursor-pointer text-sm"
-        style={{ color: themeText }}
-        onClick={() => setIsEditing(true)}
-      >
-        {fileName}
-      </div>
+      isAutoPlaying ? (
+        <div
+          className="text-sm"
+          style={{ color: themeText }}
+        >
+          {fileName}
+        </div>) : (
+        <div
+          className="cursor-pointer text-sm"
+          style={{ color: themeText }}
+          onClick={() => setIsEditing(true)}
+        >
+          {fileName}
+        </div>
+      )
+
     );
   };
 

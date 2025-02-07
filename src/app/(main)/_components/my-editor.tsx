@@ -33,10 +33,10 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
 
   return (
     <div
-      className="m-2 p-1 shadow-xl transition-[height] duration-500 ease-in-out will-change-[height]"
+      className="m-2 my-10 p-1 shadow-xl max-w-[700px] mx-auto transition-[height] duration-500 ease-in-out will-change-[height]"
       style={{
         background: "hsl(0deg 0% 11.76%)",
-        borderRadius: 15,
+        borderRadius: 10,
       }}
     >
       <CardHeader

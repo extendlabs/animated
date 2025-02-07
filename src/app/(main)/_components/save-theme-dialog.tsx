@@ -11,40 +11,36 @@ import { Input } from "@/components/ui/input";
 import { useSaveTheme } from "@/hooks/use-save-theme";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useThemes } from "@/hooks/use-themes";
+import { Save, Wrench } from "lucide-react";
+import { set } from "zod";
 
 type Props = {
-  forceCreate?: boolean;
+  variant: 'create' | 'edit';
 };
 
-export function SaveThemeDialog({ forceCreate = false }: Props) {
+export function SaveThemeDialog({ variant }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState("");
   const { saveTheme, isLoading } = useSaveTheme();
   const settings = useSettingsStore();
   const { themes } = useThemes();
 
-  const selectedTheme = !forceCreate
-    ? themes.find((theme) => theme.id === settings.selectedThemeId)
-    : null;
+  const selectedTheme = themes.find((theme) => theme.id === settings.selectedThemeId);
 
-  const isCreating = forceCreate || !selectedTheme;
-
-  useEffect(() => {
-    if (!forceCreate && selectedTheme?.name) {
-      setName(selectedTheme.name);
-    } else {
-      setName("");
-    }
-  }, [forceCreate, selectedTheme]);
+  console.log(selectedTheme)
+  console.log(variant)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await saveTheme(name, !isCreating ? selectedTheme?.id : undefined);
-      setIsOpen(false);
-      if (isCreating) {
-        setName("");
+      const savedTheme = await saveTheme(
+        settings.name,
+        variant === 'edit' ? selectedTheme?.id : undefined
+      );
+      if (savedTheme) {
+        settings.setSelectedThemeId(savedTheme.id);
+        settings.setName(savedTheme.name);
       }
+      setIsOpen(false);
     } catch (error) {
       // Error is handled in the hook
     }
@@ -53,14 +49,21 @@ export function SaveThemeDialog({ forceCreate = false }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} className="mb-2">
-          {isCreating ? "Create" : "Update"}
+        <Button
+          variant="ghost"
+          size="icon"
+        >
+          {variant === 'create' ? (
+            <Save className="h-4 w-4" />
+          ) : (
+            <Wrench className="h-4 w-4" />
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {isCreating ? "Create New Theme" : "Update Theme"}
+            {variant === 'create' ? "Create New Theme" : "Update Theme"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,8 +71,8 @@ export function SaveThemeDialog({ forceCreate = false }: Props) {
             <Input
               id="name"
               placeholder="Theme name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={settings.name}
+              onChange={(e) => settings.setName(e.target.value)}
               required
             />
           </div>
@@ -118,11 +121,10 @@ export function SaveThemeDialog({ forceCreate = false }: Props) {
                 <p className="font-medium">Line Numbers</p>
                 <p>{settings.withLineIndex ? "Yes" : "No"}</p>
               </div>
-
             </div>
           </div>
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Saving..." : isCreating ? "Create" : "Update"}
+            {isLoading ? "Saving..." : variant === 'create' ? "Create" : "Update"}
           </Button>
         </form>
       </DialogContent>

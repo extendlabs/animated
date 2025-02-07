@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSaveAnimation } from "@/hooks/use-save-animation";
 import { useUIStore } from "@/zustand/useUIStore";
+import { Plus, Save, Wrench } from "lucide-react";
 import { useState, useEffect } from "react";
 
 type Props = {
@@ -44,16 +45,23 @@ export function SaveCodeDialog({ forceCreate = false }: Props) {
     e.preventDefault();
     await saveAnimation(name, description, forceCreate);
     setIsOpen(false);
-    if (isCreating) {
-      setName("");
-      setDescription("");
-    }
+    setName("");
+    setDescription("");
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"}>{isCreating ? "Create" : "Update"}</Button>
+        <Button
+          variant={"ghost"}
+          size="icon"
+          className={'bg-secondary/60 hover:bg-secondary/90'}
+        > {isCreating ? (
+          <Save className="h-4 w-4" />
+        ) : (
+          <Wrench className="h-4 w-4" />
+        )}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
