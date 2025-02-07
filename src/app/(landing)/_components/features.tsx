@@ -1,29 +1,46 @@
-import { Brain, Cloud, Shield, Zap } from "lucide-react";
+import {
+  GalleryVerticalEnd,
+  Images,
+  Languages,
+  Lock,
+  Palette,
+  Settings2,
+} from "lucide-react";
 
 const features = [
   {
-    name: "AI-Powered Analytics",
+    name: "Themes",
     description:
-      "Harness the power of machine learning to derive actionable insights from your data.",
-    icon: Brain,
+      "Customize your presentations with beautiful themes. From default theme to 20+ premium options.",
+    icon: Palette,
   },
   {
-    name: "Cloud-Native Architecture",
+    name: "Full Control",
     description:
-      "Scalable, resilient, and efficient solutions built for the modern cloud ecosystem.",
-    icon: Cloud,
+      "Your recordings, your rules. Host locally or share securely with your team. Complete privacy and ownership of your content.",
+    icon: Lock,
   },
   {
-    name: "Enterprise-Grade Security",
+    name: "Card Customization",
     description:
-      "State-of-the-art security measures to protect your most valuable assets.",
-    icon: Shield,
+      "Fine-tune your card appearance with editable padding and radius.",
+    icon: Settings2,
   },
   {
-    name: "High-Performance Systems",
+    name: "Backgrounds",
+    description: "Choose from a variety of professional backgrounds.",
+    icon: GalleryVerticalEnd,
+  },
+  {
+    name: "Languages",
     description:
-      "Optimized for speed and efficiency, our solutions deliver unparalleled performance.",
-    icon: Zap,
+      "Support for multiple programming languages. Expand from basic to 20+ languages.",
+    icon: Languages,
+  },
+  {
+    name: "Slides",
+    description: "Create stunning code presentations with multiple slides. ",
+    icon: Images,
   },
 ];
 
@@ -34,7 +51,7 @@ export default function Features() {
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Simple Tools, Powerful Results
         </h2>
-        <p className="mt-4 text-muted-foreground sm:text-lg">
+        <p className="mt-4 sm:text-lg">
           We've simplified code recording down to its essence. Every feature is
           thoughtfully designed to be intuitive yet powerful, helping you create
           professional demonstrations with ease.
@@ -44,13 +61,13 @@ export default function Features() {
         {features.map((feature) => (
           <div
             key={feature.name}
-            className="relative overflow-hidden rounded-lg border bg-background p-8"
+            className="relative overflow-hidden rounded-lg border bg-background p-8 shadow hover:border-emerald-500"
           >
             <div className="flex items-center gap-4">
-              <feature.icon className="h-8 w-8" />
+              <feature.icon className="h-8 w-8 text-emerald-500" />
               <h3 className="font-bold">{feature.name}</h3>
             </div>
-            <p className="mt-2 text-muted-foreground">{feature.description}</p>
+            <p className="mt-2">{feature.description}</p>
           </div>
         ))}
       </div>
