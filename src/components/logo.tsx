@@ -13,15 +13,15 @@ export default function Logo({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className="mr-4 flex items-center justify-center gap-2 font-bold">
+      <div className="flex w-fit items-center justify-center gap-2 font-bold">
         <Image
           src="/logo.svg"
           alt="logo"
           width={500}
           height={500}
-          className="size-6"
+          className="h-[18px] w-fit"
         />
-        <span className="text-lg font-semibold tracking-tight">Animated</span>
+        <span className="sr-only">Animated</span>
       </div>
     </Link>
   );
