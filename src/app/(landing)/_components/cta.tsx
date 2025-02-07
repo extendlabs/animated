@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -11,9 +12,11 @@ export default function CTA() {
           Join developers worldwide who've transformed their code sharing,
           documentation, and teaching through engaging visual demonstrations.
         </p>
-        <Button size="lg" className="mt-4">
-          Get Started Today
-        </Button>
+        <Link href={"/pricing"}>
+          <Button size="lg" className="mt-4">
+            Get Started Today
+          </Button>
+        </Link>
       </div>
     </section>
   );

@@ -1,10 +1,12 @@
 import {
+  CodeXml,
+  Earth,
   GalleryVerticalEnd,
   Images,
-  Languages,
   Lock,
   Palette,
   Settings2,
+  Terminal,
 } from "lucide-react";
 
 const features = [
@@ -35,7 +37,7 @@ const features = [
     name: "Languages",
     description:
       "Support for multiple programming languages. Expand from basic to 20+ languages.",
-    icon: Languages,
+    icon: CodeXml,
   },
   {
     name: "Slides",
