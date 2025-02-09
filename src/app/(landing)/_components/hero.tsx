@@ -1,10 +1,10 @@
 "use client";
 import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { VideoDialog } from "./video-dialog";
+import Image from "next/image";
+import { Play } from "lucide-react";
 
 export default function HeroSection() {
   const [scale, setScale] = useState(1.1);
@@ -77,7 +77,17 @@ export default function HeroSection() {
             }}
           >
             <FadeUp delay={1} duration={1.2}>
-              <VideoDialog />
+              <div className="relative mt-16 max-w-screen-lg rounded-lg shadow-lg">
+                <div className="group relative rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                  <Image
+                    src="https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPSffPdKz4crUtnskQM6JR0f94vmwAdeE7WBpY"
+                    alt="screen"
+                    width={3818}
+                    height={2160}
+                    className="rounded-md border transition-all duration-200 ease-out"
+                  />
+                </div>
+              </div>
             </FadeUp>
           </div>
         </div>
