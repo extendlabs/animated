@@ -4,7 +4,7 @@ interface Props {
   title: string;
   description?: string;
   footer?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export default function Card({ title, description, footer, children }: Props) {

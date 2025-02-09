@@ -11,11 +11,18 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
 });
 
 export const getSubscription = cache(async (supabase: SupabaseClient) => {
+  const now = new Date().toISOString();
+  
   const { data: subscription, error } = await supabase
     .from("subscriptions")
     .select("*, prices(*, products(*))")
-    .in("status", ["trialing", "active"])
+    .or(`status.in.(trialing,active),and(status.eq.canceled,current_period_end.gt.${now})`)
     .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching subscription:', error);
+    return null;
+  }
 
   return subscription;
 });

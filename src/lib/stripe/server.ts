@@ -9,7 +9,7 @@ import {
   getURL,
 } from "../helpers";
 import { stripe } from "./config";
-import { createOrRetrieveCustomer, retriveCustomerId } from "../supabase/admin";
+import { createOrRetrieveCustomer, createPortalSession, deleteAccount, retriveCustomerId } from "../supabase/admin";
 
 type Price = Tables<"prices">;
 
@@ -181,7 +181,7 @@ export async function createStripePortal(currentPath: string) {
 }
 
 export async function cancelStripeSubscription(
-  subscriptionId: string,
+  subscriptionId: string
 ): Promise<{ success: boolean; message: string }> {
   try {
     const supabase = await createClient();
@@ -206,20 +206,178 @@ export async function cancelStripeSubscription(
       throw new Error("Subscription does not belong to the current user");
     }
 
-    const canceledSubscription =
-      await stripe.subscriptions.cancel(subscriptionId);
+    // Instead of immediate cancellation, schedule it for the end of the period
+    const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      cancel_at_period_end: true
+    });
 
-    if (canceledSubscription.status === "canceled") {
-      return { success: true, message: "Subscription successfully canceled" };
+    if (updatedSubscription.cancel_at_period_end) {
+      return { success: true, message: "Subscription scheduled for cancellation at the end of the billing period" };
     } else {
-      throw new Error("Failed to cancel subscription");
+      throw new Error("Failed to schedule subscription cancellation");
     }
   } catch (error) {
-    console.error("Error canceling subscription:", error);
+    console.error("Error scheduling subscription cancellation:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+export async function redirectToCustomerPortalsubscriptionId(
+  subscriptionId: string,
+) {
+  try {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const customerData = await retriveCustomerId(user.id);
+
+  const stripeCustomerId = customerData.stripe_customer_id;
+
+    if (subscription.customer !== stripeCustomerId) {
+      throw new Error("Subscription does not belong to the current user");
+    }
+
+    const response = await createPortalSession(user.id);
+
+    return {
+      success: true,
+      message: "Redirecting to customer portal",
+      path: response
+    }
+  } catch (error) {
     return {
       success: false,
       message:
         error instanceof Error ? error.message : "An unknown error occurred",
+      path: null
+    };
+  }
+}
+
+
+
+export async function resumeUserSubscription(
+  subscriptionId: string
+): Promise<{ 
+  success: boolean; 
+  message: string;
+  subscription?: any;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const customerData = await retriveCustomerId(user.id);
+
+    if (!customerData) {
+      throw new Error("Stripe customer ID not found for the current user");
+    }
+
+    const stripeCustomerId = customerData.stripe_customer_id;
+
+    if (subscription.customer !== stripeCustomerId) {
+      throw new Error("Subscription does not belong to the current user");
+    }
+
+    // Simply remove the cancellation schedule
+    const resumedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      cancel_at_period_end: false
+    });
+
+    if (!resumedSubscription.cancel_at_period_end) {
+      // Get the updated subscription data for the frontend
+      const { data: updatedSubscription } = await supabase
+        .from("subscriptions")
+        .select(`
+          *,
+          prices (
+            *,
+            products (*)
+          )
+        `)
+        .eq("id", subscriptionId)
+        .single();
+
+      return { 
+        success: true, 
+        message: "Subscription successfully resumed",
+        subscription: updatedSubscription
+      };
+    } else {
+      throw new Error("Failed to resume subscription");
+    }
+  } catch (error) {
+    console.error("Error resuming subscription:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+
+
+export async function deleteUserAccount(): Promise<{ 
+  success: boolean; 
+  message: string;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error("Failed to get user: " + userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Wait for deleteAccount to complete and get its result
+    const result = await deleteAccount(user.id);
+
+    // If deleteAccount failed, propagate its error
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to delete account');
+    }
+
+    // Sign out the user after successful deletion
+    const { error: signOutError } = await supabase.auth.signOut();
+    if (signOutError) {
+      console.error('Error signing out:', signOutError);
+      // We don't throw here as the account was successfully deleted
+    }
+
+    return {
+      success: true,
+      message: 'Account successfully deleted'
+    };
+    
+  } catch (error) {
+    console.error('Error in deleteAccount:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error deleting account'
     };
   }
 }

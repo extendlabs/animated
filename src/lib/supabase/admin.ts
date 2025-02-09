@@ -116,6 +116,174 @@ const createCustomerInStripe = async (uuid: string, email: string) => {
   return newCustomer.id;
 };
 
+const createPortalSession = async (uuid: string) => {
+  const { data: customer } = await supabaseAdmin
+    .from('customers')
+    .select('stripe_customer_id')
+    .eq('id', uuid)
+    .single();
+
+  if (!customer?.stripe_customer_id) {
+    throw new Error('Customer not found');
+  }
+
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customer.stripe_customer_id,
+    return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/account`,
+  });
+
+  return session.url;
+}
+
+export const getUserInvoices = async (uuid: string) => {
+  const { data: customer } = await supabaseAdmin
+    .from('customers')
+    .select('stripe_customer_id')
+    .eq('id', uuid)
+    .single();
+
+  if (!customer?.stripe_customer_id) {
+    return new Response(JSON.stringify({ 
+      success: false,
+      error: 'Customer not found' 
+    }), { 
+      status: 404,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  try {
+    const invoices = await stripe.invoices.list({
+      customer: customer.stripe_customer_id,
+      limit: 12,
+      expand: ['data.subscription']
+    });
+
+    return new Response(JSON.stringify({
+      success: true,
+      invoices: invoices.data.map(invoice => ({
+        id: invoice.id,
+        amount_paid: invoice.amount_paid,
+        currency: invoice.currency,
+        status: invoice.status,
+        created: invoice.created,
+        invoice_pdf: invoice.invoice_pdf,
+        invoice_url: invoice.hosted_invoice_url
+      }))
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (stripeError) {
+    return new Response(JSON.stringify({ 
+      success: false,
+      error: 'Error fetching invoices from Stripe' 
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+// In admin.ts
+export const deleteAccount = async (uuid: string) => {
+  try {
+    // Step 1: Retrieve all user data for cleanup
+    const [
+      { data: customerData, error: customerError },
+      { data: subscriptionData, error: subscriptionError }
+    ] = await Promise.all([
+      supabaseAdmin
+        .from('customers')
+        .select('stripe_customer_id')
+        .eq('id', uuid)
+        .single(),
+      supabaseAdmin
+        .from('subscriptions')
+        .select('id, status')
+        .eq('user_id', uuid)
+    ]);
+
+    // Check for active subscriptions
+    if (subscriptionData?.some(sub => 
+      ['active', 'trialing'].includes(sub.status as string)
+    )) {
+      throw new Error('Please cancel all active subscriptions before deleting your account');
+    }
+
+    // Step 2: Delete Stripe customer if exists
+    if (customerData?.stripe_customer_id) {
+      try {
+        await stripe.customers.del(customerData.stripe_customer_id);
+      } catch (error: any) {
+        // Log but don't fail if Stripe deletion fails
+        console.error('Stripe customer deletion failed:', error.message);
+      }
+    }
+
+    // Step 3: Delete all user data in parallel
+    // Using Promise.allSettled to continue even if some deletions fail
+    const deletionPromises = await Promise.allSettled([
+      // Delete subscriptions first (foreign key constraint)
+      supabaseAdmin
+        .from("subscriptions")
+        .delete()
+        .eq("user_id", uuid),
+      
+      // Delete customer record
+      supabaseAdmin
+        .from("customers")
+        .delete()
+        .eq("id", uuid),
+      
+      // Delete user profile
+      supabaseAdmin
+        .from("users")
+        .delete()
+        .eq("id", uuid),
+        
+      // Finally delete auth user
+      supabaseAdmin.auth.admin.deleteUser(uuid)
+    ]);
+
+    // Check for critical failures
+    const criticalFailures = deletionPromises
+      .filter(result => 
+        result.status === 'rejected' && 
+        result.reason?.message?.includes('foreign key constraint')
+      );
+
+    if (criticalFailures.length > 0) {
+      throw new Error('Failed to delete some user data due to database constraints');
+    }
+
+    // Log non-critical failures but continue
+    const warnings = deletionPromises
+      .filter(result => result.status === 'rejected')
+      .map(result => (result as PromiseRejectedResult).reason);
+    
+    if (warnings.length > 0) {
+      console.warn('Non-critical deletion warnings:', warnings);
+    }
+
+    return {
+      success: true,
+      message: 'Account deleted successfully'
+    };
+
+  } catch (error: any) {
+    console.error('Account deletion error:', error);
+    return {
+      success: false,
+      error: error.message || 'Error deleting account'
+    };
+  }
+};
+
+
+
+
+
 const createOrRetrieveCustomer = async ({
   email,
   uuid,
@@ -282,8 +450,8 @@ const manageSubscriptionStatusChange = async (
     // @ts-ignore
     quantity: subscription.quantity,
     cancel_at_period_end: subscription.cancel_at_period_end,
-    cancel_at: subscription.cancel_at
-      ? toDateTime(subscription.cancel_at).toISOString()
+    cancel_at: subscription.canceled_at
+      ? toDateTime(subscription.cancel_at as number).toISOString()
       : null,
     canceled_at: subscription.canceled_at
       ? toDateTime(subscription.canceled_at).toISOString()
@@ -338,6 +506,74 @@ const retriveCustomerId = async (uuid: string) => {
   return customerData;
 };
 
+
+// Add to your exports at the bottom of the file
+export async function resumeUserSubscription(
+  subscriptionId: string
+): Promise<{ 
+  success: boolean; 
+  message: string;
+  subscription?: any;
+}> {
+  try {
+    const {
+      data: { user },
+    } = await supabaseAdmin.auth.getUser();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const customerData = await retriveCustomerId(user.id);
+
+    if (!customerData) {
+      throw new Error("Stripe customer ID not found for the current user");
+    }
+
+    const stripeCustomerId = customerData.stripe_customer_id;
+
+    if (subscription.customer !== stripeCustomerId) {
+      throw new Error("Subscription does not belong to the current user");
+    }
+
+    // Simply remove the cancellation schedule
+    const resumedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      cancel_at_period_end: false
+    });
+
+    if (!resumedSubscription.cancel_at_period_end) {
+      // Get the updated subscription data for the frontend
+      const { data: updatedSubscription } = await supabaseAdmin
+        .from("subscriptions")
+        .select(`
+          *,
+          prices (
+            *,
+            products (*)
+          )
+        `)
+        .eq("id", subscriptionId)
+        .single();
+
+      return { 
+        success: true, 
+        message: "Subscription successfully resumed",
+        subscription: updatedSubscription
+      };
+    } else {
+      throw new Error("Failed to resume subscription");
+    }
+  } catch (error) {
+    console.error("Error resuming subscription:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -346,4 +582,5 @@ export {
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
   retriveCustomerId,
+  createPortalSession
 };

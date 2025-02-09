@@ -47,7 +47,7 @@ export default function EmailForm({
         </div>
       }
     >
-      <div className="mb-4 mt-8 text-xl font-semibold">
+      <div className="mb-4 mt-8 text-xl font-medium">
         <form id="emailForm" onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
