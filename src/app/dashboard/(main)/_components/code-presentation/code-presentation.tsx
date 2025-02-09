@@ -10,7 +10,6 @@ import { type DiffResult } from "types/code-presentation.type";
 import { Button } from "../../../../../components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/lib/code-diff";
-import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { PauseIcon, PlayIcon, Video, StopCircle } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";

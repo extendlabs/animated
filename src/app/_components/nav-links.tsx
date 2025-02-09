@@ -25,7 +25,7 @@ export default function Navlinks({ user }: Props) {
   return (
     <div className="flex items-center gap-5">
       <Link
-        href="/dashboard/pricing"
+        href="/pricing"
         className={cn(
           "transition-colors duration-200 hover:text-accent",
           pathname === "/pricing" && "text-accent",
