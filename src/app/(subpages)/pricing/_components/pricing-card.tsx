@@ -3,8 +3,8 @@ import { PRICING_ANIMATION_VARIANTS } from "@/constants/pricing";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { FeatureList } from "./feature-list";
-import { PriceDisplay } from "./price-display";
 import { type BillingInterval } from "@/types/pricing.type";
+import AnimatedPrice from "./animated-price";
 
 type Props = {
   isPopular?: boolean;
@@ -62,7 +62,7 @@ export const PricingCard = ({
         <p className="text-xl font-medium">{name}</p>
         <p className="my-4 h-12 text-zinc-300">{description}</p>
       </div>
-      <PriceDisplay price={price} interval={interval} />
+      <AnimatedPrice price={price} interval={interval} />
       <FeatureList features={features} />
       <div className="mt-auto">
         <motion.div

@@ -3,6 +3,8 @@ import { ThemeCard } from "./theme-card";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { type Theme } from "@/hooks/use-save-theme";
 import { toast } from "@/hooks/use-toast";
+import EmptyTab from "./empty-tab";
+import { Paintbrush } from "lucide-react";
 
 type Props = {
   themes: Theme[];
@@ -36,6 +38,12 @@ export const ThemeTab = ({ themes, loading, onDelete }: Props) => {
   };
 
   if (loading) return <LoadingSpinner />;
+  if (!themes.length) return (
+    <EmptyTab
+      title={"No Themes"}
+      description={"Create a new theme to get started."}
+      icon={<Paintbrush className="h-20 w-20 text-zinc-700 mb-6" />}
+    />);
 
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

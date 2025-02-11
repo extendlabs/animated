@@ -21,6 +21,7 @@ import {
 } from "@/types/pricing.type";
 import { PricingCard } from "./pricing-card";
 import { type Json } from "types_db";
+import BillingToggle from "./billing-toggle";
 
 type Props = {
   user: User | null | undefined;
@@ -30,12 +31,15 @@ type Props = {
 
 export default function Pricing({ user, products, subscription }: Props) {
   const router = useRouter();
-  const [billingInterval] = useState<BillingInterval>("month");
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>("month");
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const currentPath = usePathname();
   const { setIsDialogOpen } = useLoginStore();
   const { setSubscription } = useAuthStore();
 
+  const handleIntervalChange = (interval: BillingInterval) => {
+    setBillingInterval(interval);
+  };
   const handleStripeCheckout = async (price: Price) => {
     setPriceIdLoading(price.id);
 
@@ -125,10 +129,13 @@ export default function Pricing({ user, products, subscription }: Props) {
           </FadeUp>
           <FadeUp delay={0.4} duration={0.8}>
             <p className="mx-2 my-6 max-w-2xl text-base font-light tracking-tight dark:text-zinc-300 sm:text-xl">
-              Start animating for free, then choose a subscription plan to
-              unlock additional features.
+              Start animating for free, then choose a subscription plan to unlock additional features.
             </p>
           </FadeUp>
+          <BillingToggle
+            billingInterval={billingInterval}
+            onChange={handleIntervalChange}
+          />
           <div className="gradient pointer-events-none absolute inset-0 -z-10 block opacity-30 blur-3xl"></div>
         </div>
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-3">
@@ -141,9 +148,9 @@ export default function Pricing({ user, products, subscription }: Props) {
             buttonText="Get started"
             onButtonClick={() => router.push("/")}
           />
-          {sortedProducts.map((product: any) => {
+          {sortedProducts.map((product) => {
             const price = product?.prices?.find(
-              (price: any) => price.interval === billingInterval,
+              (price) => price.interval === billingInterval
             );
             if (!price) return null;
 
@@ -153,9 +160,8 @@ export default function Pricing({ user, products, subscription }: Props) {
               minimumFractionDigits: 0,
             }).format((price?.unit_amount ?? 0) / 100);
 
-            const productFeatures =
-              product?.metadata?.features?.split(",") ?? [];
-            const isPopular = product.metadata?.most_popular === "true";
+            const productFeatures = (product?.metadata as any)?.features?.split(",") ?? [];
+            const isPopular = (product.metadata as any)?.most_popular === "true";
 
             return (
               <PricingCard
@@ -166,9 +172,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                 price={priceString}
                 interval={billingInterval}
                 features={productFeatures}
-                buttonText={
-                  subscription?.prices?.id === price.id ? "Cancel" : "Subscribe"
-                }
+                buttonText={subscription?.prices?.id === price.id ? "Cancel" : "Subscribe"}
                 buttonDisabled={
                   priceIdLoading === price.id ||
                   (subscription?.prices?.id === price.id

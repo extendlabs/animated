@@ -66,11 +66,14 @@ export default function InvoicesForm() {
                     <Button
                         variant="outline"
                         onClick={fetchInvoices}
-                        className="flex items-center gap-2 text-primary"
+                        className="flex items-center gap-2 text-primary bg-zinc-900 border-zinc-600 border-2"
                         disabled={loading}
                     >
                         {loading ? (
-                            'Loading...'
+                            <>
+                                Loading...
+                                <ChevronDown className="h-4 w-4" />
+                            </>
                         ) : (
                             <>
                                 {isExpanded ? 'Hide' : 'Show'} Invoices

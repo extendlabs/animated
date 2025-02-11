@@ -1,7 +1,7 @@
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 
-import { Trash2 } from "lucide-react";
+import { FilmIcon, Trash2 } from "lucide-react";
 import { SlideCard } from "./slide-card";
 import {
   Accordion,
@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import EmptyTab from "./empty-tab";
 
 type Props = {
   animations: any[];
@@ -24,6 +25,12 @@ export const SettingsTab = ({
   onDelete,
 }: Props) => {
   if (loading) return <LoadingSpinner />;
+  if (!animations.length) return (
+    <EmptyTab
+      title={"No Animations"}
+      description={"Create a new animation to get started."}
+      icon={<FilmIcon className="h-20 w-20 text-zinc-700 mb-6" />}
+    />);
 
   return (
     <Accordion type="single" collapsible className="w-full">

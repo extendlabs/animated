@@ -59,7 +59,7 @@ export default function DeleteAccountForm({ hasActiveSubscription }: DeleteAccou
             description="Permanently delete your account and all associated data."
             footer={
                 <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-                    <p className="pb-4 sm:pb-0 text-sm text-muted-foreground">
+                    <p className="pb-4 sm:pb-0">
                         {hasActiveSubscription ?
                             "Please cancel your subscription before deleting your account." :
                             "This action cannot be undone and will permanently delete all your data."}
