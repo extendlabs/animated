@@ -2,19 +2,19 @@ import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { Twitter } from "lucide-react";
 import XformerlyTwitter from "@/components/twitter-logo";
+import { MobileNav } from "./mobile-nav";
 
 export default async function Header() {
   const supabase = await createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   return (
     <header className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 lg:px-6">
       <Logo />
-      <nav className="flex items-center gap-5">
+      <nav className="hidden items-center gap-5 sm:flex">
         <Link
           href={"/"}
           className={cn("transition-colors duration-200 hover:text-accent")}
@@ -51,6 +51,7 @@ export default async function Header() {
           </Link>
         )}
       </nav>
+      <MobileNav user={user} />
     </header>
   );
 }

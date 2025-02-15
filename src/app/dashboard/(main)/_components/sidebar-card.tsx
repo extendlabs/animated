@@ -39,19 +39,22 @@ export const SidebarCard = ({
       onMouseLeave={() => setIsHovered(false)}
       className="relative cursor-pointer overflow-hidden rounded-md transition-all duration-200"
     >
-      <div className="relative aspect-[16/9] w-full" style={{ background: background }}>
+      <div
+        className="relative aspect-[16/9] w-full"
+        style={{ background: background }}
+      >
         <CodePreview currentSlide={index} />
         <div
           className={cn(
             "absolute inset-0 transition-opacity duration-200",
             !isCurrent && "bg-black/50",
-            isHovered && "bg-slate-300/30"
+            isHovered && "bg-slate-300/30",
           )}
         />
         <div
           className={cn(
             "absolute right-0 top-0 p-2 transition-opacity duration-200",
-            isHovered ? "opacity-100" : "opacity-0"
+            isHovered ? "opacity-100" : "opacity-0",
           )}
         >
           <Button

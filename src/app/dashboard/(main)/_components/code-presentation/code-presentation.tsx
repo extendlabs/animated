@@ -14,7 +14,7 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { PauseIcon, PlayIcon, Video, StopCircle } from "lucide-react";
 import RecordableCodeCard from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
-import { usePathname } from "next/navigation";
+
 
 type Props = {
   autoPlayInterval?: number;
@@ -32,8 +32,6 @@ export const CodePresentation = ({ autoPlayInterval = 1500 }: Props) => {
     name,
     description,
   } = useUIStore();
-
-  const pathname = usePathname();
 
   const componentRef = useRef<HTMLDivElement>(null);
   const { recordingState, startRecording, stopRecording } = useRecording();
