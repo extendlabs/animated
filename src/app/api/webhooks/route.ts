@@ -39,6 +39,51 @@ const relevantEvents = new Set([
   "customer.deleted"
 ]);
 
+async function handlePaymentIntentSuccess(paymentIntent: Stripe.PaymentIntent) {
+  if (paymentIntent.metadata?.purchaseType === 'lifetime') {
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent: paymentIntent.id
+    });
+    const session = sessions.data[0];
+    
+    if (session) {
+      await manageLifetimePurchase(session, paymentIntent);
+    }
+  } else if (paymentIntent.invoice) {
+    const invoice = await stripe.invoices.retrieve(paymentIntent.invoice as string);
+    if (invoice.subscription) {
+      await manageSubscriptionStatusChange(
+        invoice.subscription as string,
+        invoice.customer as string,
+        false
+      );
+    }
+  }
+}
+
+async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+  switch (session.mode) {
+    case "subscription":
+      const subscriptionId = session.subscription;
+      await manageSubscriptionStatusChange(
+        subscriptionId as string,
+        session.customer as string,
+        true
+      );
+      break;
+    
+    case "payment":
+      const paymentIntent = await stripe.paymentIntents.retrieve(
+        session.payment_intent as string
+      );
+      
+      if (paymentIntent.metadata?.purchaseType === 'lifetime') {
+        await manageLifetimePurchase(session, paymentIntent);
+      } 
+      break;
+  }
+}
+
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature")!;
@@ -103,27 +148,7 @@ export async function POST(req: Request) {
           break;
 
         case "payment_intent.succeeded":
-          const paymentIntent = event.data.object as Stripe.PaymentIntent;
-          if (paymentIntent.metadata?.purchaseType === 'lifetime') {
-            // Fetch the checkout session to get user reference
-            const sessions = await stripe.checkout.sessions.list({
-              payment_intent: paymentIntent.id
-            });
-            const session = sessions.data[0];
-            
-            if (session) {
-              await manageLifetimePurchase(session, paymentIntent);
-            }
-          } else if (paymentIntent.invoice) {
-            const invoice = await stripe.invoices.retrieve(paymentIntent.invoice as string);
-            if (invoice.subscription) {
-              await manageSubscriptionStatusChange(
-                invoice.subscription as string,
-                invoice.customer as string,
-                false
-              );
-            }
-          }
+          await handlePaymentIntentSuccess(event.data.object as Stripe.PaymentIntent);
           break;
 
         case "payment_intent.created":
@@ -143,13 +168,11 @@ export async function POST(req: Request) {
 
         case "customer.created":
         case "customer.updated":
-          const customer = event.data.object as Stripe.Customer;
-          await upsertCustomerRecord(customer);
+          await upsertCustomerRecord(event.data.object as Stripe.Customer);
           break;
         
         case "customer.deleted":
-          const deletedCustomer = event.data.object as Stripe.Customer;
-          await deleteCustomerRecord(deletedCustomer);
+          await deleteCustomerRecord(event.data.object as Stripe.Customer);
           break;
 
         case "customer.subscription.created":
@@ -164,24 +187,7 @@ export async function POST(req: Request) {
           break;
 
         case "checkout.session.completed":
-          const checkoutSession = event.data.object as Stripe.Checkout.Session;
-          if (checkoutSession.mode === "subscription") {
-            const subscriptionId = checkoutSession.subscription;
-            await manageSubscriptionStatusChange(
-              subscriptionId as string,
-              checkoutSession.customer as string,
-              true
-            );
-          } else if (checkoutSession.mode === "payment") {
-            // Handle one-time payment completion
-            const paymentIntent = await stripe.paymentIntents.retrieve(
-              checkoutSession.payment_intent as string
-            );
-            
-            if (paymentIntent.metadata?.purchaseType === 'lifetime') {
-              await manageLifetimePurchase(checkoutSession, paymentIntent);
-            }
-          }
+          await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
           break;
 
         default:

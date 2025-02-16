@@ -580,7 +580,6 @@ export async function manageLifetimePurchase(
       .from('lifetime_purchases')
       .upsert({
         user_id: userId,
-        customer_id: checkoutSession.customer as string, // Required field
         price_id: paymentIntent.metadata.price_id || null,
         payment_intent_id: paymentIntent.id || null,
         amount: paymentIntent.amount,
