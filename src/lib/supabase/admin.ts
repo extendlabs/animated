@@ -19,6 +19,25 @@ const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
 );
 
+const createUserRecord = async (uuid: string) => {
+  const { error: createError } = await supabaseAdmin
+    .from("users")
+    .upsert([{ 
+      id: uuid,
+      full_name: null,
+      avatar_url: null,
+      billing_address: null,
+      payment_method: null
+    }]);
+
+  if (createError) {
+    console.error('Error creating user record:', createError);
+    throw new Error(`User record creation failed: ${createError.message}`);
+  }
+  
+  console.log(`User record created: ${uuid}`);
+};
+
 const upsertProductRecord = async (product: Stripe.Product) => {
   const productData: Product = {
     id: product.id,
@@ -191,7 +210,8 @@ export const deleteAccount = async (uuid: string) => {
     // Step 1: Retrieve all user data for cleanup
     const [
       { data: customerData, error: customerError },
-      { data: subscriptionData, error: subscriptionError }
+      { data: subscriptionData, error: subscriptionError },
+      { data: lifetimePurchaseData, error: lifetimePurchaseError }
     ] = await Promise.all([
       supabaseAdmin
         .from('customers')
@@ -201,6 +221,10 @@ export const deleteAccount = async (uuid: string) => {
       supabaseAdmin
         .from('subscriptions')
         .select('id, status')
+        .eq('user_id', uuid),
+        supabaseAdmin
+        .from('lifetime_purchases')
+        .select('id')
         .eq('user_id', uuid)
     ]);
 
@@ -229,7 +253,11 @@ export const deleteAccount = async (uuid: string) => {
         .from("subscriptions")
         .delete()
         .eq("user_id", uuid),
-      
+        
+        supabaseAdmin
+        .from("lifetime_purchases")
+        .delete()
+        .eq("user_id", uuid),
       // Delete customer record
       supabaseAdmin
         .from("customers")
@@ -292,6 +320,17 @@ const createOrRetrieveCustomer = async ({
   uuid: string;
 }) => {
   // Check if the customer already exists in Supabase
+
+  const { data: existingUser } = await supabaseAdmin
+    .from("users")
+    .select("id")
+    .eq("id", uuid)
+    .single();
+
+  if (!existingUser) {
+    await createUserRecord(uuid);
+  }
+
   const { data: existingSupabaseCustomer, error: queryError } =
     await supabaseAdmin
       .from("customers")

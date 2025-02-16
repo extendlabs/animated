@@ -81,16 +81,11 @@ export async function checkoutWithStripe(
       automatic_tax: { 
         enabled: true,
       },
-      
-      // Invoice Configuration
-      invoice_creation: {
-        enabled: true,
-      },
+    
 
       // Customer Data Collection
       customer_update: {
         address: "auto",
-        shipping: "auto",
         name: "auto"
       },
 
@@ -106,13 +101,6 @@ export async function checkoutWithStripe(
           quantity: 1
         },
       ],
-
-      // Phone Collection
-      phone_number_collection: {
-        enabled: true
-      },
-
-
 
       // URLs
       cancel_url: `${getURL()}/checkout/cancel`,
@@ -136,6 +124,10 @@ export async function checkoutWithStripe(
     } else if (price.type === "one_time") {
       params = {
         ...params,
+         // Invoice Configuration
+      invoice_creation: {
+        enabled: true,
+      },
         mode: "payment",
         metadata: {
           purchaseType: 'lifetime',
