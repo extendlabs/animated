@@ -112,11 +112,7 @@ export async function checkoutWithStripe(
         enabled: true
       },
 
-      // Consent Collection (for GDPR compliance)
-      consent_collection: {
-        terms_of_service: "required",
-        promotions: "auto"
-      },
+
 
       // URLs
       cancel_url: `${getURL()}/checkout/cancel`,
