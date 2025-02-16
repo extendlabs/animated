@@ -38,7 +38,7 @@ export function SaveThemeDialog({ variant }: Props) {
       );
       if (savedTheme) {
         settings.setSelectedThemeId(savedTheme.id);
-        settings.setName(savedTheme.name);
+        settings.setName((savedTheme as any).name);
       }
       setIsOpen(false);
     } catch (error) {

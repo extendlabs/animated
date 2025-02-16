@@ -7,6 +7,7 @@ import {
   deletePriceRecord,
   upsertCustomerRecord,
   deleteCustomerRecord,
+  manageLifetimePurchase,
 } from "@/lib/supabase/admin";
 import { stripe } from "@/lib/stripe/config";
 
@@ -81,7 +82,6 @@ export async function POST(req: Request) {
         case "invoice.payment_succeeded":
         case "invoice.paid":
           const invoice = event.data.object as Stripe.Invoice;
-          // Handle successful payment
           if (invoice.subscription) {
             await manageSubscriptionStatusChange(
               invoice.subscription as string,
@@ -93,7 +93,6 @@ export async function POST(req: Request) {
 
         case "invoice.payment_failed":
           const failedInvoice = event.data.object as Stripe.Invoice;
-          // Handle failed payment - you might want to notify the customer
           if (failedInvoice.subscription) {
             await manageSubscriptionStatusChange(
               failedInvoice.subscription as string,
@@ -104,12 +103,18 @@ export async function POST(req: Request) {
           break;
 
         case "payment_intent.succeeded":
-        case "payment_intent.created":
-        case "payment_intent.payment_failed":
           const paymentIntent = event.data.object as Stripe.PaymentIntent;
-          // Handle payment intent status changes
-          if (paymentIntent.invoice) {
-            // If this payment intent is associated with an invoice
+          if (paymentIntent.metadata?.purchaseType === 'lifetime') {
+            // Fetch the checkout session to get user reference
+            const sessions = await stripe.checkout.sessions.list({
+              payment_intent: paymentIntent.id
+            });
+            const session = sessions.data[0];
+            
+            if (session) {
+              await manageLifetimePurchase(session, paymentIntent);
+            }
+          } else if (paymentIntent.invoice) {
             const invoice = await stripe.invoices.retrieve(paymentIntent.invoice as string);
             if (invoice.subscription) {
               await manageSubscriptionStatusChange(
@@ -120,10 +125,25 @@ export async function POST(req: Request) {
             }
           }
           break;
+
+        case "payment_intent.created":
+        case "payment_intent.payment_failed":
+          const pi = event.data.object as Stripe.PaymentIntent;
+          if (pi.invoice) {
+            const invoice = await stripe.invoices.retrieve(pi.invoice as string);
+            if (invoice.subscription) {
+              await manageSubscriptionStatusChange(
+                invoice.subscription as string,
+                invoice.customer as string,
+                false
+              );
+            }
+          }
+          break;
+
         case "customer.created":
         case "customer.updated":
           const customer = event.data.object as Stripe.Customer;
-          // You'll need to create these functions in your admin.ts
           await upsertCustomerRecord(customer);
           break;
         
@@ -131,6 +151,7 @@ export async function POST(req: Request) {
           const deletedCustomer = event.data.object as Stripe.Customer;
           await deleteCustomerRecord(deletedCustomer);
           break;
+
         case "customer.subscription.created":
         case "customer.subscription.updated":
         case "customer.subscription.deleted":
@@ -151,6 +172,15 @@ export async function POST(req: Request) {
               checkoutSession.customer as string,
               true
             );
+          } else if (checkoutSession.mode === "payment") {
+            // Handle one-time payment completion
+            const paymentIntent = await stripe.paymentIntents.retrieve(
+              checkoutSession.payment_intent as string
+            );
+            
+            if (paymentIntent.metadata?.purchaseType === 'lifetime') {
+              await manageLifetimePurchase(checkoutSession, paymentIntent);
+            }
           }
           break;
 
@@ -158,6 +188,7 @@ export async function POST(req: Request) {
           console.warn(`Unhandled relevant event type: ${event.type}`);
       }
     } catch (error: any) {
+      console.error(`Webhook error: ${error.message}`);
       return new Response(
         "Webhook handler failed. View your Next.js function logs.",
         { status: 400 }

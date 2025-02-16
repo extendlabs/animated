@@ -7,42 +7,39 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect } from "react";
-import { getSubscription } from "@/lib/supabase/queries";
+import { getUserSubscriptionStatus } from "@/lib/supabase/queries";
 import { useAuthStore } from "@/zustand/useAuthStore";
+import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 
 export function AppSidebar({
   className,
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { slides, currentSlide, setCurrentSlide, addSlide, deleteSlide } =
-    useUIStore();
-  const supabase = createClient();
-  const { subscription, setSubscription } = useAuthStore();
-  const { isRecordingMode } = useUIStore();
+  const {
+    slides,
+    currentSlide,
+    setCurrentSlide,
+    addSlide,
+    deleteSlide,
+    isRecordingMode
+  } = useUIStore();
 
-  const getMaxSlides = () => {
-    switch (subscription) {
-      case null:
-        return 2;
-      case "Hobby":
-        return 5;
-      case "Premium":
-        return Infinity;
-      default:
-        return 0;
-    }
-  };
+  const supabase = createClient();
+  const { subscriptionStatus, setSubscription, setPurchase } = useAuthStore();
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
+
+  // Free users get 2 slides, pro users get unlimited
+  const MAX_FREE_SLIDES = 2;
 
   const handleAddSlide = () => {
-    const maxSlides = getMaxSlides();
-    if (slides.length >= maxSlides) {
+    if (!limitations.proUser && slides.length >= MAX_FREE_SLIDES) {
+      console.error("Upgrade to Pro to add more slides");
       return;
     }
 
@@ -62,16 +59,21 @@ export function AppSidebar({
   };
 
   useEffect(() => {
-    const fetchSubscription = async () => {
-      const subscription = await getSubscription(supabase);
-      setSubscription(subscription?.prices?.products?.name || null);
+    const fetchSubscriptionStatus = async () => {
+      const status = await getUserSubscriptionStatus(supabase);
+      if (status) {
+        setSubscription(status.subscription);
+        setPurchase(status.lifetimePurchase);
+      }
     };
 
-    fetchSubscription();
-  }, []);
+    fetchSubscriptionStatus();
+  }, [supabase, setSubscription, setPurchase]);
 
   const isAddDisabled = () => {
-    return slides.length >= getMaxSlides();
+    if (isRecordingMode) return true;
+    if (limitations.proUser) return false;
+    return slides.length >= MAX_FREE_SLIDES;
   };
 
   return (
@@ -90,6 +92,7 @@ export function AppSidebar({
                       currentSlide={currentSlide}
                       setCurrentSlide={setCurrentSlide}
                       handleDeleteSlide={handleDeleteSlide}
+                    // disabled={isRecordingMode}
                     />
                   ))}
                 </div>

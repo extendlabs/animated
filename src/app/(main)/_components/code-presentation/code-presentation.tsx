@@ -242,9 +242,9 @@ export const CodePresentation = () => {
     takeScreenshot(componentRef.current);
   };
 
-  const { subscription } = useAuthStore();
+  const { subscriptionStatus } = useAuthStore();
   const animationId = useUIStore((state) => state.id);
-  const limitations = useSubscriptionLimitations(subscription);
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
 
   return (
     <>
@@ -261,7 +261,7 @@ export const CodePresentation = () => {
           <div className="absolute top-4 right-4">
             <div className="flex items-center gap-2">
               <EditButton />
-              {(limitations.proUser === true || limitations.subUser === true) && (
+              {(limitations.proUser === true) && (
                 <>
                   <SaveCodeDialog key={animationId ? "update" : "create"} />
                   {animationId && <SaveCodeDialog key="create-new" forceCreate />}

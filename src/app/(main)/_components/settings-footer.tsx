@@ -57,7 +57,7 @@ export default function DraggableFooter() {
     setTransitionDelay
   } = useSettingsStore();
 
-  const { subscription } = useAuthStore();
+
   const [isExpanded, setExpanded] = useState(false);
   const [gradient, setGradient] = useState(() => parseGradient(background));
   const availableThemes = Object.keys(themes);
@@ -87,7 +87,9 @@ export default function DraggableFooter() {
 
   const toggleFooterSize = () => setExpanded((prev) => !prev);
 
-  const limitations = useSubscriptionLimitations(subscription);
+  const { subscriptionStatus } = useAuthStore();
+  const animationId = useUIStore((state) => state.id);
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
   const { isEditing } = useUIStore();
 
   const selectedOption = useMemo(() => {
@@ -123,7 +125,7 @@ export default function DraggableFooter() {
 
           <div className="flex flex-col">
             <div className="flex justify-end">
-              {(limitations.proUser === true || limitations.subUser === true) && (
+              {(limitations.proUser === true) && (
                 <div className="mb-2 flex gap-2">
                   {selectedThemeId ? (
                     <>
@@ -146,7 +148,7 @@ export default function DraggableFooter() {
                     <Select
                       value={cardTheme}
                       onValueChange={setCardTheme}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     >
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
@@ -165,7 +167,7 @@ export default function DraggableFooter() {
                     <Select
                       value={themeName}
                       onValueChange={setThemeName}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     >
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
@@ -188,7 +190,7 @@ export default function DraggableFooter() {
                     <Select
                       value={selectedOption}
                       onValueChange={handleBackgroundSelect}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     >
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue placeholder="Select background">
@@ -244,7 +246,7 @@ export default function DraggableFooter() {
                     <Select
                       value={language}
                       onValueChange={setLanguage}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     >
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
@@ -265,7 +267,7 @@ export default function DraggableFooter() {
                     <Switch
                       checked={withLineIndex}
                       onCheckedChange={setWithLineIndex}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>
@@ -283,7 +285,7 @@ export default function DraggableFooter() {
                       step={1}
                       value={[Number(width)]}
                       onValueChange={([value]) => setWidth(value!)}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
 
@@ -302,7 +304,7 @@ export default function DraggableFooter() {
                       step={1}
                       value={[Number(radius)]}
                       onValueChange={([value]) => setRadius(value!)}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>
@@ -320,7 +322,7 @@ export default function DraggableFooter() {
                       step={0.1}
                       value={[autoPlayInterval]}
                       onValueChange={([value]) => setAutoPlayInterval(value!)}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
 
@@ -339,7 +341,7 @@ export default function DraggableFooter() {
                       step={0.01}
                       value={[transitionDuration]}
                       onValueChange={([value]) => setTransitionDuration(value!)}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -357,7 +359,7 @@ export default function DraggableFooter() {
                       step={0.01}
                       value={[transitionDelay]}
                       onValueChange={([value]) => setTransitionDelay(value!)}
-                      disabled={!limitations.subUser}
+                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>

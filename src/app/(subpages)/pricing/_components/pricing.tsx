@@ -1,90 +1,108 @@
 "use client";
 
-import FadeUp from "@/components/fadeup";
-import { getErrorRedirect, getStatusRedirect } from "@/lib/helpers";
-import { getStripe } from "@/lib/stripe/client";
-import {
-  cancelStripeSubscription,
-  checkoutWithStripe,
-} from "@/lib/stripe/server";
-import { type User } from "@supabase/supabase-js";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
+import FadeUp from "@/components/fadeup";
+import { getErrorRedirect } from "@/lib/helpers";
+import { getStripe } from "@/lib/stripe/client";
 import { PRICING_FREE_DATA } from "@/constants/pricing";
 import { useLoginStore } from "@/zustand/useLoginStore";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import {
-  type BillingInterval,
-  type Price,
-  type ProductWithPrices,
-  type SubscriptionWithProduct,
-} from "@/types/pricing.type";
+import { BillingInterval, UserSubscriptionStatus } from "@/types/pricing.type";
 import { PricingCard } from "./pricing-card";
-import { type Json } from "types_db";
 import BillingToggle from "./billing-toggle";
+import { User } from "@supabase/supabase-js";
+import { Tables } from "types_db";
+import { checkoutWithStripe } from "@/lib/stripe/server";
+
+type Price = Tables<"prices">;
 
 type Props = {
   user: User | null | undefined;
-  products: ProductWithPrices[];
-  subscription: SubscriptionWithProduct | null;
+  products: any[];
+  subscriptionStatus: UserSubscriptionStatus | null;
 };
 
-export default function Pricing({ user, products, subscription }: Props) {
+export default function Pricing({ user, products, subscriptionStatus }: Props) {
   const router = useRouter();
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("month");
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const currentPath = usePathname();
   const { setIsDialogOpen } = useLoginStore();
-  const { setSubscription } = useAuthStore();
 
   const handleIntervalChange = (interval: BillingInterval) => {
     setBillingInterval(interval);
   };
+
   const handleStripeCheckout = async (price: Price) => {
-    setPriceIdLoading(price.id);
+    try {
+      setPriceIdLoading(price.id);
 
-    if (!user) {
-      setPriceIdLoading(undefined);
-      setIsDialogOpen(true);
-      return;
-    }
+      if (!user) {
+        setPriceIdLoading(undefined);
+        setIsDialogOpen(true);
+        return;
+      }
 
-    const { errorRedirect, sessionId } = await checkoutWithStripe(
-      price,
-      currentPath,
-    );
+      // Check if user already has access
+      if (subscriptionStatus?.hasLifetimePurchase) {
+        // toast.error("You already have lifetime access");
+        setPriceIdLoading(undefined);
+        return;
+      }
 
-    if (errorRedirect) {
-      setPriceIdLoading(undefined);
-      return router.push(errorRedirect);
-    }
+      if (price.type === 'recurring' && subscriptionStatus?.isSubscribed) {
+        // toast.error("You already have an active subscription");
+        setPriceIdLoading(undefined);
+        return;
+      }
 
-    if (!sessionId) {
-      setPriceIdLoading(undefined);
-      return router.push(
+      console.log('Starting checkout with price:', {
+        id: price.id,
+        type: price.type,
+        amount: price.unit_amount,
+        interval: price.interval,
+        currency: price.currency
+      });
+
+      const { errorRedirect, sessionId } = await checkoutWithStripe(price, currentPath);
+
+      if (errorRedirect) {
+        console.error('Checkout error redirect:', errorRedirect);
+        setPriceIdLoading(undefined);
+        return router.push(errorRedirect);
+      }
+
+      if (!sessionId) {
+        setPriceIdLoading(undefined);
+        return router.push(
+          getErrorRedirect(
+            currentPath,
+            "An unknown error occurred.",
+            "Please try again later or contact support.",
+          ),
+        );
+      }
+
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error("Stripe not initialized");
+      }
+
+      await stripe.redirectToCheckout({ sessionId });
+
+    } catch (error) {
+      console.error('Checkout error:', error);
+      // toast.error(error instanceof Error ? error.message : "Failed to process checkout");
+      router.push(
         getErrorRedirect(
           currentPath,
-          "An unknown error occurred.",
-          "Please try again later or contact a system administrator.",
+          "Checkout failed",
+          "Please try again later or contact support.",
         ),
       );
+    } finally {
+      setPriceIdLoading(undefined);
     }
-
-    const stripe = await getStripe();
-    await stripe?.redirectToCheckout({ sessionId });
-    setPriceIdLoading(undefined);
-  };
-
-  const handleCancelSubscription = async (subscriptionId: string) => {
-    const result = await cancelStripeSubscription(subscriptionId);
-    const redirectPath = result.success
-      ? getStatusRedirect(currentPath, "Success!", result.message)
-      : getErrorRedirect(currentPath, "Error", result.message);
-
-    if (result.success) {
-      setSubscription(null);
-    }
-    router.push(redirectPath);
   };
 
   if (!products.length) {
@@ -110,13 +128,14 @@ export default function Pricing({ user, products, subscription }: Props) {
     );
   }
 
-  const sortedProducts = [...products].sort((a, b) => {
-    const aPopular =
-      (a.metadata as Record<string, Json | undefined>)?.most_popular === "true";
-    const bPopular =
-      (b.metadata as Record<string, Json | undefined>)?.most_popular === "true";
-    return bPopular ? 1 : aPopular ? -1 : 0;
-  });
+  // Separate products by type
+  const subscriptionProducts = products.filter(product =>
+    product.prices.some((price: any) => price.type === 'recurring')
+  );
+
+  const lifetimeProducts = products.filter(product =>
+    product.prices.some((price: any) => price.type === 'one_time')
+  );
 
   return (
     <section id="pricing" className="mb-8 space-y-4 overflow-hidden">
@@ -129,29 +148,35 @@ export default function Pricing({ user, products, subscription }: Props) {
           </FadeUp>
           <FadeUp delay={0.4} duration={0.8}>
             <p className="mx-2 my-6 max-w-2xl text-base font-light tracking-tight dark:text-zinc-300 sm:text-xl">
-              Start animating for free, then choose a subscription plan to unlock additional features.
+              Start for free, then choose a plan that fits your needs.
             </p>
           </FadeUp>
-          <BillingToggle
-            billingInterval={billingInterval}
-            onChange={handleIntervalChange}
-          />
-          <div className="gradient pointer-events-none absolute inset-0 -z-10 block opacity-30 blur-3xl"></div>
+          {subscriptionProducts.length > 0 && (
+            <BillingToggle
+              billingInterval={billingInterval}
+              onChange={handleIntervalChange}
+            />
+          )}
         </div>
+
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-3">
+          {/* Free Plan */}
           <PricingCard
             name={PRICING_FREE_DATA.name}
             description={PRICING_FREE_DATA.description}
             price={PRICING_FREE_DATA.price}
-            interval={billingInterval}
+            interval="month"
             features={PRICING_FREE_DATA.features}
             buttonText="Get started"
             onButtonClick={() => router.push("/")}
           />
-          {sortedProducts.map((product) => {
-            const price = product?.prices?.find(
-              (price) => price.interval === billingInterval
+
+          {/* Subscription Plans */}
+          {subscriptionProducts.map((product) => {
+            const price = product.prices.find(
+              (price: any) => price.type === 'recurring' && price.interval === billingInterval
             );
+
             if (!price) return null;
 
             const priceString = new Intl.NumberFormat("en-US", {
@@ -160,8 +185,10 @@ export default function Pricing({ user, products, subscription }: Props) {
               minimumFractionDigits: 0,
             }).format((price?.unit_amount ?? 0) / 100);
 
-            const productFeatures = (product?.metadata as any)?.features?.split(",") ?? [];
-            const isPopular = (product.metadata as any)?.most_popular === "true";
+            const productFeatures = product.metadata?.features?.split(",") ?? [];
+            const isPopular = product.metadata?.most_popular === "true";
+
+            const isCurrentPlan = subscriptionStatus?.subscription?.prices?.id === price.id;
 
             return (
               <PricingCard
@@ -172,20 +199,45 @@ export default function Pricing({ user, products, subscription }: Props) {
                 price={priceString}
                 interval={billingInterval}
                 features={productFeatures}
-                buttonText={subscription?.prices?.id === price.id ? "Cancel" : "Subscribe"}
+                buttonText={isCurrentPlan ? "Current Plan" : "Subscribe"}
                 buttonDisabled={
                   priceIdLoading === price.id ||
-                  (subscription?.prices?.id === price.id
-                    ? false
-                    : !subscription
-                      ? false
-                      : true)
+                  isCurrentPlan ||
+                  subscriptionStatus?.hasLifetimePurchase
                 }
-                onButtonClick={() =>
-                  subscription?.prices?.id === price.id
-                    ? handleCancelSubscription(subscription?.id as string)
-                    : handleStripeCheckout(price)
-                }
+                onButtonClick={() => handleStripeCheckout(price)}
+              />
+            );
+          })}
+
+          {/* Lifetime Plans */}
+          {lifetimeProducts.map((product) => {
+            const price = product.prices.find(
+              (price: any) => price.type === 'one_time'
+            );
+
+            if (!price) return null;
+
+            const priceString = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: price.currency!,
+              minimumFractionDigits: 0,
+            }).format((price?.unit_amount ?? 0) / 100);
+
+            const productFeatures = product.metadata?.features?.split(",") ?? [];
+            const isCurrentPlan = subscriptionStatus?.lifetimePurchase?.price_id === price.id;
+
+            return (
+              <PricingCard
+                key={product.id}
+                name={product.name}
+                description={product.description}
+                price={priceString}
+                interval="lifetime"
+                features={productFeatures}
+                buttonText={isCurrentPlan ? "Purchased" : "Buy Lifetime"}
+                buttonDisabled={priceIdLoading === price.id || isCurrentPlan}
+                onButtonClick={() => handleStripeCheckout(price)}
               />
             );
           })}

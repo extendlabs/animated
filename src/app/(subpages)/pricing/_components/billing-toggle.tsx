@@ -8,6 +8,9 @@ type Props = {
 }
 
 const BillingToggle = ({ billingInterval, onChange }: Props) => {
+    // Only show toggle for month/year options
+    if (billingInterval === 'lifetime') return null;
+
     return (
         <div className="w-full flex justify-center mt-12 mb-6">
             <div className="inline-flex items-center gap-4">

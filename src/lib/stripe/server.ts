@@ -23,7 +23,6 @@ export async function checkoutWithStripe(
   redirectPath = "/account",
 ): Promise<CheckoutResponse> {
   try {
-    // Get the user from Supabase auth
     const supabase = await createClient();
     const {
       error,
@@ -35,7 +34,32 @@ export async function checkoutWithStripe(
       throw new Error("Could not get user session.");
     }
 
-    // Retrieve or create the customer in Stripe
+    // Check if user already has lifetime access
+    const { data: lifetimePurchase } = await supabase
+      .from('lifetime_purchases')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('status', 'completed')
+      .single();
+
+    if (lifetimePurchase) {
+      throw new Error("You already have lifetime access to this product.");
+    }
+
+    // For subscriptions, check if user already has an active one
+    if (price.type === 'recurring') {
+      const { data: activeSubscription } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .single();
+
+      if (activeSubscription) {
+        throw new Error("You already have an active subscription.");
+      }
+    }
+
     let customer: string;
     try {
       customer = await createOrRetrieveCustomer({
@@ -62,12 +86,9 @@ export async function checkoutWithStripe(
       ],
       cancel_url: getURL(),
       success_url: getURL(redirectPath),
+      client_reference_id: user.id,
     };
 
-    console.log(
-      "Trial end:",
-      calculateTrialEndUnixTimestamp(price.trial_period_days),
-    );
     if (price.type === "recurring") {
       params = {
         ...params,
@@ -80,42 +101,31 @@ export async function checkoutWithStripe(
       params = {
         ...params,
         mode: "payment",
+        payment_intent_data: {
+          metadata: {
+            purchaseType: 'lifetime',
+            price_id: price.id
+          }
+        }
       };
     }
 
-    // Create a checkout session in Stripe
-    let session;
-    try {
-      session = await stripe.checkout.sessions.create(params);
-    } catch (err) {
-      console.error(err);
-      throw new Error("Unable to create checkout session.");
-    }
+    const session = await stripe.checkout.sessions.create(params);
 
-    // Instead of returning a Response, just return the data or error.
     if (session) {
       return { sessionId: session.id };
     } else {
       throw new Error("Unable to create checkout session.");
     }
   } catch (error) {
-    if (error instanceof Error) {
-      return {
-        errorRedirect: getErrorRedirect(
-          redirectPath,
-          error.message,
-          "Please try again later or contact a system administrator.",
-        ),
-      };
-    } else {
-      return {
-        errorRedirect: getErrorRedirect(
-          redirectPath,
-          "An unknown error occurred.",
-          "Please try again later or contact a system administrator.",
-        ),
-      };
-    }
+    console.error('Checkout error:', error);
+    return {
+      errorRedirect: getErrorRedirect(
+        redirectPath,
+        error instanceof Error ? error.message : "An unknown error occurred",
+        "Please try again later or contact support.",
+      ),
+    };
   }
 }
 

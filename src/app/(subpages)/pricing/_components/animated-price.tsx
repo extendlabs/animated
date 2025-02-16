@@ -1,3 +1,4 @@
+
 import { BillingInterval } from '@/types/pricing.type';
 import React, { useEffect, useState } from 'react';
 
@@ -29,15 +30,24 @@ const AnimatedPrice = ({ price, interval }: Props) => {
         return () => clearInterval(timer);
     }, [targetPrice, count]);
 
+    const renderInterval = () => {
+        if (interval === 'lifetime') {
+            return <span className="text-lg text-gray-400">one-time</span>;
+        }
+        return (
+            <span className="text-lg text-gray-400">
+                /{interval}
+            </span>
+        );
+    };
+
     return (
         <div className="inline-flex items-baseline mb-6">
             <span className="text-4xl font-bold">$</span>
             <span className="text-4xl font-bold mx-1 tabular-nums">
                 {Math.round(count)}
             </span>
-            <span className="text-lg text-gray-400">
-                /{interval}
-            </span>
+            {renderInterval()}
         </div>
     );
 };
