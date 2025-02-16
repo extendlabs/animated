@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSubscription, getUser } from "@/lib/supabase/queries";
+import { getSubscription, getUser, getLifetimePurchase } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
 import CustomerPortalForm from "./_components/customer-form";
 import EmailForm from "./_components/email-form";
@@ -9,9 +9,10 @@ import FadeUp from "@/components/fadeup";
 
 export default async function Account() {
   const supabase = await createClient();
-  const [user, subscription] = await Promise.all([
+  const [user, subscription, lifetimePurchase] = await Promise.all([
     getUser(supabase),
     getSubscription(supabase),
+    getLifetimePurchase(supabase),
   ]);
 
   if (!user) {
@@ -34,7 +35,10 @@ export default async function Account() {
       </div>
       <div className="p-4 space-y-4">
         <FadeUp delay={0.4} duration={0.8}>
-          <CustomerPortalForm subscription={subscription} />
+          <CustomerPortalForm
+            subscription={subscription}
+            lifetimePurchase={lifetimePurchase}
+          />
         </FadeUp>
         <FadeUp delay={0.5} duration={0.8}>
           <EmailForm userEmail={user.email} />
@@ -43,7 +47,9 @@ export default async function Account() {
           <InvoicesForm />
         </FadeUp>
         <FadeUp delay={0.7} duration={0.8}>
-          <DeleteAccountForm hasActiveSubscription={hasActiveSubscription} />
+          <DeleteAccountForm
+            hasActiveSubscription={hasActiveSubscription}
+          />
         </FadeUp>
       </div>
     </section>

@@ -75,6 +75,8 @@ export async function checkoutWithStripe(
       allow_promotion_codes: true,
       billing_address_collection: "required",
       customer,
+      automatic_tax: { enabled: true },
+      invoice_creation: { enabled: true },
       customer_update: {
         address: "auto",
       },

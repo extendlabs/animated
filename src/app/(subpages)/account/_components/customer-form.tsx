@@ -1,14 +1,15 @@
-"use client";
+'use client'
 
-import { useRouter, usePathname, redirect } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { type Tables } from "types_db";
-import { cancelStripeSubscription, redirectToCustomerPortalsubscriptionId, resumeUserSubscription, } from "@/lib/stripe/server";
+import { cancelStripeSubscription, redirectToCustomerPortalsubscriptionId, resumeUserSubscription } from "@/lib/stripe/server";
 import { Button } from "@/components/ui/button";
 import Card from "@/components/card";
 import { getErrorRedirect, getStatusRedirect } from "@/lib/helpers";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { format } from "date-fns";
+import { LifetimePurchaseWithProduct } from "@/types/pricing.type";
 
 type Subscription = Tables<"subscriptions">;
 type Price = Tables<"prices">;
@@ -24,9 +25,10 @@ type SubscriptionWithPriceAndProduct = Subscription & {
 
 interface Props {
   subscription: SubscriptionWithPriceAndProduct | null;
+  lifetimePurchase?: LifetimePurchaseWithProduct | null;
 }
 
-export default function CustomerPortalForm({ subscription }: Props) {
+export default function CustomerPortalForm({ subscription, lifetimePurchase }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
   const { setSubscription } = useAuthStore();
@@ -64,8 +66,27 @@ export default function CustomerPortalForm({ subscription }: Props) {
     return setTimeout(() => router.push(redirectPath), 1000);
   };
 
+  const handleResumeSubscription = async (subscriptionId: string) => {
+    const result = await resumeUserSubscription(subscriptionId);
+    let redirectPath;
+
+    if (result.success) {
+      if (result.subscription) {
+        setSubscription(result.subscription);
+      }
+      redirectPath = getStatusRedirect(currentPath, "Success!", result.message);
+    } else {
+      redirectPath = getErrorRedirect(currentPath, "Error", result.message);
+    }
+
+    return setTimeout(() => router.push(redirectPath), 1000);
+  };
 
   const getSubscriptionStatusText = () => {
+    if (lifetimePurchase) {
+      return
+    }
+
     if (!subscription) return null;
 
     if (subscription.current_period_end && subscription.canceled_at) {
@@ -79,45 +100,27 @@ export default function CustomerPortalForm({ subscription }: Props) {
         <div className="mt-2 text-zinc-300">
           Next payment will be on {format(new Date(subscription.current_period_end), "MMMM d, yyyy")}.
         </div>
-      )
+      );
     }
-
   };
 
-
-
-
-
-  // Add this to your imports at the top of the file
-
-  const handleResumeSubscription = async (subscriptionId: string) => {
-    const result = await resumeUserSubscription(subscriptionId);
-    let redirectPath;
-
-    if (result.success) {
-      // Update local subscription state with the new subscription data
-      if (result.subscription) {
-        setSubscription(result.subscription);
-      }
-      redirectPath = getStatusRedirect(currentPath, "Success!", result.message);
-    } else {
-      redirectPath = getErrorRedirect(currentPath, "Error", result.message);
+  const getPlanDescription = () => {
+    if (lifetimePurchase) {
+      return `You have lifetime access to Animated Pro.`;
     }
 
-    return setTimeout(() => router.push(redirectPath), 1000);
+    return subscription
+      ? `You are currently on the ${subscription?.prices?.products?.name} plan.`
+      : "You are not currently subscribed.";
   };
 
   return (
     <Card
       title="Your Plan"
-      description={
-        subscription
-          ? `You are currently on the ${subscription?.prices?.products?.name} plan.`
-          : "You are not currently subscribed."
-      }
+      description={getPlanDescription()}
       footer={
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          <p className="pb-4 sm:pb-0">Manage your subscription.</p>
+          {!lifetimePurchase ? <p className="pb-4 sm:pb-0">Manage your subscription.</p> : <p className="pb-4 sm:pb-0">Bought {format(new Date(lifetimePurchase.created_at), "MMMM d, yyyy")}</p>}
           {subscription ? (
             <div className="flex gap-2">
               <Button
@@ -145,21 +148,19 @@ export default function CustomerPortalForm({ subscription }: Props) {
                 </Button>
               )}
             </div>
-          ) : (
+          ) : !lifetimePurchase ? (
             <Link href="/pricing">
               <Button>Choose your plan</Button>
             </Link>
-          )}
+          ) : null}
         </div>
       }
     >
       <div className="mb-4 mt-8">
         {subscription && (
-          <>
-            <div className="text-xl font-semibold">
-              {subscriptionPrice}/{subscription?.prices?.interval}
-            </div>
-          </>
+          <div className="text-xl font-semibold">
+            {subscriptionPrice}/{subscription?.prices?.interval}
+          </div>
         )}
         {getSubscriptionStatusText()}
       </div>

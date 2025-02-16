@@ -23,7 +23,6 @@ export interface LifetimePurchaseWithProduct {
   updated_at: string;
   metadata: Record<string, any>;
   payment_intent_id: string;
-  customer_id: string;
   prices?: {
     products: Tables<'products'>;
   };
