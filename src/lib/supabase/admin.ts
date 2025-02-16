@@ -563,35 +563,40 @@ const manageSubscriptionStatusChange = async (
       subscription.default_payment_method as Stripe.PaymentMethod,
     );
 };
-
-export const manageLifetimePurchase = async (
-  session: Stripe.Checkout.Session,
+export async function manageLifetimePurchase(
+  checkoutSession: Stripe.Checkout.Session,
   paymentIntent: Stripe.PaymentIntent
-) => {
-  if (!session.client_reference_id) {
-    throw new Error('No client reference ID found in session');
+) {
+  
+  
+  const userId = checkoutSession.client_reference_id;
+  
+  if (!userId) {
+    throw new Error('No client_reference_id found in checkout session');
   }
 
-  const purchaseData = {
-    user_id: session.client_reference_id,
-    price_id: session.line_items?.data[0]?.price?.id as string,
-    amount: paymentIntent.amount,
-    status: paymentIntent.status === 'succeeded' ? 'completed' : 'pending',
-    payment_intent_id: paymentIntent.id,
-    customer_id: session.customer as string,
-    metadata: session.metadata
-  };
+  try {
+    const { error } = await supabaseAdmin
+      .from('lifetime_purchases')
+      .upsert({
+        user_id: userId,
+        customer_id: checkoutSession.customer as string, // Required field
+        price_id: paymentIntent.metadata.price_id || null,
+        payment_intent_id: paymentIntent.id || null,
+        amount: paymentIntent.amount,
+        status: 'completed',
+        metadata: paymentIntent.metadata || null // Required field of type Json
+      });
 
-  const { error: upsertError } = await (supabaseAdmin as any)
-    .from('lifetime_purchases')
-    .upsert([purchaseData]);
-
-  if (upsertError) {
-    throw new Error(`Lifetime purchase insert/update failed: ${upsertError.message}`);
+    if (error) {
+      console.error('Lifetime purchase insert/update failed:', error);
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error managing lifetime purchase:', error);
+    throw error;
   }
-
-  console.log(`Inserted/updated lifetime purchase for user [${session.client_reference_id}]`);
-};
+}
 
 
 export const checkPurchaseStatus = async (userId: string) => {

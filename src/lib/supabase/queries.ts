@@ -1,5 +1,4 @@
 
-// lib/supabase/queries.ts
 import { SubscriptionPlans, SubscriptionWithProduct, UserSubscriptionStatus, LifetimePurchaseWithProduct } from "@/types/pricing.type";
 import { type SupabaseClient } from "@supabase/supabase-js";
 import { cache } from "react";
@@ -12,7 +11,7 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
 });
 
 export async function getUserSubscriptionStatus(supabase: SupabaseClient) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getUser(supabase);
   
   if (!user) return null;
 
@@ -98,29 +97,26 @@ export const getProducts = cache(async (supabase: SupabaseClient) => {
   }));
 });
 
-export const hasActiveAccess = cache(async (supabase: SupabaseClient) => {
-  const status = await getUserSubscriptionStatus(supabase);
-  return Boolean(status?.isSubscribed || status?.hasLifetimePurchase);
-});
 
-
-
-
-
-
-
-export async function getPurchase(supabase: SupabaseClient) {
-  const { data: purchase } = await supabase
-    .from('purchases')
-    .select('*, prices(*, products(*))')
-    .eq('status', 'completed')
-    .single();
-
-  return purchase;
-}
-
-
-
+export const createAnimationWithSlides = async (
+  supabase: SupabaseClient,
+  name: string,
+  description: string,
+  user: any,
+  slides: any,
+) => {
+  const { data, error } = await supabase.rpc("create_animation_with_slides", {
+    p_name: name,
+    p_description: description,
+    p_user_id: user.id,
+    p_slides: slides.map((slide: any) => ({
+      code: slide.code,
+      file_name: slide.file_name || "",
+      description: slide.description || "",
+    })),
+  });
+  return { data, error };
+};
 
 
 export const updateAnimationWithSlides = async (
@@ -143,48 +139,4 @@ export const updateAnimationWithSlides = async (
     })),
   });
   return error;
-};
-
-export const getUserAccessLevel = cache(async (supabase: SupabaseClient) => {
-  const subscription = await getSubscription(supabase);
-  
-  if (!subscription) return 'free';
-  
-  if (subscription.prices?.type === 'one_time') {
-    return 'lifetime';
-  }
-  
-  if (subscription.status === 'active' || subscription.status === 'trialing') {
-    return 'pro';
-  }
-  
-  return 'free';
-});
-
-export const getUserDetails = cache(async (supabase: SupabaseClient) => {
-  const { data: userDetails } = await supabase
-    .from("users")
-    .select("*")
-    .single();
-  return userDetails;
-});
-
-export const createAnimationWithSlides = async (
-  supabase: SupabaseClient,
-  name: string,
-  description: string,
-  user: any,
-  slides: any,
-) => {
-  const { data, error } = await supabase.rpc("create_animation_with_slides", {
-    p_name: name,
-    p_description: description,
-    p_user_id: user.id,
-    p_slides: slides.map((slide: any) => ({
-      code: slide.code,
-      file_name: slide.file_name || "",
-      description: slide.description || "",
-    })),
-  });
-  return { data, error };
 };

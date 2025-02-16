@@ -92,15 +92,16 @@ export async function checkoutWithStripe(
     if (price.type === "recurring") {
       params = {
         ...params,
-        mode: "subscription",
-        subscription_data: {
-          trial_end: calculateTrialEndUnixTimestamp(price.trial_period_days),
-        },
+        mode: "subscription"
       };
     } else if (price.type === "one_time") {
       params = {
         ...params,
         mode: "payment",
+        metadata: {
+          purchaseType: 'lifetime',
+          price_id: price.id
+        },
         payment_intent_data: {
           metadata: {
             purchaseType: 'lifetime',

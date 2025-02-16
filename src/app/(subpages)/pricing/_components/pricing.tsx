@@ -13,6 +13,7 @@ import BillingToggle from "./billing-toggle";
 import { User } from "@supabase/supabase-js";
 import { Tables } from "types_db";
 import { checkoutWithStripe } from "@/lib/stripe/server";
+import { toast } from "@/hooks/use-toast";
 
 type Price = Tables<"prices">;
 
@@ -29,6 +30,7 @@ export default function Pricing({ user, products, subscriptionStatus }: Props) {
   const currentPath = usePathname();
   const { setIsDialogOpen } = useLoginStore();
 
+
   const handleIntervalChange = (interval: BillingInterval) => {
     setBillingInterval(interval);
   };
@@ -43,31 +45,29 @@ export default function Pricing({ user, products, subscriptionStatus }: Props) {
         return;
       }
 
-      // Check if user already has access
       if (subscriptionStatus?.hasLifetimePurchase) {
-        // toast.error("You already have lifetime access");
+        toast({
+          title: "Error",
+          description: "You already have a lifetime purchase",
+          variant: "destructive",
+        })
         setPriceIdLoading(undefined);
         return;
       }
 
       if (price.type === 'recurring' && subscriptionStatus?.isSubscribed) {
-        // toast.error("You already have an active subscription");
+        toast({
+          title: "Error",
+          description: "You already have a lifetime purchase",
+          variant: "destructive",
+        })
         setPriceIdLoading(undefined);
         return;
       }
 
-      console.log('Starting checkout with price:', {
-        id: price.id,
-        type: price.type,
-        amount: price.unit_amount,
-        interval: price.interval,
-        currency: price.currency
-      });
-
       const { errorRedirect, sessionId } = await checkoutWithStripe(price, currentPath);
 
       if (errorRedirect) {
-        console.error('Checkout error redirect:', errorRedirect);
         setPriceIdLoading(undefined);
         return router.push(errorRedirect);
       }
@@ -91,8 +91,11 @@ export default function Pricing({ user, products, subscriptionStatus }: Props) {
       await stripe.redirectToCheckout({ sessionId });
 
     } catch (error) {
-      console.error('Checkout error:', error);
-      // toast.error(error instanceof Error ? error.message : "Failed to process checkout");
+      toast({
+        title: "Error",
+        description: "Failed to process checkout",
+        variant: "destructive",
+      })
       router.push(
         getErrorRedirect(
           currentPath,
@@ -128,7 +131,6 @@ export default function Pricing({ user, products, subscriptionStatus }: Props) {
     );
   }
 
-  // Separate products by type
   const subscriptionProducts = products.filter(product =>
     product.prices.some((price: any) => price.type === 'recurring')
   );
