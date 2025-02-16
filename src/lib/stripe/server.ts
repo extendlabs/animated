@@ -75,26 +75,67 @@ export async function checkoutWithStripe(
       allow_promotion_codes: true,
       billing_address_collection: "required",
       customer,
-      automatic_tax: { enabled: true },
-      invoice_creation: { enabled: true },
+      locale: "auto", // Automatically detect customer's language
+      
+      // Tax Configuration
+      automatic_tax: { 
+        enabled: true,
+      },
+      
+      // Invoice Configuration
+      invoice_creation: {
+        enabled: true,
+      },
+
+      // Customer Data Collection
       customer_update: {
         address: "auto",
+        shipping: "auto",
+        name: "auto"
       },
+
+      // Tax ID Collection
+      tax_id_collection: {
+        enabled: true
+      },
+
+
       line_items: [
         {
           price: price.id,
-          quantity: 1,
+          quantity: 1
         },
       ],
-      cancel_url: getURL(),
-      success_url: getURL(redirectPath),
+
+      // Phone Collection
+      phone_number_collection: {
+        enabled: true
+      },
+
+      // Consent Collection (for GDPR compliance)
+      consent_collection: {
+        terms_of_service: "required",
+        promotions: "auto"
+      },
+
+      // URLs
+      cancel_url: `${getURL()}/checkout/cancel`,
+      success_url: `${getURL()}${redirectPath}?session_id={CHECKOUT_SESSION_ID}`,
       client_reference_id: user.id,
     };
 
     if (price.type === "recurring") {
       params = {
         ...params,
-        mode: "subscription"
+        mode: "subscription",
+        subscription_data: {
+          trial_settings: {
+            end_behavior: {
+              missing_payment_method: 'cancel'
+            }
+          },
+        },
+        payment_method_collection: 'always'
       };
     } else if (price.type === "one_time") {
       params = {
@@ -102,13 +143,15 @@ export async function checkoutWithStripe(
         mode: "payment",
         metadata: {
           purchaseType: 'lifetime',
-          price_id: price.id
+          price_id: price.id,
         },
         payment_intent_data: {
           metadata: {
             purchaseType: 'lifetime',
-            price_id: price.id
-          }
+            price_id: price.id,
+          },
+          setup_future_usage: 'off_session',
+          capture_method: 'automatic'
         }
       };
     }
