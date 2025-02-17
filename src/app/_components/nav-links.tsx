@@ -1,8 +1,9 @@
 'use client'
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
 import { LogOut } from "lucide-react";
-import { usePathname } from "next/navigation";
+import {
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { handleRequest } from "@/lib/auth-helpers/client";
 import { SignOut } from "@/lib/auth-helpers/server";
@@ -11,21 +12,21 @@ import { AuthDialog } from "./auth-dialog";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { cn } from "@/lib/utils";
 import { FormEvent } from "react";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-type Props = {
+type NavLinksProps = {
   user: any;
   className?: string;
   variant?: 'default' | 'dropdown';
 }
 
-export const NavLinks = ({ user, className, variant = 'default' }: Props) => {
-  const router = getRedirectMethod() === "client" ? useRouter() : null;
-  const pathname = usePathname();
+export const NavLinks = ({ user, className, variant = 'default' }: NavLinksProps) => {
+  const router = useRouter();
   const { setSubscription, setPurchase, setPlan } = useAuthStore();
+  const redirectMethod = getRedirectMethod();
+
 
   const handleSignOut = (e: FormEvent<HTMLFormElement>) => {
-    handleRequest(e, SignOut, router);
+    handleRequest(e, SignOut, redirectMethod === "client" ? router : null);
     setSubscription(null);
     setPurchase(null);
     setPlan(null);
