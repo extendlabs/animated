@@ -1,7 +1,7 @@
 import { Tables } from "types_db";
 
 export type BillingInterval = "month" | "year" | "lifetime";
-export type SubscriptionPlans = "For life" | "Premium" | null;
+export type SubscriptionPlans = "For life" | "Animated Pro" | null;
 export type PurchaseType = "subscription" | "one_time";
 export type SubscriptionStatus =
   | "trialing"

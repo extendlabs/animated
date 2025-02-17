@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSaveAnimation } from "@/hooks/use-save-animation";
 import { useUIStore } from "@/zustand/useUIStore";
-import { Plus, Save, Wrench } from "lucide-react";
+import { Save, Wrench } from "lucide-react";
 import { useState, useEffect } from "react";
 
 type Props = {
@@ -31,6 +31,8 @@ export const SaveCodeDialog = ({ forceCreate = false }: Props) => {
     id: animationId,
     name: existingName,
     description: existingDescription,
+    isEditing,
+    isAutoPlaying
   } = useUIStore();
   const isCreating = forceCreate || !animationId;
 
@@ -56,6 +58,7 @@ export const SaveCodeDialog = ({ forceCreate = false }: Props) => {
           variant={"ghost"}
           size="icon"
           className={"bg-secondary/60 hover:bg-secondary/90"}
+          disabled={isEditing || isAutoPlaying}
         >
           {" "}
           {isCreating ? (
