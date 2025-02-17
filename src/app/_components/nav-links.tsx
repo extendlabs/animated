@@ -1,77 +1,52 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-"use client";
-
-import { handleRequest } from "@/lib/auth-helpers/client";
-import { useRouter } from "next/navigation";
-import { SignOut } from "@/lib/auth-helpers/server";
-import { Button } from "@/components/ui/button";
-import { getRedirectMethod } from "@/lib/auth-helpers/settings";
+'use client'
 import Link from "next/link";
-import { AuthDialog } from "./auth-dialog";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { handleRequest } from "@/lib/auth-helpers/client";
+import { SignOut } from "@/lib/auth-helpers/server";
+import { getRedirectMethod } from "@/lib/auth-helpers/settings";
+import { AuthDialog } from "./auth-dialog";
+import { useAuthStore } from "@/zustand/useAuthStore";
 import { cn } from "@/lib/utils";
+import { FormEvent } from "react";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 type Props = {
   user: any;
-};
+  className?: string;
+  variant?: 'default' | 'dropdown';
+}
 
-export default function Navlinks({ user }: Props) {
+export const NavLinks = ({ user, className, variant = 'default' }: Props) => {
   const router = getRedirectMethod() === "client" ? useRouter() : null;
   const pathname = usePathname();
   const { setSubscription, setPurchase, setPlan } = useAuthStore();
 
-  return (
-    <div className="flex items-center gap-5">
-      <Link
-        href="/pricing"
-        className={cn(
-          "transition-colors duration-200 hover:text-accent",
-          pathname === "/pricing" && "text-accent",
-        )}
-      >
-        Pricing
-      </Link>
-      {user && (
-        <>
-          <Link
-            href="/settings"
-            className={cn(
-              "transition-colors duration-200 hover:text-accent",
-              pathname === "/settings" && "text-accent",
-            )}
-          >
-            Settings
-          </Link>
-          <Link
-            href="/account"
-            className={cn(
-              "transition-colors duration-200 hover:text-accent",
-              pathname === "/account" && "text-accent",
-            )}
-          >
-            Account
-          </Link>
-        </>
-      )}
-      {user ? (
-        <form
-          onSubmit={(e) => {
-            handleRequest(e, SignOut, router);
-            setSubscription(null);
-            setPurchase(null);
-            setPlan(null);
+  const handleSignOut = (e: FormEvent<HTMLFormElement>) => {
+    handleRequest(e, SignOut, router);
+    setSubscription(null);
+    setPurchase(null);
+    setPlan(null);
+  };
 
-          }}
-        >
-          <Button variant="ghost" size="icon" type="submit">
-            <LogOut size={20} />
-          </Button>
-        </form>
-      ) : (
-        <AuthDialog />
-      )}
+  if (variant === 'dropdown' && user) {
+    return (
+      <form onSubmit={handleSignOut}>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <button className="w-full flex items-center gap-2">
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </DropdownMenuItem>
+      </form>
+    );
+  }
+
+  return (
+    <div className={cn("flex items-center gap-5", className)}>
+      {!user && <AuthDialog />}
     </div>
   );
-}
+};

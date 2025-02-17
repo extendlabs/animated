@@ -17,6 +17,7 @@ import { getUserSubscriptionStatus } from "@/lib/supabase/queries";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { stat } from "fs";
+import Image from "next/image";
 
 export function AppSidebar({
   className,

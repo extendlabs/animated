@@ -243,6 +243,7 @@ export const CodePresentation = () => {
   const animationId = useUIStore((state) => state.id);
   const limitations = useSubscriptionLimitations(subscriptionStatus);
 
+
   return (
     <>
       <div
