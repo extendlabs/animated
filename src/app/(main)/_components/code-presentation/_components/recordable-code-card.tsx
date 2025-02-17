@@ -26,5 +26,3 @@ export const RecordableCodeCard = ({
     </div>
   );
 };
-
-export default RecordableCodeCard;

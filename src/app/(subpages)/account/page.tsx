@@ -1,10 +1,14 @@
 import { redirect } from "next/navigation";
-import { getSubscription, getUser, getLifetimePurchase } from "@/lib/supabase/queries";
+import {
+  getSubscription,
+  getUser,
+  getLifetimePurchase,
+} from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
-import CustomerPortalForm from "./_components/customer-form";
-import EmailForm from "./_components/email-form";
-import InvoicesForm from "./_components/invoices-form";
-import DeleteAccountForm from "./_components/delete-account-form";
+import { CustomerPortalForm } from "./_components/customer-form";
+import { EmailForm } from "./_components/email-form";
+import { InvoicesForm } from "./_components/invoices-form";
+import { DeleteAccountForm } from "./_components/delete-account-form";
 import FadeUp from "@/components/fadeup";
 
 export default async function Account() {
@@ -19,8 +23,8 @@ export default async function Account() {
     return redirect("/");
   }
 
-  const hasActiveSubscription = subscription?.status === 'active' ||
-    subscription?.status === 'trialing';
+  const hasActiveSubscription =
+    subscription?.status === "active" || subscription?.status === "trialing";
 
   return (
     <section id="account" className="mb-8 space-y-4 overflow-hidden">
@@ -33,7 +37,7 @@ export default async function Account() {
           </FadeUp>
         </div>
       </div>
-      <div className="p-4 space-y-4">
+      <div className="space-y-4 p-4">
         <FadeUp delay={0.4} duration={0.8}>
           <CustomerPortalForm
             subscription={subscription}
@@ -47,9 +51,7 @@ export default async function Account() {
           <InvoicesForm />
         </FadeUp>
         <FadeUp delay={0.7} duration={0.8}>
-          <DeleteAccountForm
-            hasActiveSubscription={hasActiveSubscription}
-          />
+          <DeleteAccountForm hasActiveSubscription={hasActiveSubscription} />
         </FadeUp>
       </div>
     </section>

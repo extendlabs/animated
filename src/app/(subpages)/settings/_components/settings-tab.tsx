@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import EmptyTab from "./empty-tab";
+import { EmptyTab } from "./empty-tab";
 
 type Props = {
   animations: any[];
@@ -24,13 +24,22 @@ export const SettingsTab = ({
   onSelectSlides,
   onDelete,
 }: Props) => {
-  if (loading) return <LoadingSpinner />;
-  if (!animations.length) return (
-    <EmptyTab
-      title={"No Animations"}
-      description={"Create a new animation to get started."}
-      icon={<FilmIcon className="h-20 w-20 text-zinc-700 mb-6" />}
-    />);
+  if (loading)
+    return (
+      <EmptyTab
+        title={"Loading Animations"}
+        description={"Waiting for animations to load..."}
+        icon={<LoadingSpinner />}
+      />
+    );
+  if (!animations.length)
+    return (
+      <EmptyTab
+        title={"No Animations"}
+        description={"Create a new animation to get started."}
+        icon={<FilmIcon className="mb-6 h-20 w-20 text-zinc-700" />}
+      />
+    );
 
   return (
     <Accordion type="single" collapsible className="w-full">

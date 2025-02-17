@@ -1,6 +1,10 @@
-import { getProducts, getSubscription, getUser, getUserSubscriptionStatus } from "@/lib/supabase/queries";
+import {
+  getProducts,
+  getUser,
+  getUserSubscriptionStatus,
+} from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
-import Pricing from "./_components/pricing";
+import { Pricing } from "./_components/pricing";
 
 export default async function PricingPage() {
   const supabase = await createClient();

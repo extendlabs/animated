@@ -1,44 +1,41 @@
-import React from 'react';
+import React from "react";
 import { Switch } from "@/components/ui/switch";
-import { BillingInterval } from '@/types/pricing.type';
+import { BillingInterval } from "@/types/pricing.type";
 
 type Props = {
-    billingInterval: BillingInterval;
-    onChange: (value: BillingInterval) => void;
-}
-
-const BillingToggle = ({ billingInterval, onChange }: Props) => {
-    // Only show toggle for month/year options
-    if (billingInterval === 'lifetime') return null;
-
-    return (
-        <div className="w-full flex justify-center mt-12 mb-6">
-            <div className="inline-flex items-center gap-4">
-                <span
-                    className={`text-base cursor-pointer w-36 text-right ${billingInterval === 'month' ? 'text-white' : 'text-zinc-500'}`}
-                    onClick={() => onChange('month')}
-                >
-                    Monthly
-                </span>
-                <Switch
-                    checked={billingInterval === 'year'}
-                    onCheckedChange={(checked) => onChange(checked ? 'year' : 'month')}
-                    className="data-[state=checked]:bg-accent bg-zinc-700"
-                />
-                <div className="flex items-center gap-2 w-36">
-                    <span
-                        className={`text-base cursor-pointer ${billingInterval === 'year' ? 'text-white' : 'text-zinc-500'}`}
-                        onClick={() => onChange('year')}
-                    >
-                        Yearly
-                    </span>
-                    <span className="bg-emerald-900/50 text-emerald-400 rounded-full px-3 py-1 text-sm">
-                        Save 20%
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
+  billingInterval: BillingInterval;
+  onChange: (value: BillingInterval) => void;
 };
 
-export default BillingToggle;
+export const BillingToggle = ({ billingInterval, onChange }: Props) => {
+  if (billingInterval === "lifetime") return null;
+
+  return (
+    <div className="mb-6 mt-12 flex w-full justify-center">
+      <div className="inline-flex items-center gap-4">
+        <span
+          className={`w-36 cursor-pointer text-right text-base ${billingInterval === "month" ? "text-white" : "text-zinc-500"}`}
+          onClick={() => onChange("month")}
+        >
+          Monthly
+        </span>
+        <Switch
+          checked={billingInterval === "year"}
+          onCheckedChange={(checked) => onChange(checked ? "year" : "month")}
+          className="bg-zinc-700 data-[state=checked]:bg-accent"
+        />
+        <div className="flex w-36 items-center gap-2">
+          <span
+            className={`cursor-pointer text-base ${billingInterval === "year" ? "text-white" : "text-zinc-500"}`}
+            onClick={() => onChange("year")}
+          >
+            Yearly
+          </span>
+          <span className="rounded-full bg-emerald-900/50 px-3 py-1 text-sm text-emerald-400">
+            Save 20%
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};

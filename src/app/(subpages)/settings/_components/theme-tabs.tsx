@@ -3,7 +3,7 @@ import { ThemeCard } from "./theme-card";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { type Theme } from "@/hooks/use-save-theme";
 import { toast } from "@/hooks/use-toast";
-import EmptyTab from "./empty-tab";
+import { EmptyTab } from "./empty-tab";
 import { Paintbrush } from "lucide-react";
 
 type Props = {
@@ -37,13 +37,23 @@ export const ThemeTab = ({ themes, loading, onDelete }: Props) => {
     setSelectedThemeId(theme.id!);
   };
 
-  if (loading) return <LoadingSpinner />;
-  if (!themes.length) return (
-    <EmptyTab
-      title={"No Themes"}
-      description={"Create a new theme to get started."}
-      icon={<Paintbrush className="h-20 w-20 text-zinc-700 mb-6" />}
-    />);
+  if (loading)
+    return (
+      <EmptyTab
+        title={"Loading Themes"}
+        description={"Waiting for themes to load..."}
+        icon={<LoadingSpinner />}
+      />
+    );
+
+  if (!themes.length)
+    return (
+      <EmptyTab
+        title={"No Themes"}
+        description={"Create a new theme to get started."}
+        icon={<Paintbrush className="mb-6 h-20 w-20 text-zinc-700" />}
+      />
+    );
 
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

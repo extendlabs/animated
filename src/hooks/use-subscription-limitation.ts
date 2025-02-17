@@ -7,11 +7,11 @@ function useSubscriptionLimitations(status: UserSubscriptionStatus | null) {
     () => ({
       // Pro user can be either subscription or lifetime purchase
       proUser: Boolean(
-        (status?.isSubscribed || status?.hasLifetimePurchase) && 
-        status?.plan === "Premium"
+        (status?.isSubscribed || status?.hasLifetimePurchase) &&
+          (status?.plan === "Premium" || status?.plan === "For life"),
       ),
     }),
-    [status]
+    [status],
   );
 }
 

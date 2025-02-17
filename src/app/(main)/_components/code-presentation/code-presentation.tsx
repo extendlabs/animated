@@ -9,11 +9,11 @@ import { motion } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
 import { Button } from "@/components/ui/button";
 import { MyEditor } from "../my-editor";
-import { computeDiff } from "@/lib/code-diff";
+import { computeDiff } from "@/helpers/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { Camera, PauseIcon, PlayIcon, Video } from "lucide-react";
-import RecordableCodeCard from "./_components/recordable-code-card";
+import { RecordableCodeCard } from "./_components/recordable-code-card";
 import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
@@ -21,8 +21,6 @@ import { EditButton } from "../edit-button";
 import { SaveCodeDialog } from "../save-code-dialog";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { useAuthStore } from "@/zustand/useAuthStore";
-
-
 
 export const CodePresentation = () => {
   const {
@@ -48,7 +46,6 @@ export const CodePresentation = () => {
   );
 
   const { autoPlayInterval } = useSettingsStore((state) => state);
-
 
   const [diffMap, setDiffMap] = useState<DiffResult>({
     lineDiff: {},
@@ -251,20 +248,22 @@ export const CodePresentation = () => {
       <div
         style={{ background }}
         className={cn(
-          "flex flex-col  items-center transition-all duration-200 rounded-md relative",
+          "relative flex flex-col items-center rounded-md transition-all duration-200",
           isRecordingMode
             ? "fixed inset-0 z-50 overflow-y-auto bg-background"
-            : "py-12 mt-4 max-w-3xl mx-auto ",
+            : "mx-auto mt-4 max-w-3xl py-12",
         )}
       >
         {!isRecordingMode && (
-          <div className="absolute top-4 right-4">
+          <div className="absolute right-4 top-4">
             <div className="flex items-center gap-2">
               <EditButton />
-              {(limitations.proUser === true) && (
+              {limitations.proUser === true && (
                 <>
                   <SaveCodeDialog key={animationId ? "update" : "create"} />
-                  {animationId && <SaveCodeDialog key="create-new" forceCreate />}
+                  {animationId && (
+                    <SaveCodeDialog key="create-new" forceCreate />
+                  )}
                 </>
               )}
             </div>

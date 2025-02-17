@@ -57,7 +57,7 @@ const initialState: Settings = {
   selectedThemeId: null,
   autoPlayInterval: 2,
   transitionDuration: 0.6,
-  transitionDelay: 0.1
+  transitionDelay: 0.1,
 };
 
 export const useSettingsStore = create<SettingsStore>()((set) => ({

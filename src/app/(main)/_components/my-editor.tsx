@@ -33,7 +33,7 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
 
   return (
     <div
-      className="m-2 my-10 p-1 shadow-xl max-w-[700px] mx-auto transition-[height] duration-500 ease-in-out will-change-[height]"
+      className="m-2 mx-auto my-10 max-w-[700px] p-1 shadow-xl transition-[height] duration-500 ease-in-out will-change-[height]"
       style={{
         background: "hsl(0deg 0% 11.76%)",
         borderRadius: 10,

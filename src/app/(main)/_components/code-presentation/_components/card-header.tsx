@@ -47,23 +47,18 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
         />
       );
     }
-    return (
-      isAutoPlaying ? (
-        <div
-          className="text-sm"
-          style={{ color: themeText }}
-        >
-          {fileName}
-        </div>) : (
-        <div
-          className="cursor-pointer text-sm"
-          style={{ color: themeText }}
-          onClick={() => setIsEditing(true)}
-        >
-          {fileName}
-        </div>
-      )
-
+    return isAutoPlaying ? (
+      <div className="text-sm" style={{ color: themeText }}>
+        {fileName}
+      </div>
+    ) : (
+      <div
+        className="cursor-pointer text-sm"
+        style={{ color: themeText }}
+        onClick={() => setIsEditing(true)}
+      >
+        {fileName}
+      </div>
     );
   };
 

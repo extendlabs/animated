@@ -1,34 +1,32 @@
-'use client'
+"use client";
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { type Tables } from "types_db";
-import { cancelStripeSubscription, redirectToCustomerPortalsubscriptionId, resumeUserSubscription } from "@/lib/stripe/server";
+import {
+  cancelStripeSubscription,
+  redirectToCustomerPortalsubscriptionId,
+  resumeUserSubscription,
+} from "@/lib/stripe/server";
 import { Button } from "@/components/ui/button";
 import Card from "@/components/card";
 import { getErrorRedirect, getStatusRedirect } from "@/lib/helpers";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { format } from "date-fns";
-import { LifetimePurchaseWithProduct } from "@/types/pricing.type";
+import {
+  LifetimePurchaseWithProduct,
+  SubscriptionWithPriceAndProduct,
+} from "@/types/pricing.type";
 
-type Subscription = Tables<"subscriptions">;
-type Price = Tables<"prices">;
-type Product = Tables<"products">;
-
-type SubscriptionWithPriceAndProduct = Subscription & {
-  prices:
-  | (Price & {
-    products: Product | null;
-  })
-  | null;
-};
-
-interface Props {
+type Props = {
   subscription: SubscriptionWithPriceAndProduct | null;
   lifetimePurchase?: LifetimePurchaseWithProduct | null;
-}
+};
 
-export default function CustomerPortalForm({ subscription, lifetimePurchase }: Props) {
+export const CustomerPortalForm = ({
+  subscription,
+  lifetimePurchase,
+}: Props) => {
   const router = useRouter();
   const currentPath = usePathname();
   const { setSubscription } = useAuthStore();
@@ -58,7 +56,11 @@ export default function CustomerPortalForm({ subscription, lifetimePurchase }: P
     let redirectPath;
 
     if (result.success) {
-      redirectPath = getStatusRedirect(result.path as string, "Success!", result.message);
+      redirectPath = getStatusRedirect(
+        result.path as string,
+        "Success!",
+        result.message,
+      );
     } else {
       redirectPath = getErrorRedirect(currentPath, "Error", result.message);
     }
@@ -84,7 +86,7 @@ export default function CustomerPortalForm({ subscription, lifetimePurchase }: P
 
   const getSubscriptionStatusText = () => {
     if (lifetimePurchase) {
-      return
+      return;
     }
 
     if (!subscription) return null;
@@ -92,13 +94,15 @@ export default function CustomerPortalForm({ subscription, lifetimePurchase }: P
     if (subscription.current_period_end && subscription.canceled_at) {
       return (
         <div className="mt-2 text-zinc-300">
-          Your subscription will end on {format(new Date(subscription.current_period_end), "MMMM d, yyyy")}.
+          Your subscription will end on{" "}
+          {format(new Date(subscription.current_period_end), "MMMM d, yyyy")}.
         </div>
       );
     } else {
       return (
         <div className="mt-2 text-zinc-300">
-          Next payment will be on {format(new Date(subscription.current_period_end), "MMMM d, yyyy")}.
+          Next payment will be on{" "}
+          {format(new Date(subscription.current_period_end), "MMMM d, yyyy")}.
         </div>
       );
     }
@@ -120,7 +124,14 @@ export default function CustomerPortalForm({ subscription, lifetimePurchase }: P
       description={getPlanDescription()}
       footer={
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          {!lifetimePurchase ? <p className="pb-4 sm:pb-0">Manage your subscription.</p> : <p className="pb-4 sm:pb-0">Bought {format(new Date(lifetimePurchase.created_at), "MMMM d, yyyy")}</p>}
+          {!lifetimePurchase ? (
+            <p className="pb-4 sm:pb-0">Manage your subscription.</p>
+          ) : (
+            <p className="pb-4 sm:pb-0">
+              Bought{" "}
+              {format(new Date(lifetimePurchase.created_at), "MMMM d, yyyy")}
+            </p>
+          )}
           {subscription ? (
             <div className="flex gap-2">
               <Button
@@ -166,4 +177,4 @@ export default function CustomerPortalForm({ subscription, lifetimePurchase }: P
       </div>
     </Card>
   );
-}
+};

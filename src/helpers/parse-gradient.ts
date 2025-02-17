@@ -1,4 +1,5 @@
-import { type GradientStop } from "@/app/(main)/_components/settings-footer";
+import { GradientStop } from "@/types/animated.type";
+
 
 export const parseGradient = (gradientString: string) => {
   const content = gradientString.match(/linear-gradient\((.*?)\)/)?.[1];

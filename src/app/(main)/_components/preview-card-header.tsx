@@ -10,7 +10,7 @@ type Props = {
   fileName?: string;
 };
 
-const PreviewCardHeader = ({
+export const PreviewCardHeader = ({
   cardTheme = "default",
   themeBorder,
   themeText,
@@ -116,5 +116,3 @@ const PreviewCardHeader = ({
     </div>
   );
 };
-
-export default PreviewCardHeader;

@@ -7,17 +7,16 @@ import { updateEmail } from "@/lib/auth-helpers/server";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function EmailForm({
-  userEmail,
-}: {
-  userEmail: string | undefined;
-}) {
+type Props = {
+  userEmail?: string;
+};
+
+export const EmailForm = ({ userEmail }: Props) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true);
-    // Check if the new email is the same as the old email
     if (e.currentTarget.newEmail.value === userEmail) {
       e.preventDefault();
       setIsSubmitting(false);
@@ -36,12 +35,7 @@ export default function EmailForm({
           <p className="pb-4 sm:pb-0">
             We will email you to verify the change.
           </p>
-          <Button
-            // variant="slim"
-            type="submit"
-            form="emailForm"
-            loading={isSubmitting}
-          >
+          <Button type="submit" form="emailForm" loading={isSubmitting}>
             Update Email
           </Button>
         </div>
@@ -61,4 +55,4 @@ export default function EmailForm({
       </div>
     </Card>
   );
-}
+};

@@ -20,7 +20,7 @@ type Props = {
   forceCreate?: boolean;
 };
 
-export function SaveCodeDialog({ forceCreate = false }: Props) {
+export const SaveCodeDialog = ({ forceCreate = false }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -55,12 +55,14 @@ export function SaveCodeDialog({ forceCreate = false }: Props) {
         <Button
           variant={"ghost"}
           size="icon"
-          className={'bg-secondary/60 hover:bg-secondary/90'}
-        > {isCreating ? (
-          <Save className="h-4 w-4" />
-        ) : (
-          <Wrench className="h-4 w-4" />
-        )}
+          className={"bg-secondary/60 hover:bg-secondary/90"}
+        >
+          {" "}
+          {isCreating ? (
+            <Save className="h-4 w-4" />
+          ) : (
+            <Wrench className="h-4 w-4" />
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -108,4 +110,4 @@ export function SaveCodeDialog({ forceCreate = false }: Props) {
       </DialogContent>
     </Dialog>
   );
-}
+};

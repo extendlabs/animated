@@ -26,7 +26,9 @@ export const AnimatedToken = ({
     exit: { opacity: 0 },
   };
 
-  const { transitionDuration, transitionDelay } = useSettingsStore((state) => state);
+  const { transitionDuration, transitionDelay } = useSettingsStore(
+    (state) => state,
+  );
 
   return (
     <motion.span
@@ -36,7 +38,10 @@ export const AnimatedToken = ({
       initial={"initial"}
       animate="animate"
       exit="exit"
-      transition={{ duration: transitionDuration, delay: tokenIndex * transitionDelay }}
+      transition={{
+        duration: transitionDuration,
+        delay: tokenIndex * transitionDelay,
+      }}
     />
   );
 };

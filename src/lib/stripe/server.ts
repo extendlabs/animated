@@ -1,17 +1,16 @@
 "use server";
 
 import type Stripe from "stripe";
-import { type Tables } from "types_db";
 import { createClient } from "../supabase/server";
-import {
-  calculateTrialEndUnixTimestamp,
-  getErrorRedirect,
-  getURL,
-} from "../helpers";
+import { getErrorRedirect, getURL } from "../helpers";
 import { stripe } from "./config";
-import { createOrRetrieveCustomer, createPortalSession, deleteAccount, retriveCustomerId } from "../supabase/admin";
-
-type Price = Tables<"prices">;
+import {
+  createOrRetrieveCustomer,
+  createPortalSession,
+  deleteAccount,
+  retriveCustomerId,
+} from "../supabase/admin";
+import { Price } from "@/types/pricing.type";
 
 type CheckoutResponse = {
   errorRedirect?: string;
@@ -34,25 +33,23 @@ export async function checkoutWithStripe(
       throw new Error("Could not get user session.");
     }
 
-    // Check if user already has lifetime access
     const { data: lifetimePurchase } = await supabase
-      .from('lifetime_purchases')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('status', 'completed')
+      .from("lifetime_purchases")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("status", "completed")
       .single();
 
     if (lifetimePurchase) {
       throw new Error("You already have lifetime access to this product.");
     }
 
-    // For subscriptions, check if user already has an active one
-    if (price.type === 'recurring') {
+    if (price.type === "recurring") {
       const { data: activeSubscription } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("status", "active")
         .single();
 
       if (activeSubscription) {
@@ -75,35 +72,26 @@ export async function checkoutWithStripe(
       allow_promotion_codes: true,
       billing_address_collection: "required",
       customer,
-      locale: "auto", // Automatically detect customer's language
-      
-      // Tax Configuration
-      automatic_tax: { 
+      locale: "auto",
+      automatic_tax: {
         enabled: true,
       },
-    
-
-      // Customer Data Collection
       customer_update: {
         address: "auto",
-        name: "auto"
+        name: "auto",
       },
-
-      // Tax ID Collection
       tax_id_collection: {
-        enabled: true
+        enabled: true,
       },
-
-
       line_items: [
         {
           price: price.id,
-          quantity: 1
+          quantity: 1,
         },
       ],
 
       // URLs
-      cancel_url: `${getURL()}/checkout/cancel`,
+      cancel_url: `${getURL()}/account`,
       success_url: `${getURL()}${redirectPath}?session_id={CHECKOUT_SESSION_ID}`,
       client_reference_id: user.id,
     };
@@ -115,32 +103,31 @@ export async function checkoutWithStripe(
         subscription_data: {
           trial_settings: {
             end_behavior: {
-              missing_payment_method: 'cancel'
-            }
+              missing_payment_method: "cancel",
+            },
           },
         },
-        payment_method_collection: 'always'
+        payment_method_collection: "always",
       };
     } else if (price.type === "one_time") {
       params = {
         ...params,
-         // Invoice Configuration
-      invoice_creation: {
-        enabled: true,
-      },
+        invoice_creation: {
+          enabled: true,
+        },
         mode: "payment",
         metadata: {
-          purchaseType: 'lifetime',
+          purchaseType: "lifetime",
           price_id: price.id,
         },
         payment_intent_data: {
           metadata: {
-            purchaseType: 'lifetime',
+            purchaseType: "lifetime",
             price_id: price.id,
           },
-          setup_future_usage: 'off_session',
-          capture_method: 'automatic'
-        }
+          setup_future_usage: "off_session",
+          capture_method: "automatic",
+        },
       };
     }
 
@@ -152,7 +139,6 @@ export async function checkoutWithStripe(
       throw new Error("Unable to create checkout session.");
     }
   } catch (error) {
-    console.error('Checkout error:', error);
     return {
       errorRedirect: getErrorRedirect(
         redirectPath,
@@ -225,7 +211,7 @@ export async function createStripePortal(currentPath: string) {
 }
 
 export async function cancelStripeSubscription(
-  subscriptionId: string
+  subscriptionId: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
     const supabase = await createClient();
@@ -250,13 +236,19 @@ export async function cancelStripeSubscription(
       throw new Error("Subscription does not belong to the current user");
     }
 
-    // Instead of immediate cancellation, schedule it for the end of the period
-    const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: true
-    });
+    const updatedSubscription = await stripe.subscriptions.update(
+      subscriptionId,
+      {
+        cancel_at_period_end: true,
+      },
+    );
 
     if (updatedSubscription.cancel_at_period_end) {
-      return { success: true, message: "Subscription scheduled for cancellation at the end of the billing period" };
+      return {
+        success: true,
+        message:
+          "Subscription scheduled for cancellation at the end of the billing period",
+      };
     } else {
       throw new Error("Failed to schedule subscription cancellation");
     }
@@ -264,7 +256,8 @@ export async function cancelStripeSubscription(
     console.error("Error scheduling subscription cancellation:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
     };
   }
 }
@@ -273,19 +266,19 @@ export async function redirectToCustomerPortalsubscriptionId(
   subscriptionId: string,
 ) {
   try {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-  const customerData = await retriveCustomerId(user.id);
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const customerData = await retriveCustomerId(user.id);
 
-  const stripeCustomerId = customerData.stripe_customer_id;
+    const stripeCustomerId = customerData.stripe_customer_id;
 
     if (subscription.customer !== stripeCustomerId) {
       throw new Error("Subscription does not belong to the current user");
@@ -296,24 +289,20 @@ export async function redirectToCustomerPortalsubscriptionId(
     return {
       success: true,
       message: "Redirecting to customer portal",
-      path: response
-    }
+      path: response,
+    };
   } catch (error) {
     return {
       success: false,
       message:
         error instanceof Error ? error.message : "An unknown error occurred",
-      path: null
+      path: null,
     };
   }
 }
 
-
-
-export async function resumeUserSubscription(
-  subscriptionId: string
-): Promise<{ 
-  success: boolean; 
+export async function resumeUserSubscription(subscriptionId: string): Promise<{
+  success: boolean;
   message: string;
   subscription?: any;
 }> {
@@ -340,29 +329,32 @@ export async function resumeUserSubscription(
       throw new Error("Subscription does not belong to the current user");
     }
 
-    // Simply remove the cancellation schedule
-    const resumedSubscription = await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: false
-    });
+    const resumedSubscription = await stripe.subscriptions.update(
+      subscriptionId,
+      {
+        cancel_at_period_end: false,
+      },
+    );
 
     if (!resumedSubscription.cancel_at_period_end) {
-      // Get the updated subscription data for the frontend
       const { data: updatedSubscription } = await supabase
         .from("subscriptions")
-        .select(`
+        .select(
+          `
           *,
           prices (
             *,
             products (*)
           )
-        `)
+        `,
+        )
         .eq("id", subscriptionId)
         .single();
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         message: "Subscription successfully resumed",
-        subscription: updatedSubscription
+        subscription: updatedSubscription,
       };
     } else {
       throw new Error("Failed to resume subscription");
@@ -371,22 +363,21 @@ export async function resumeUserSubscription(
     console.error("Error resuming subscription:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
     };
   }
 }
 
-
-
-export async function deleteUserAccount(): Promise<{ 
-  success: boolean; 
+export async function deleteUserAccount(): Promise<{
+  success: boolean;
   message: string;
 }> {
   try {
     const supabase = await createClient();
     const {
       data: { user },
-      error: userError
+      error: userError,
     } = await supabase.auth.getUser();
 
     if (userError) {
@@ -397,31 +388,26 @@ export async function deleteUserAccount(): Promise<{
       throw new Error("User not found");
     }
 
-    // Wait for deleteAccount to complete and get its result
     const result = await deleteAccount(user.id);
 
-    // If deleteAccount failed, propagate its error
     if (!result.success) {
-      throw new Error(result.error || 'Failed to delete account');
+      throw new Error(result.error || "Failed to delete account");
     }
 
-    // Sign out the user after successful deletion
     const { error: signOutError } = await supabase.auth.signOut();
     if (signOutError) {
-      console.error('Error signing out:', signOutError);
-      // We don't throw here as the account was successfully deleted
+      console.error("Error signing out:", signOutError);
     }
 
     return {
       success: true,
-      message: 'Account successfully deleted'
+      message: "Account successfully deleted",
     };
-    
   } catch (error) {
-    console.error('Error in deleteAccount:', error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Error deleting account'
+      message:
+        error instanceof Error ? error.message : "Error deleting account",
     };
   }
 }

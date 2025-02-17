@@ -1,22 +1,18 @@
-import React from 'react';
-import { FilmIcon } from 'lucide-react';
+import React from "react";
+import { FilmIcon } from "lucide-react";
 
 type Props = {
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-}
-
-const EmptyTab = ({ title, description, icon }: Props) => {
-    return (
-        <div className="flex flex-col items-center justify-center min-h-[400px]  pb-8 text-center rounded-xl  border-4 border-zinc-800">
-            {icon}
-            <h3 className="text-xl font-semibold mb-2">{title}</h3>
-            <p className="text-zinc-400">
-                {description}
-            </p>
-        </div>
-    );
+  title: string;
+  description: string;
+  icon: React.ReactNode;
 };
 
-export default EmptyTab;
+export const EmptyTab = ({ title, description, icon }: Props) => {
+  return (
+    <div className="flex min-h-[400px] flex-col items-center justify-center rounded-xl border-4 border-zinc-800 pb-8 text-center">
+      {icon}
+      <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+      <p className="text-zinc-400">{description}</p>
+    </div>
+  );
+};

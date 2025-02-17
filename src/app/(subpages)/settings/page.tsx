@@ -7,12 +7,11 @@ import { ThemeTab } from "./_components/theme-tabs";
 import { toast } from "@/hooks/use-toast";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useAnimations } from "@/hooks/use-animations";
-
 import { SettingsHeader } from "./_components/settings-header";
 import { useThemes } from "@/hooks/use-themes";
 
 export default function AnimationsPage() {
-  const { animations, loading, error, deleteAnimation } = useAnimations();
+  const { animations, loading, deleteAnimation } = useAnimations();
   const { themes, loading: themesLoading, deleteTheme } = useThemes();
 
   const handleSetSlides = (animation: any) => {
@@ -66,14 +65,6 @@ export default function AnimationsPage() {
       });
     }
   };
-
-  if (error) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center">
-        <p className="text-red-500">Error: {error}</p>
-      </div>
-    );
-  }
 
   return (
     <section id="animations" className="space-y-4">

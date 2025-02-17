@@ -1,15 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
-import CodePreview from "./code-preview";
+import { CodePreview } from "./code-preview";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useState } from "react";
-
-type Slide = {
-  id: number;
-  code: string;
-  description?: string;
-};
+import { Slide } from "@/types/animated.type";
 
 type Props = {
   slide: Slide;

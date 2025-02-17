@@ -8,6 +8,7 @@ import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import ExtendUILogo from "@/app/_components/logo";
 import { useAuthStore } from "@/zustand/useAuthStore";
+import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 
 type Props = {
   currentCode: string;
@@ -24,6 +25,7 @@ export const HighlightCode = ({
 }: Props) => {
   const prevTokensRef = useRef<string[]>([]);
   const [exitingLines, setExitingLines] = useState<Set<number>>(new Set());
+
   useEffect(() => {
     const prevLines = prevTokensRef.current;
     const currentLines = currentCode.split("\n");
@@ -41,8 +43,8 @@ export const HighlightCode = ({
   const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
 
-  const { subscription } = useAuthStore();
-
+  const { subscriptionStatus } = useAuthStore();
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
   const theme = themes[themeName as keyof typeof themes] || themes.vsDark;
 
   return (
@@ -118,7 +120,7 @@ export const HighlightCode = ({
           );
         }}
       </Highlight>
-      {!subscription && !thumbnail && (
+      {!limitations.proUser && !thumbnail && (
         <div className="absolute -bottom-3 right-1 text-white">
           <ExtendUILogo />
         </div>

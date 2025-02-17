@@ -52,9 +52,10 @@ export const ThemeCard = ({ theme, onSelect, onDelete }: Props) => {
           </div>
           <div>
             <p>Line Numbers</p>
-            <p className="font-extralight">{theme.withLineIndex ? "Yes" : "No"}</p>
+            <p className="font-extralight">
+              {theme.withLineIndex ? "Yes" : "No"}
+            </p>
           </div>
-
         </div>
         <div className="mt-4 space-y-2">
           <Button

@@ -58,8 +58,8 @@ export function useSaveAnimation() {
           slides,
         );
         if (createError) throw createError;
-          setAnimationDetails(data, name, description);
-        
+        setAnimationDetails(data, name, description);
+
         toast({
           title: "Success",
           description: "Animation created successfully",

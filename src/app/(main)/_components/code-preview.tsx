@@ -5,14 +5,14 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 import { HighlightCode } from "./code-presentation/_components/highlight-code";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
-import PreviewCardHeader from "./preview-card-header";
+import { PreviewCardHeader } from "./preview-card-header";
 import { type CardTheme } from "types/code-presentation.type";
 
 type Props = {
   currentSlide: number;
 };
 
-const CodePreview = ({ currentSlide }: Props) => {
+export const CodePreview = ({ currentSlide }: Props) => {
   const { slides, fileName } = useUIStore();
   const { language, themeName, cardTheme } = useSettingsStore();
 
@@ -48,4 +48,3 @@ const CodePreview = ({ currentSlide }: Props) => {
     </div>
   );
 };
-export default CodePreview;

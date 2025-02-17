@@ -20,22 +20,20 @@ const supabaseAdmin = createClient<Database>(
 );
 
 const createUserRecord = async (uuid: string) => {
-  const { error: createError } = await supabaseAdmin
-    .from("users")
-    .upsert([{ 
+  const { error: createError } = await supabaseAdmin.from("users").upsert([
+    {
       id: uuid,
       full_name: null,
       avatar_url: null,
       billing_address: null,
-      payment_method: null
-    }]);
+      payment_method: null,
+    },
+  ]);
 
   if (createError) {
-    console.error('Error creating user record:', createError);
+    console.error("Error creating user record:", createError);
     throw new Error(`User record creation failed: ${createError.message}`);
   }
-  
-  console.log(`User record created: ${uuid}`);
 };
 
 const upsertProductRecord = async (product: Stripe.Product) => {
@@ -79,7 +77,6 @@ const upsertPriceRecord = async (
 
   if (upsertError?.message.includes("foreign key constraint")) {
     if (retryCount < maxRetries) {
-      console.log(`Retry attempt ${retryCount + 1} for price ID: ${price.id}`);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await upsertPriceRecord(price, retryCount + 1, maxRetries);
     } else {
@@ -137,13 +134,13 @@ const createCustomerInStripe = async (uuid: string, email: string) => {
 
 const createPortalSession = async (uuid: string) => {
   const { data: customer } = await supabaseAdmin
-    .from('customers')
-    .select('stripe_customer_id')
-    .eq('id', uuid)
+    .from("customers")
+    .select("stripe_customer_id")
+    .eq("id", uuid)
     .single();
 
   if (!customer?.stripe_customer_id) {
-    throw new Error('Customer not found');
+    throw new Error("Customer not found");
   }
 
   const session = await stripe.billingPortal.sessions.create({
@@ -152,165 +149,150 @@ const createPortalSession = async (uuid: string) => {
   });
 
   return session.url;
-}
+};
 
 export const getUserInvoices = async (uuid: string) => {
   const { data: customer } = await supabaseAdmin
-    .from('customers')
-    .select('stripe_customer_id')
-    .eq('id', uuid)
+    .from("customers")
+    .select("stripe_customer_id")
+    .eq("id", uuid)
     .single();
 
   if (!customer?.stripe_customer_id) {
-    return new Response(JSON.stringify({ 
-      success: false,
-      error: 'Customer not found' 
-    }), { 
-      status: 404,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: "Customer not found",
+      }),
+      {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 
   try {
     const invoices = await stripe.invoices.list({
       customer: customer.stripe_customer_id,
       limit: 12,
-      expand: ['data.subscription']
+      expand: ["data.subscription"],
     });
 
-    return new Response(JSON.stringify({
-      success: true,
-      invoices: invoices.data.map(invoice => ({
-        id: invoice.id,
-        amount_paid: invoice.amount_paid,
-        currency: invoice.currency,
-        status: invoice.status,
-        created: invoice.created,
-        invoice_pdf: invoice.invoice_pdf,
-        invoice_url: invoice.hosted_invoice_url
-      }))
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-
+    return new Response(
+      JSON.stringify({
+        success: true,
+        invoices: invoices.data.map((invoice) => ({
+          id: invoice.id,
+          amount_paid: invoice.amount_paid,
+          currency: invoice.currency,
+          status: invoice.status,
+          created: invoice.created,
+          invoice_pdf: invoice.invoice_pdf,
+          invoice_url: invoice.hosted_invoice_url,
+        })),
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (stripeError) {
-    return new Response(JSON.stringify({ 
-      success: false,
-      error: 'Error fetching invoices from Stripe' 
-    }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: "Error fetching invoices from Stripe",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
-}
-// In admin.ts
+};
+
 export const deleteAccount = async (uuid: string) => {
   try {
-    // Step 1: Retrieve all user data for cleanup
     const [
       { data: customerData, error: customerError },
       { data: subscriptionData, error: subscriptionError },
-      { data: lifetimePurchaseData, error: lifetimePurchaseError }
+      { data: lifetimePurchaseData, error: lifetimePurchaseError },
     ] = await Promise.all([
       supabaseAdmin
-        .from('customers')
-        .select('stripe_customer_id')
-        .eq('id', uuid)
+        .from("customers")
+        .select("stripe_customer_id")
+        .eq("id", uuid)
         .single(),
       supabaseAdmin
-        .from('subscriptions')
-        .select('id, status')
-        .eq('user_id', uuid),
-        supabaseAdmin
-        .from('lifetime_purchases')
-        .select('id')
-        .eq('user_id', uuid)
+        .from("subscriptions")
+        .select("id, status")
+        .eq("user_id", uuid),
+      supabaseAdmin.from("lifetime_purchases").select("id").eq("user_id", uuid),
     ]);
 
-    // Check for active subscriptions
-    if (subscriptionData?.some(sub => 
-      ['active', 'trialing'].includes(sub.status as string)
-    )) {
-      throw new Error('Please cancel all active subscriptions before deleting your account');
+    if (
+      subscriptionData?.some((sub) =>
+        ["active", "trialing"].includes(sub.status as string),
+      )
+    ) {
+      throw new Error(
+        "Please cancel all active subscriptions before deleting your account",
+      );
     }
 
-    // Step 2: Delete Stripe customer if exists
     if (customerData?.stripe_customer_id) {
       try {
         await stripe.customers.del(customerData.stripe_customer_id);
       } catch (error: any) {
-        // Log but don't fail if Stripe deletion fails
-        console.error('Stripe customer deletion failed:', error.message);
+        console.error("Stripe customer deletion failed:", error.message);
       }
     }
 
-    // Step 3: Delete all user data in parallel
-    // Using Promise.allSettled to continue even if some deletions fail
     const deletionPromises = await Promise.allSettled([
       // Delete subscriptions first (foreign key constraint)
-      supabaseAdmin
-        .from("subscriptions")
-        .delete()
-        .eq("user_id", uuid),
-        
-        supabaseAdmin
-        .from("lifetime_purchases")
-        .delete()
-        .eq("user_id", uuid),
-      // Delete customer record
-      supabaseAdmin
-        .from("customers")
-        .delete()
-        .eq("id", uuid),
-      
-      // Delete user profile
-      supabaseAdmin
-        .from("users")
-        .delete()
-        .eq("id", uuid),
-        
-      // Finally delete auth user
-      supabaseAdmin.auth.admin.deleteUser(uuid)
+      supabaseAdmin.from("subscriptions").delete().eq("user_id", uuid),
+
+      supabaseAdmin.from("lifetime_purchases").delete().eq("user_id", uuid),
+
+      supabaseAdmin.from("customers").delete().eq("id", uuid),
+
+      supabaseAdmin.from("users").delete().eq("id", uuid),
+
+      supabaseAdmin.auth.admin.deleteUser(uuid),
     ]);
 
-    // Check for critical failures
-    const criticalFailures = deletionPromises
-      .filter(result => 
-        result.status === 'rejected' && 
-        result.reason?.message?.includes('foreign key constraint')
-      );
+    const criticalFailures = deletionPromises.filter(
+      (result) =>
+        result.status === "rejected" &&
+        result.reason?.message?.includes("foreign key constraint"),
+    );
 
     if (criticalFailures.length > 0) {
-      throw new Error('Failed to delete some user data due to database constraints');
+      throw new Error(
+        "Failed to delete some user data due to database constraints",
+      );
     }
 
     // Log non-critical failures but continue
     const warnings = deletionPromises
-      .filter(result => result.status === 'rejected')
-      .map(result => (result as PromiseRejectedResult).reason);
-    
+      .filter((result) => result.status === "rejected")
+      .map((result) => (result as PromiseRejectedResult).reason);
+
     if (warnings.length > 0) {
-      console.warn('Non-critical deletion warnings:', warnings);
+      console.warn("Non-critical deletion warnings:", warnings);
     }
 
     return {
       success: true,
-      message: 'Account deleted successfully'
+      message: "Account deleted successfully",
     };
-
   } catch (error: any) {
-    console.error('Account deletion error:', error);
+    console.error("Account deletion error:", error);
     return {
       success: false,
-      error: error.message || 'Error deleting account'
+      error: error.message || "Error deleting account",
     };
   }
 };
-
-
-
-
 
 const createOrRetrieveCustomer = async ({
   email,
@@ -319,8 +301,6 @@ const createOrRetrieveCustomer = async ({
   email: string;
   uuid: string;
 }) => {
-  // Check if the customer already exists in Supabase
-
   const { data: existingUser } = await supabaseAdmin
     .from("users")
     .select("id")
@@ -342,7 +322,6 @@ const createOrRetrieveCustomer = async ({
     throw new Error(`Supabase customer lookup failed: ${queryError.message}`);
   }
 
-  // Retrieve the Stripe customer ID using the Supabase customer ID, with email fallback
   let stripeCustomerId: string | undefined;
   if (existingSupabaseCustomer?.stripe_customer_id) {
     const existingStripeCustomer = await stripe.customers.retrieve(
@@ -350,13 +329,11 @@ const createOrRetrieveCustomer = async ({
     );
     stripeCustomerId = existingStripeCustomer.id;
   } else {
-    // If Stripe ID is missing from Supabase, try to retrieve Stripe customer ID by email
     const stripeCustomers = await stripe.customers.list({ email: email });
     stripeCustomerId =
       stripeCustomers.data.length > 0 ? stripeCustomers.data[0]?.id : undefined;
   }
 
-  // If still no stripeCustomerId, create a new customer in Stripe
   const stripeIdToInsert = stripeCustomerId
     ? stripeCustomerId
     : await createCustomerInStripe(uuid, email);
@@ -378,14 +355,11 @@ const createOrRetrieveCustomer = async ({
         `Supabase customer record mismatched Stripe ID. Supabase record updated.`,
       );
     }
-    // If Supabase has a record and matches Stripe, return Stripe customer ID
     return stripeCustomerId;
   } else {
     console.warn(
       `Supabase customer record was missing. A new record was created.`,
     );
-
-    // If Supabase has no record, create a new record and return Stripe customer ID
     const upsertedStripeCustomer = await upsertCustomerToSupabase(
       uuid,
       stripeIdToInsert,
@@ -399,11 +373,11 @@ const createOrRetrieveCustomer = async ({
 
 export const upsertCustomerRecord = async (customer: Stripe.Customer) => {
   const customerData = {
-    id: customer.metadata.supabaseUUID || '',
+    id: customer.metadata.supabaseUUID || "",
     stripe_customer_id: customer.id,
     email: customer.email,
     name: customer.name,
-    metadata: customer.metadata
+    metadata: customer.metadata,
   };
 
   const { error: upsertError } = await supabaseAdmin
@@ -433,10 +407,9 @@ export const deleteCustomerRecord = async (customer: Stripe.Customer) => {
 
   if (deletionError)
     throw new Error(`Customer deletion failed: ${deletionError.message}`);
-  
+
   console.log(`Customer deleted: ${customer.id}`);
 };
-
 
 const copyBillingDetailsToCustomer = async (
   uuid: string,
@@ -458,8 +431,6 @@ const copyBillingDetailsToCustomer = async (
     throw new Error(`Customer update failed: ${updateError.message}`);
 };
 
-
-
 const retriveCustomerId = async (uuid: string) => {
   const { data: customerData, error: noCustomerError } = await supabaseAdmin
     .from("customers")
@@ -471,12 +442,9 @@ const retriveCustomerId = async (uuid: string) => {
   return customerData;
 };
 
-
 // Add to your exports at the bottom of the file
-export async function resumeUserSubscription(
-  subscriptionId: string
-): Promise<{ 
-  success: boolean; 
+export async function resumeUserSubscription(subscriptionId: string): Promise<{
+  success: boolean;
   message: string;
   subscription?: any;
 }> {
@@ -503,28 +471,33 @@ export async function resumeUserSubscription(
     }
 
     // Simply remove the cancellation schedule
-    const resumedSubscription = await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: false
-    });
+    const resumedSubscription = await stripe.subscriptions.update(
+      subscriptionId,
+      {
+        cancel_at_period_end: false,
+      },
+    );
 
     if (!resumedSubscription.cancel_at_period_end) {
       // Get the updated subscription data for the frontend
       const { data: updatedSubscription } = await supabaseAdmin
         .from("subscriptions")
-        .select(`
+        .select(
+          `
           *,
           prices (
             *,
             products (*)
           )
-        `)
+        `,
+        )
         .eq("id", subscriptionId)
         .single();
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         message: "Subscription successfully resumed",
-        subscription: updatedSubscription
+        subscription: updatedSubscription,
       };
     } else {
       throw new Error("Failed to resume subscription");
@@ -533,7 +506,8 @@ export async function resumeUserSubscription(
     console.error("Error resuming subscription:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
     };
   }
 }
@@ -594,7 +568,9 @@ const manageSubscriptionStatusChange = async (
     .upsert([subscriptionData]);
 
   if (upsertError)
-    throw new Error(`Subscription insert/update failed: ${upsertError.message}`);
+    throw new Error(
+      `Subscription insert/update failed: ${upsertError.message}`,
+    );
 
   if (createAction && subscription.default_payment_method && uuid)
     await copyBillingDetailsToCustomer(
@@ -604,58 +580,53 @@ const manageSubscriptionStatusChange = async (
 };
 export async function manageLifetimePurchase(
   checkoutSession: Stripe.Checkout.Session,
-  paymentIntent: Stripe.PaymentIntent
+  paymentIntent: Stripe.PaymentIntent,
 ) {
-  
-  
   const userId = checkoutSession.client_reference_id;
-  
+
   if (!userId) {
-    throw new Error('No client_reference_id found in checkout session');
+    throw new Error("No client_reference_id found in checkout session");
   }
 
   try {
-    const { error } = await supabaseAdmin
-      .from('lifetime_purchases')
-      .upsert({
-        user_id: userId,
-        price_id: paymentIntent.metadata.price_id || null,
-        payment_intent_id: paymentIntent.id || null,
-        amount: paymentIntent.amount,
-        status: 'completed',
-        metadata: paymentIntent.metadata || null // Required field of type Json
-      });
+    const { error } = await supabaseAdmin.from("lifetime_purchases").upsert({
+      user_id: userId,
+      price_id: paymentIntent.metadata.price_id || null,
+      payment_intent_id: paymentIntent.id || null,
+      amount: paymentIntent.amount,
+      status: "completed",
+      metadata: paymentIntent.metadata || null, // Required field of type Json
+    });
 
     if (error) {
-      console.error('Lifetime purchase insert/update failed:', error);
+      console.error("Lifetime purchase insert/update failed:", error);
       throw error;
     }
   } catch (error) {
-    console.error('Error managing lifetime purchase:', error);
+    console.error("Error managing lifetime purchase:", error);
     throw error;
   }
 }
 
-
 export const checkPurchaseStatus = async (userId: string) => {
   const [subscription, lifetimePurchase] = await Promise.all([
     supabaseAdmin
-      .from('subscriptions')
-      .select('status')
-      .eq('user_id', userId)
-      .eq('status', 'active')
+      .from("subscriptions")
+      .select("status")
+      .eq("user_id", userId)
+      .eq("status", "active")
       .single(),
     (supabaseAdmin as any)
-      .from('lifetime_purchases')
-      .select('status')
-      .eq('user_id', userId)
-      .eq('status', 'completed')
-      .single()
+      .from("lifetime_purchases")
+      .select("status")
+      .eq("user_id", userId)
+      .eq("status", "completed")
+      .single(),
   ]);
 
   return {
     hasActiveSubscription: Boolean(subscription.data),
-    hasLifetimePurchase: Boolean(lifetimePurchase.data)
+    hasLifetimePurchase: Boolean(lifetimePurchase.data),
   };
 };
 
@@ -667,5 +638,5 @@ export {
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
   retriveCustomerId,
-  createPortalSession
+  createPortalSession,
 };

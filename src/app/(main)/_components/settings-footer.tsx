@@ -23,20 +23,15 @@ import { AVAILABLE_CARD_THEMES, LANGUAGE_OPTIONS } from "@/constants/themes";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { SaveThemeDialog } from "./save-theme-dialog";
 import { useUIStore } from "@/zustand/useUIStore";
+import { GradientStop } from "@/types/animated.type";
 
 const CUSTOM_GRADIENT = "custom";
-
-export type GradientStop = {
-  color: string;
-  position: number;
-};
 
 export default function DraggableFooter() {
   const {
     width,
     radius,
     language,
-    name,
     themeName,
     background,
     withLineIndex,
@@ -54,13 +49,15 @@ export default function DraggableFooter() {
     setWithLineIndex,
     setAutoPlayInterval,
     setTransitionDuration,
-    setTransitionDelay
+    setTransitionDelay,
   } = useSettingsStore();
-
 
   const [isExpanded, setExpanded] = useState(false);
   const [gradient, setGradient] = useState(() => parseGradient(background));
   const availableThemes = Object.keys(themes);
+  const { subscriptionStatus } = useAuthStore();
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
+  const { isEditing } = useUIStore();
 
   const handleGradientChange = (newGradient: GradientStop[]) => {
     setGradient(newGradient);
@@ -87,11 +84,6 @@ export default function DraggableFooter() {
 
   const toggleFooterSize = () => setExpanded((prev) => !prev);
 
-  const { subscriptionStatus } = useAuthStore();
-  const animationId = useUIStore((state) => state.id);
-  const limitations = useSubscriptionLimitations(subscriptionStatus);
-  const { isEditing } = useUIStore();
-
   const selectedOption = useMemo(() => {
     const allOptions = backgroundOptions.flatMap((group) => group.options);
     return (
@@ -116,16 +108,20 @@ export default function DraggableFooter() {
       >
         <div className="container m-1.5 mx-auto cursor-pointer text-center text-sm font-medium">
           <div className="mx-auto flex items-center justify-center">
-            <Button size="icon" variant="ghost" onClick={toggleFooterSize} disabled={isEditing}>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={toggleFooterSize}
+              disabled={isEditing}
+            >
               {isExpanded ? <ChevronsDown /> : <ChevronsUp />}
             </Button>
           </div>
         </div>
-        <div className="max-w-5xl mx-auto p-8 pt-2">
-
+        <div className="mx-auto max-w-5xl p-8 pt-2">
           <div className="flex flex-col">
             <div className="flex justify-end">
-              {(limitations.proUser === true) && (
+              {limitations.proUser === true && (
                 <div className="mb-2 flex gap-2">
                   {selectedThemeId ? (
                     <>
@@ -138,8 +134,8 @@ export default function DraggableFooter() {
                 </div>
               )}
             </div>
-            <div className="items-center justify-center mt-4">
-              <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5 ">
+            <div className="mt-4 items-center justify-center">
+              <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <span className="text-sm text-muted-foreground">
@@ -197,9 +193,9 @@ export default function DraggableFooter() {
                           {selectedOption === CUSTOM_GRADIENT
                             ? "Custom"
                             : backgroundOptions
-                              .flatMap((group) => group.options)
-                              .find((opt) => opt.value === selectedOption)
-                              ?.label}
+                                .flatMap((group) => group.options)
+                                .find((opt) => opt.value === selectedOption)
+                                ?.label}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
@@ -274,7 +270,9 @@ export default function DraggableFooter() {
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm text-muted-foreground">Width</span>
+                      <span className="text-sm text-muted-foreground">
+                        Width
+                      </span>
                       <output className="text-sm tabular-nums text-muted-foreground">
                         {width}
                       </output>
@@ -311,7 +309,9 @@ export default function DraggableFooter() {
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm text-muted-foreground">Interval</span>
+                      <span className="text-sm text-muted-foreground">
+                        Interval
+                      </span>
                       <output className="text-sm tabular-nums text-muted-foreground">
                         {autoPlayInterval}
                       </output>
@@ -365,7 +365,6 @@ export default function DraggableFooter() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </footer>

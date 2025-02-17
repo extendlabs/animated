@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,48 +12,38 @@ import { useSaveTheme } from "@/hooks/use-save-theme";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useThemes } from "@/hooks/use-themes";
 import { Save, Wrench } from "lucide-react";
-import { set } from "zod";
 
 type Props = {
-  variant: 'create' | 'edit';
+  variant: "create" | "edit";
 };
 
-export function SaveThemeDialog({ variant }: Props) {
+export const SaveThemeDialog = ({ variant }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { saveTheme, isLoading } = useSaveTheme();
   const settings = useSettingsStore();
   const { themes } = useThemes();
-
-  const selectedTheme = themes.find((theme) => theme.id === settings.selectedThemeId);
-
-  console.log(selectedTheme)
-  console.log(variant)
+  const selectedTheme = themes.find(
+    (theme) => theme.id === settings.selectedThemeId,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const savedTheme = await saveTheme(
-        settings.name,
-        variant === 'edit' ? selectedTheme?.id : undefined
-      );
-      if (savedTheme) {
-        settings.setSelectedThemeId(savedTheme.id);
-        settings.setName((savedTheme as any).name);
-      }
-      setIsOpen(false);
-    } catch (error) {
-      // Error is handled in the hook
+    const savedTheme = await saveTheme(
+      settings.name,
+      variant === "edit" ? selectedTheme?.id : undefined,
+    );
+    if (savedTheme) {
+      settings.setSelectedThemeId(savedTheme.id);
+      settings.setName((savedTheme as any).name);
     }
+    setIsOpen(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-        >
-          {variant === 'create' ? (
+        <Button variant="ghost" size="icon">
+          {variant === "create" ? (
             <Save className="h-4 w-4" />
           ) : (
             <Wrench className="h-4 w-4" />
@@ -63,7 +53,7 @@ export function SaveThemeDialog({ variant }: Props) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {variant === 'create' ? "Create New Theme" : "Update Theme"}
+            {variant === "create" ? "Create New Theme" : "Update Theme"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -124,10 +114,14 @@ export function SaveThemeDialog({ variant }: Props) {
             </div>
           </div>
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Saving..." : variant === 'create' ? "Create" : "Update"}
+            {isLoading
+              ? "Saving..."
+              : variant === "create"
+                ? "Create"
+                : "Update"}
           </Button>
         </form>
       </DialogContent>
     </Dialog>
   );
-}
+};
