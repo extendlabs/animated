@@ -136,7 +136,7 @@ export const CustomerPortalForm = ({
             <div className="flex gap-2">
               <Button
                 variant="outline"
-                className="text-primary"
+                className="flex items-center gap-2 border-2 border-zinc-600 bg-zinc-900 text-primary"
                 onClick={() => handleRedirectToCustomerPortal(subscription.id)}
               >
                 Manage Plan
@@ -144,7 +144,7 @@ export const CustomerPortalForm = ({
               {subscription.canceled_at ? (
                 <Button
                   variant="outline"
-                  className="text-primary"
+                  className="flex items-center gap-2 border-2 border-zinc-600 bg-zinc-900 text-primary"
                   onClick={() => handleResumeSubscription(subscription.id)}
                 >
                   Resume Subscription
@@ -152,7 +152,7 @@ export const CustomerPortalForm = ({
               ) : (
                 <Button
                   variant="outline"
-                  className="text-primary"
+                  className="flex items-center gap-2 border-2 border-zinc-600 bg-zinc-900 text-primary"
                   onClick={() => handleCancelSubscription(subscription.id)}
                 >
                   Cancel Subscription
