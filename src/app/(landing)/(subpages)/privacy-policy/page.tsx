@@ -28,9 +28,10 @@ export default function PrivacyPolicy() {
           <CardContent>
             <Alert className="mb-6">
               <AlertDescription>
-                This privacy policy applies to users of the &quot;Animated&quot; code
-                animation app, created by ExtendUI. We are committed to protecting
-                your privacy and handling your data responsibly and transparently.
+                This privacy policy applies to users of the &quot;Animated&quot;
+                code animation app, created by ExtendUI. We are committed to
+                protecting your privacy and handling your data responsibly and
+                transparently.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -46,7 +47,9 @@ export default function PrivacyPolicy() {
                 <h3 className="text-lg font-medium">Account Information</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>Email address and password for account creation</li>
-                  <li>Subscription information for payment processing via Stripe</li>
+                  <li>
+                    Subscription information for payment processing via Stripe
+                  </li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Content Data</h3>
@@ -66,7 +69,9 @@ export default function PrivacyPolicy() {
                 <h3 className="text-lg font-medium">Service Provision</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>Creating and managing your animation content</li>
-                  <li>Managing your subscription and payments through Stripe</li>
+                  <li>
+                    Managing your subscription and payments through Stripe
+                  </li>
                   <li>Providing customer support and service updates</li>
                 </ul>
 
@@ -84,9 +89,9 @@ export default function PrivacyPolicy() {
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <p>
-                  Payments and subscriptions are processed securely through Stripe. We
-                  do not store payment information. We only collect the necessary
-                  subscription-related data.
+                  Payments and subscriptions are processed securely through
+                  Stripe. We do not store payment information. We only collect
+                  the necessary subscription-related data.
                 </p>
 
                 <h3 className="text-lg font-medium">
@@ -101,7 +106,9 @@ export default function PrivacyPolicy() {
                 <h3 className="text-lg font-medium">Payment Processing</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>All payment processing is handled by Stripe</li>
-                  <li>We do not store your credit card or payment information</li>
+                  <li>
+                    We do not store your credit card or payment information
+                  </li>
                   <li>Stripe ensures all payment data is processed securely</li>
                 </ul>
               </AccordionContent>
@@ -114,20 +121,27 @@ export default function PrivacyPolicy() {
               <AccordionContent className="space-y-4">
                 <h3 className="text-lg font-medium">Data Retention</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Your data is retained while your subscription is active</li>
+                  <li>
+                    Your data is retained while your subscription is active
+                  </li>
                   <li>Generated animations are stored in your account</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">After Cancellation</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Account and content data is retained for 30 days after cancellation</li>
+                  <li>
+                    Account and content data is retained for 30 days after
+                    cancellation
+                  </li>
                   <li>Animations are archived for 30 days before deletion</li>
                   <li>You can request complete data deletion at any time</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Content Deletion</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>You may delete your account and associated data at any time</li>
+                  <li>
+                    You may delete your account and associated data at any time
+                  </li>
                   <li>Deleted content cannot be recovered</li>
                 </ul>
               </AccordionContent>
@@ -138,13 +152,22 @@ export default function PrivacyPolicy() {
                 5. Your Rights & Controls
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
-                <p>You have the following rights regarding your personal data:</p>
+                <p>
+                  You have the following rights regarding your personal data:
+                </p>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Access your account data, including email, animations, and settings</li>
+                  <li>
+                    Access your account data, including email, animations, and
+                    settings
+                  </li>
                   <li>Export your data in a machine-readable format</li>
                   <li>Request corrections to your account information</li>
-                  <li>Delete your account and all associated data at any time</li>
-                  <li>Request the deletion of your animations after cancellation</li>
+                  <li>
+                    Delete your account and all associated data at any time
+                  </li>
+                  <li>
+                    Request the deletion of your animations after cancellation
+                  </li>
                   <li>Opt-out of non-essential communications</li>
                 </ul>
               </AccordionContent>
@@ -156,7 +179,8 @@ export default function PrivacyPolicy() {
           <CardContent className="pt-6">
             <div className="text-sm">
               <p>
-                For any privacy-related questions or concerns, please contact us at:
+                For any privacy-related questions or concerns, please contact us
+                at:
               </p>
               <p className="mt-2">privacy@extendui.com</p>
               <p className="mt-4">Krzysztof Wicki App Developer</p>

@@ -131,12 +131,12 @@
 
 @layer utilities {
   /* Add this to your global CSS file */
-.selection-box {
-  position: absolute;
-  border: 2px dashed #000;
-  background: rgba(0, 0, 0, 0.3);
-  display: none;
-}
+  .selection-box {
+    position: absolute;
+    border: 2px dashed #000;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+  }
 
   ::-webkit-scrollbar {
     width: 10px;

@@ -3,13 +3,16 @@ export interface Theme {
   name: string;
   themeName: string;
   background: string;
-  padding: number;
+  width: number;
   radius: number;
   language: string;
   withLineIndex: boolean;
   cardTheme: string;
   theme: any;
   user_id: string;
+  autoPlayInterval: number;
+  transitionDuration: number;
+  transitionDelay: number;
   created_at?: string;
 }
 
@@ -18,7 +21,6 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "./use-toast";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-
 
 export function useSaveTheme() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,61 +31,67 @@ export function useSaveTheme() {
   const saveTheme = async (name: string, themeId?: string) => {
     setIsLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
 
-      const themeData: Omit<Theme, 'id' | 'created_at'> = {
+      const themeData: Omit<Theme, "id" | "created_at"> = {
         name,
         themeName: settings.themeName,
         background: settings.background,
-        padding: settings.padding,
+        width: settings.width,
         radius: settings.radius,
         language: settings.language,
         withLineIndex: settings.withLineIndex,
         cardTheme: settings.cardTheme,
         theme: settings.theme,
+        autoPlayInterval: settings.autoPlayInterval,
+        transitionDuration: settings.transitionDuration,
+        transitionDelay: settings.transitionDelay,
         user_id: user.id,
       };
 
       if (themeId) {
         const { data, error } = await supabase
-          .from('themes')
-          .update({ 
-            ...themeData
+          .from("themes")
+          .update({
+            ...themeData,
           })
-          .eq('id', themeId)
-          .eq('user_id', user.id)
+          .eq("id", themeId)
+          .eq("user_id", user.id)
           .select()
           .single();
 
         if (error) throw error;
-        toast({ 
-          title: "Success", 
-          description: "Theme updated successfully"
+        toast({
+          title: "Success",
+          description: "Theme updated successfully",
         });
         return data;
       } else {
         const { data, error } = await supabase
-          .from('themes')
-          .insert({ 
-            ...themeData, 
-            created_at: new Date().toISOString() 
+          .from("themes")
+          .insert({
+            ...themeData,
+            created_at: new Date().toISOString(),
           })
           .select()
           .single();
 
         if (error) throw error;
-        toast({ 
-          title: "Success", 
-          description: "Theme saved successfully"
+        toast({
+          title: "Success",
+          description: "Theme saved successfully",
         });
         return data;
       }
     } catch (err) {
       toast({
         title: "Error",
-        description: err instanceof Error ? err.message : 'Failed to save theme',
-        variant: "destructive"
+        description:
+          err instanceof Error ? err.message : "Failed to save theme",
+        variant: "destructive",
       });
       throw err;
     } finally {

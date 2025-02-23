@@ -104,18 +104,31 @@ export const themeStyles: Record<
   },
 };
 
-
 export const AVAILABLE_CARD_THEMES = [
-    { value: "default", label: "Default" },
-    { value: "minimal", label: "Minimal" },
-    { value: "defaultColorLess", label: "Color Less" },
-    { value: "leftName", label: "Left Name" },
-    { value: "centerName", label: "Center Name" },
-    { value: "rightName", label: "Right Name" },
-    { value: "window", label: "Window" },
-  ];
+  { value: "default", label: "Default" },
+  { value: "minimal", label: "Minimal" },
+  { value: "defaultColorLess", label: "Color Less" },
+  { value: "leftName", label: "Left Name" },
+  { value: "centerName", label: "Center Name" },
+  { value: "rightName", label: "Right Name" },
+  { value: "window", label: "Window" },
+];
 
 export const LANGUAGE_OPTIONS = [
-  "markup", "jsx", "tsx", "swift", "kotlin", "objectivec", "js-extras",
-  "reason", "rust", "graphql", "yaml", "go", "cpp", "markdown", "python", "json"
+  "markup",
+  "jsx",
+  "tsx",
+  "swift",
+  "kotlin",
+  "objectivec",
+  "js-extras",
+  "reason",
+  "rust",
+  "graphql",
+  "yaml",
+  "go",
+  "cpp",
+  "markdown",
+  "python",
+  "json",
 ];

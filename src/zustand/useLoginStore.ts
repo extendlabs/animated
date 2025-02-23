@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type LoginState = {
-    isDialogOpen: boolean;
+  isDialogOpen: boolean;
 };
 
 type LoginActions = {
@@ -13,9 +13,7 @@ export const useLoginStore = create(
   immer<LoginState & LoginActions>((set) => ({
     isDialogOpen: false,
     setIsDialogOpen: (open) => set({ isDialogOpen: open }),
-  }),
-));
+  })),
+);
 
-export const {
-    setIsDialogOpen,
-} = useLoginStore.getState();
+export const { setIsDialogOpen } = useLoginStore.getState();

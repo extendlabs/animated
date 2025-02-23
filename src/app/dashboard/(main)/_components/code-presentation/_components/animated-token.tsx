@@ -5,6 +5,7 @@ import {
   type TokenOutputProps,
   type Token,
 } from "prism-react-renderer";
+import { useSettingsStore } from "@/zustand/useSettingsStore";
 type Props = {
   token: Token;
   lineIndex: number;
@@ -24,6 +25,11 @@ export const AnimatedToken = ({
     animate: { opacity: 1 },
     exit: { opacity: 0 },
   };
+
+  const { transitionDuration, transitionDelay } = useSettingsStore(
+    (state) => state,
+  );
+
   return (
     <motion.span
       {...getTokenProps({ token })}
@@ -32,7 +38,10 @@ export const AnimatedToken = ({
       initial={"initial"}
       animate="animate"
       exit="exit"
-      transition={{ duration: 0.5, delay: tokenIndex * 0.05 }}
+      transition={{
+        duration: transitionDuration,
+        delay: tokenIndex * transitionDelay,
+      }}
     />
   );
 };

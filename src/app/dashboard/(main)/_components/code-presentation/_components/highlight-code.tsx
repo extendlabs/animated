@@ -6,6 +6,10 @@ import { type DiffResult } from "types/code-presentation.type";
 import { AnimatedLine } from "./animated-line";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
+import ExtendUILogo from "@/app/_components/logo";
+import { useAuthStore } from "@/zustand/useAuthStore";
+import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
+
 type Props = {
   currentCode: string;
   language: string;
@@ -21,6 +25,7 @@ export const HighlightCode = ({
 }: Props) => {
   const prevTokensRef = useRef<string[]>([]);
   const [exitingLines, setExitingLines] = useState<Set<number>>(new Set());
+
   useEffect(() => {
     const prevLines = prevTokensRef.current;
     const currentLines = currentCode.split("\n");
@@ -38,82 +43,89 @@ export const HighlightCode = ({
   const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
 
-
-
+  const { subscriptionStatus } = useAuthStore();
+  const limitations = useSubscriptionLimitations(subscriptionStatus);
   const theme = themes[themeName as keyof typeof themes] || themes.vsDark;
 
   return (
-    <Highlight theme={theme} code={currentCode} language={language}>
-      {({ className, style, tokens, getLineProps, getTokenProps }) => {
-        const currentLines = tokens.map((line) =>
-          line.map((token) => token.content).join(""),
-        );
-        return (
-          <pre
-            className={cn(
-              className,
-              "overflow-hidden pl-5 pt-4 text-sm",
-              thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
-            )}
-            style={style}
-          >
-            {!isAutoPlaying ? (
-              <div>
-                {tokens.map((line, index) => {
-                  const lineContent = currentLines[index];
-                  return (
-                    <div key={`${index}-${lineContent}-notAnimated`}>
-                      {withLineIndex && (
-                        <span
-                          className={cn(
-                            "mr-4 select-none text-gray-500",
-                            thumbnail && "mr-3",
-                          )}
-                        >
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                      )}
-                      {line.map((token) => (
-                        <span
-                          {...getTokenProps({ token })}
-                          key={crypto.randomUUID()}
-                        />
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <AnimatePresence initial={false}>
-                {tokens.map((line, index) => {
-                  const lineContent = currentLines[index];
-                  const isNewLine =
-                    index >= prevTokensRef.current.length ||
-                    prevTokensRef.current[index] !== lineContent;
-                  const isExiting = exitingLines.has(index);
-                  const lineDiffType = diffMap?.lineDiff[index];
-                  const disableAnimations = !isAutoPlaying;
-                  return (
-                    <AnimatedLine
-                      key={`${index}-${lineContent}`}
-                      line={line}
-                      lineIndex={index}
-                      isNewLine={isNewLine}
-                      isExiting={isExiting}
-                      diffType={lineDiffType}
-                      thumbnail={thumbnail}
-                      disableAnimations={disableAnimations}
-                      getLineProps={getLineProps}
-                      getTokenProps={getTokenProps}
-                    />
-                  );
-                })}
-              </AnimatePresence>
-            )}
-          </pre>
-        );
-      }}
-    </Highlight>
+    <div className="relative">
+      <Highlight theme={theme} code={currentCode} language={language}>
+        {({ className, style, tokens, getLineProps, getTokenProps }) => {
+          const currentLines = tokens.map((line) =>
+            line.map((token) => token.content).join(""),
+          );
+          return (
+            <pre
+              className={cn(
+                className,
+                "overflow-hidden pl-5 pt-4 text-sm transition-[height] duration-500 ease-in-out will-change-[height]",
+                thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
+              )}
+              style={style}
+            >
+              {!isAutoPlaying ? (
+                <div>
+                  {tokens.map((line, index) => {
+                    const lineContent = currentLines[index];
+                    return (
+                      <div key={`${index}-${lineContent}-notAnimated`}>
+                        {withLineIndex && (
+                          <span
+                            className={cn(
+                              "mr-4 select-none text-gray-500",
+                              thumbnail && "mr-3",
+                            )}
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                        )}
+                        {line.map((token) => (
+                          <span
+                            {...getTokenProps({ token })}
+                            key={crypto.randomUUID()}
+                          />
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <AnimatePresence initial={false}>
+                  {tokens.map((line, index) => {
+                    const lineContent = currentLines[index];
+                    const isNewLine =
+                      index >= prevTokensRef.current.length ||
+                      prevTokensRef.current[index] !== lineContent;
+                    const isExiting = exitingLines.has(index);
+                    const lineDiffType = diffMap?.lineDiff[index];
+                    const disableAnimations = !isAutoPlaying;
+                    return (
+                      <AnimatedLine
+                        key={`${index}-${lineContent}`}
+                        line={line}
+                        lineIndex={index}
+                        isNewLine={isNewLine}
+                        isExiting={isExiting}
+                        diffType={lineDiffType}
+                        thumbnail={thumbnail}
+                        disableAnimations={disableAnimations}
+                        getLineProps={getLineProps}
+                        getTokenProps={getTokenProps}
+                      />
+                    );
+                  })}
+                </AnimatePresence>
+              )}
+            </pre>
+          );
+        }}
+      </Highlight>
+      {!limitations.proUser && !thumbnail && (
+        <div className="absolute -bottom-3 right-1 text-white">
+          <ExtendUILogo />
+        </div>
+      )}
+    </div>
   );
 };
 HighlightCode.displayName = "HighlightCode";

@@ -29,8 +29,8 @@ export default function RefundPolicy() {
             <Alert className="mb-6">
               <AlertDescription>
                 We strive to provide the best code animation service possible.
-                If you&apos;re not satisfied, we offer refunds according to the terms
-                below.
+                If you&apos;re not satisfied, we offer refunds according to the
+                terms below.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -92,8 +92,13 @@ export default function RefundPolicy() {
                 <h3 className="text-lg font-medium">How to Request</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>Refund requests can only be made via email.</li>
-                  <li>Send an email to <strong>billing@extendui.com</strong></li>
-                  <li>Include your subscription details and reason for the refund request.</li>
+                  <li>
+                    Send an email to <strong>billing@extendui.com</strong>
+                  </li>
+                  <li>
+                    Include your subscription details and reason for the refund
+                    request.
+                  </li>
                   <li>Provide relevant error screenshots if applicable.</li>
                 </ul>
 
@@ -134,10 +139,13 @@ export default function RefundPolicy() {
               <AccordionContent className="space-y-4">
                 <ul className="list-disc space-y-2 pl-6">
                   <li>
-                    The Stripe processing fee is not refundable. In the event of a refund, Stripe will retain the fee they initially charged.
+                    The Stripe processing fee is not refundable. In the event of
+                    a refund, Stripe will retain the fee they initially charged.
                   </li>
                   <li>
-                    For example, if you paid $100 and Stripe took a $2 fee, you will receive a refund of $100, but the $2 fee will not be returned.
+                    For example, if you paid $100 and Stripe took a $2 fee, you
+                    will receive a refund of $100, but the $2 fee will not be
+                    returned.
                   </li>
                 </ul>
               </AccordionContent>

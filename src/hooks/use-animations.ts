@@ -1,4 +1,3 @@
-
 import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 
@@ -26,26 +25,30 @@ export function useAnimations() {
 
   const fetchAnimations = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
-  
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       // First, fetch the animations
       const { data: animationsData, error: animationsError } = await supabase
-        .from('animations')
+        .from("animations")
         .select(`*, animation_slides(*)`)
-        .eq('user_id', user.id);
-  
+        .eq("user_id", user.id);
+
       if (animationsError) throw animationsError;
-  
+
       // Transform the data to match your interface
-      const transformedData = animationsData?.map(animation => ({
+      const transformedData = animationsData?.map((animation) => ({
         ...animation,
-        slides: animation.animation_slides || []
+        slides: animation.animation_slides || [],
       }));
-  
+
       setAnimations(transformedData || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch animations');
+      setError(
+        err instanceof Error ? err.message : "Failed to fetch animations",
+      );
     } finally {
       setLoading(false);
     }
@@ -53,17 +56,16 @@ export function useAnimations() {
 
   const deleteAnimation = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('animations')
-        .delete()
-        .eq('id', id);
-      
+      const { error } = await supabase.from("animations").delete().eq("id", id);
+
       if (error) throw error;
-      
+
       // Update local state
-      setAnimations(prev => prev.filter(animation => animation.id !== id));
+      setAnimations((prev) => prev.filter((animation) => animation.id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete animation');
+      setError(
+        err instanceof Error ? err.message : "Failed to delete animation",
+      );
       throw err;
     }
   };
@@ -77,6 +79,6 @@ export function useAnimations() {
     loading,
     error,
     deleteAnimation,
-    refreshAnimations: fetchAnimations
+    refreshAnimations: fetchAnimations,
   };
 }

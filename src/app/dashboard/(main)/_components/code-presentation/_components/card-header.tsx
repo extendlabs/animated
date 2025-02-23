@@ -11,7 +11,7 @@ type Props = {
 export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { fileName, setFileName } = useUIStore();
+  const { fileName, setFileName, isAutoPlaying } = useUIStore();
 
   const headerStyles = {
     borderColor: themeBorder,
@@ -47,7 +47,11 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
         />
       );
     }
-    return (
+    return isAutoPlaying ? (
+      <div className="text-sm" style={{ color: themeText }}>
+        {fileName}
+      </div>
+    ) : (
       <div
         className="cursor-pointer text-sm"
         style={{ color: themeText }}
@@ -86,12 +90,19 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
             className="flex items-center justify-between border-b px-4 py-3"
             style={headerStyles}
           >
-            <div className="flex items-center gap-2">
+            {/* Left section with dots */}
+            <div className="flex w-[62px] items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-red-500" />
               <div className="h-3 w-3 rounded-full bg-yellow-500" />
               <div className="h-3 w-3 rounded-full bg-green-500" />
             </div>
-            {renderFileName()}
+
+            {/* Center section with filename - now with flex-1 and proper centering */}
+            <div className="flex flex-1 items-center justify-center">
+              {renderFileName()}
+            </div>
+
+            {/* Right spacer matching left width */}
             <div className="w-[62px]" />
           </div>
         );

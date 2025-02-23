@@ -79,9 +79,13 @@ export default function TermsOfService() {
                   <li>Share account credentials or transfer subscriptions.</li>
                   <li>Use the service for illegal or unauthorized purposes.</li>
                   <li>
-                    Attempt to reverse engineer or copy our animation technology.
+                    Attempt to reverse engineer or copy our animation
+                    technology.
                   </li>
-                  <li>Upload malicious code or content that violates others&apos; rights.</li>
+                  <li>
+                    Upload malicious code or content that violates others&apos;
+                    rights.
+                  </li>
                   <li>Resell generated animations without permission.</li>
                 </ul>
               </AccordionContent>
@@ -95,14 +99,20 @@ export default function TermsOfService() {
                 <h3 className="text-lg font-medium">Your Content</h3>
                 <ul className="list-disc space-y-2 pl-6">
                   <li>You retain rights to your uploaded code and content.</li>
-                  <li>You grant us license to process and store your content.</li>
+                  <li>
+                    You grant us license to process and store your content.
+                  </li>
                   <li>Generated animations are your intellectual property.</li>
                 </ul>
 
                 <h3 className="text-lg font-medium">Our Service</h3>
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>Our animation technology and platform remain our property.</li>
-                  <li>Service features and UI elements are protected by copyright.</li>
+                  <li>
+                    Our animation technology and platform remain our property.
+                  </li>
+                  <li>
+                    Service features and UI elements are protected by copyright.
+                  </li>
                   <li>Usage analytics and aggregated data belong to us.</li>
                 </ul>
               </AccordionContent>
@@ -135,9 +145,13 @@ export default function TermsOfService() {
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <ul className="list-disc space-y-2 pl-6">
-                  <li>We reserve the right to modify or discontinue features.</li>
+                  <li>
+                    We reserve the right to modify or discontinue features.
+                  </li>
                   <li>Pricing changes will be communicated in advance.</li>
-                  <li>Service availability and performance are not guaranteed.</li>
+                  <li>
+                    Service availability and performance are not guaranteed.
+                  </li>
                   <li>We may update these terms with notice to users.</li>
                 </ul>
               </AccordionContent>
