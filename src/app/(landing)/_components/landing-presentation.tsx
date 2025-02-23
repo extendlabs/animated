@@ -1,7 +1,7 @@
 import { SidebarCard } from "@/app/dashboard/(main)/_components/sidebar-card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { DiffResult } from "types/code-presentation.type";
@@ -87,60 +87,60 @@ export default function LandingPresentation({
     oldTokens: [],
     newTokens: [],
   });
-  const handleDeleteSlide = (id: number) => {};
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
     [slides, currentSlide],
   );
+  const handleDeleteSlide = (id: number) => {
+    console.log(id);
+    const handleSlideChange = useCallback(
+      (direction: "next" | "prev") => {
+        const newIndex =
+          direction === "next"
+            ? Math.min(currentSlide + 1, slides.length - 1)
+            : Math.max(currentSlide - 1, 0);
 
-  const handleSlideChange = useCallback(
-    (direction: "next" | "prev") => {
-      const newIndex =
-        direction === "next"
-          ? Math.min(currentSlide + 1, slides.length - 1)
-          : Math.max(currentSlide - 1, 0);
-
-      if (newIndex !== currentSlide) {
-        if (slides[newIndex] && slides[currentSlide]) {
-          const newDiff = computeDiff(
-            slides[currentSlide].code,
-            slides[newIndex].code,
-          );
-          setDiffMap(newDiff);
-          setCurrentSlide(newIndex);
+        if (newIndex !== currentSlide) {
+          if (slides[newIndex] && slides[currentSlide]) {
+            const newDiff = computeDiff(
+              slides[currentSlide].code,
+              slides[newIndex].code,
+            );
+            setDiffMap(newDiff);
+            setCurrentSlide(newIndex);
+          }
         }
+      },
+      [currentSlide, slides, setCurrentSlide],
+    );
+
+    useEffect(() => {
+      let interval: NodeJS.Timeout;
+      if (isAutoPlaying) {
+        interval = setInterval(() => {
+          if (currentSlide < slides.length - 1) {
+            handleSlideChange("next");
+          } else {
+            setIsAutoPlaying(false);
+            setDiffMap({
+              lineDiff: {},
+              oldTokens: [],
+              newTokens: [],
+            });
+          }
+        }, autoPlayInterval);
       }
-    },
-    [currentSlide, slides, setCurrentSlide],
-  );
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isAutoPlaying) {
-      interval = setInterval(() => {
-        if (currentSlide < slides.length - 1) {
-          handleSlideChange("next");
-        } else {
-          setIsAutoPlaying(false);
-          setDiffMap({
-            lineDiff: {},
-            oldTokens: [],
-            newTokens: [],
-          });
-        }
-      }, autoPlayInterval);
-    }
-
-    return () => clearInterval(interval);
-  }, [
-    isAutoPlaying,
-    currentSlide,
-    slides.length,
-    autoPlayInterval,
-    handleSlideChange,
-    setIsAutoPlaying,
-  ]);
-
+      return () => clearInterval(interval);
+    }, [
+      isAutoPlaying,
+      currentSlide,
+      slides.length,
+      autoPlayInterval,
+      handleSlideChange,
+      setIsAutoPlaying,
+    ]);
+  };
   return (
     <div className="z-50 flex h-full">
       <div className="h-full w-1/4">

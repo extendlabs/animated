@@ -61,10 +61,11 @@ export default function HeroSection() {
             <FadeUp delay={0.4} duration={0.8}>
               <p className="mx-2 mt-6 max-w-2xl text-base font-light tracking-tight dark:text-zinc-300 sm:text-lg">
                 Create vivid, engaging{" "}
-                <span className="inline font-semibold">recordings</span> that
+                <span className="inline font-semibold">recordings</span>{" "}
+                {`that
                 showcase your code in motion. Perfect for tutorials,
                 documentation, and those 'aha' moments that deserve to be
-                shared.
+                shared.`}
               </p>
             </FadeUp>
             <FadeUp delay={0.6} duration={1}>

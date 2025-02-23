@@ -33,9 +33,9 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
           Simple Tools, Powerful Results
         </h2>
         <p className="mt-4 sm:text-lg">
-          We've simplified code recording down to its essence. Every feature is
+          {`We've simplified code recording down to its essence. Every feature is
           thoughtfully designed to be intuitive yet powerful, helping you create
-          professional demonstrations with ease.
+          professional demonstrations with ease.`}
         </p>
       </div>
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-12">

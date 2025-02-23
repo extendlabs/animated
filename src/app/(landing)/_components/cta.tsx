@@ -9,8 +9,8 @@ export default function CTA() {
           Ready to elevate your code sharing?
         </h2>
         <p className="max-w-[42rem] leading-normal sm:text-xl sm:leading-8">
-          Join developers worldwide who've transformed their code sharing,
-          documentation, and teaching through engaging visual demonstrations.
+          {`Join developers worldwide who've transformed their code sharing,
+          documentation, and teaching through engaging visual demonstrations.`}
         </p>
         <Link href={"/pricing"}>
           <Button size="lg" className="mt-4">
