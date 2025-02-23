@@ -13,7 +13,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "prepare": "husky"
   },
   "dependencies": {
     "@babel/generator": "^7.26.2",
@@ -104,6 +105,8 @@
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
     "eslint-config-next": "^15.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "opus-media-recorder": "^0.8.0",
     "postcss": "^8.4.39",
@@ -115,5 +118,8 @@
   "ct3aMetadata": {
     "initVersion": "7.38.1"
   },
-  "packageManager": "npm@10.2.3"
+  "packageManager": "npm@10.2.3",
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
 }
