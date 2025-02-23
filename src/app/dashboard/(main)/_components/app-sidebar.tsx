@@ -62,7 +62,7 @@ export function AppSidebar({
 
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
-      console.log(supabase)
+      console.log(supabase);
       const status = await getUserSubscriptionStatus(supabase);
       if (status) {
         setSubscription(status.subscription);
@@ -72,11 +72,7 @@ export function AppSidebar({
     };
 
     fetchSubscriptionStatus();
-
   }, [supabase, setSubscription, setPurchase]);
-
-
-
 
   const isAddDisabled = () => {
     if (isRecordingMode) return true;
@@ -100,7 +96,7 @@ export function AppSidebar({
                       currentSlide={currentSlide}
                       setCurrentSlide={setCurrentSlide}
                       handleDeleteSlide={handleDeleteSlide}
-                    // disabled={isRecordingMode}
+                      // disabled={isRecordingMode}
                     />
                   ))}
                 </div>

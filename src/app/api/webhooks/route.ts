@@ -190,7 +190,10 @@ export async function POST(req: Request) {
           await manageSubscriptionStatusChange(
             subscription.id,
             subscription.customer as string,
-            Boolean(event.type === "customer.subscription.created" || event.type === "customer.subscription.updated"),
+            Boolean(
+              event.type === "customer.subscription.created" ||
+                event.type === "customer.subscription.updated",
+            ),
           );
           break;
 

@@ -6,13 +6,13 @@ import { MobileNav } from "@/app/_components/mobile-nav";
 
 export default async function SubpageNavbar() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <nav className="flex justify-between h-16 items-center border-b px-4 lg:px-6 bg-background">
-      <Link
-        href="/"
-      >
+    <nav className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
+      <Link href="/">
         <Image
           src="/logo.svg"
           alt="logo"
@@ -22,11 +22,11 @@ export default async function SubpageNavbar() {
         />
       </Link>
 
-      <div className="w-64 flex justify-end items-center gap-4">
+      <div className="flex w-64 items-center justify-end gap-4">
         {/* Pricing link always visible */}
         <Link
           href="/pricing"
-          className="hidden sm:block transition-colors duration-200 hover:text-accent font-medium"
+          className="hidden font-medium transition-colors duration-200 hover:text-accent sm:block"
         >
           Pricing
         </Link>

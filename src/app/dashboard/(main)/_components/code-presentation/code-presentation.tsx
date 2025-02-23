@@ -7,16 +7,10 @@ import React, {
 } from "react";
 import { motion } from "framer-motion";
 import { type DiffResult } from "types/code-presentation.type";
-<<<<<<< HEAD:src/app/dashboard/(main)/_components/code-presentation/code-presentation.tsx
-import { Button } from "../../../../../components/ui/button";
-import { MyEditor } from "../my-editor";
-import { computeDiff } from "@/lib/code-diff";
-=======
 import { Button } from "@/components/ui/button";
 import { MyEditor } from "../my-editor";
 import { computeDiff } from "@/helpers/code-diff";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
->>>>>>> main:src/app/(main)/_components/code-presentation/code-presentation.tsx
 import { useUIStore } from "@/zustand/useUIStore";
 import { Camera, PauseIcon, PlayIcon, Video } from "lucide-react";
 import { RecordableCodeCard } from "./_components/recordable-code-card";
@@ -164,17 +158,7 @@ export const CodePresentation = () => {
 
       return () => clearTimeout(timer);
     }
-<<<<<<< HEAD:src/app/dashboard/(main)/_components/code-presentation/code-presentation.tsx
-  }, [
-    recordingState.status,
-    isAutoPlaying,
-    currentSlide,
-    slides.length,
-    stopRecording,
-  ]);
-=======
   }, [recordingState.status, isAutoPlaying, currentSlide, slides.length]);
->>>>>>> main:src/app/(main)/_components/code-presentation/code-presentation.tsx
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -259,7 +243,6 @@ export const CodePresentation = () => {
   const animationId = useUIStore((state) => state.id);
   const limitations = useSubscriptionLimitations(subscriptionStatus);
 
-
   return (
     <>
       <div
@@ -292,39 +275,6 @@ export const CodePresentation = () => {
             "mx-auto w-full max-w-3xl",
             isRecordingMode && "my-auto",
           )}
-<<<<<<< HEAD:src/app/dashboard/(main)/_components/code-presentation/code-presentation.tsx
-          <div className="relative overflow-hidden rounded-sm">
-            {isEditing ? (
-              <MyEditor
-                value={currentCode}
-                handleUpdateSlide={handleUpdateSlide}
-              />
-            ) : (
-              <RecordableCodeCard
-                currentCode={currentCode}
-                currentSlide={currentSlide}
-                diffMap={diffMap}
-                containerRef={componentRef}
-              />
-            )}
-          </div>
-          <div className="flex justify-center max-sm:hidden">
-            <div className="mt-4 flex items-center space-x-4">
-              <Button
-                onClick={() => {
-                  setCurrentSlide(0);
-                  setIsAutoPlaying(!isAutoPlaying);
-                }}
-                aria-label={isAutoPlaying ? "Pause" : "Play"}
-                disabled={
-                  isAutoPlaying || recordingState.status === "recording"
-                }
-                variant="ghost"
-                size="icon"
-              >
-                {isAutoPlaying ? (
-                  <PauseIcon className="h-4 w-4" />
-=======
           style={{ height: containerHeight || "auto" }}
         >
           <motion.div className="w-full space-y-4 rounded-lg">
@@ -335,7 +285,6 @@ export const CodePresentation = () => {
                     value={currentCode}
                     handleUpdateSlide={handleUpdateSlide}
                   />
->>>>>>> main:src/app/(main)/_components/code-presentation/code-presentation.tsx
                 ) : (
                   <RecordableCodeCard
                     currentCode={currentCode}
@@ -343,32 +292,7 @@ export const CodePresentation = () => {
                     diffMap={diffMap}
                   />
                 )}
-<<<<<<< HEAD:src/app/dashboard/(main)/_components/code-presentation/code-presentation.tsx
-              </Button>
-
-              {recordingState.status === "idle" ? (
-                <Button
-                  onClick={handleStartRecording}
-                  variant="ghost"
-                  size="icon"
-                  disabled={isAutoPlaying}
-                  aria-label="Start Recording"
-                >
-                  <Video className="h-4 w-4" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={stopRecording}
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Stop Recording"
-                >
-                  <StopCircle className="h-4 w-4 text-red-500" />
-                </Button>
-              )}
-=======
               </div>
->>>>>>> main:src/app/(main)/_components/code-presentation/code-presentation.tsx
             </div>
           </motion.div>
         </div>

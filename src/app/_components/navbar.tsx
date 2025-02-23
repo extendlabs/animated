@@ -5,13 +5,14 @@ import Link from "next/link";
 import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
 
-
 export default async function Navbar() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <nav className="flex h-16 items-center border-b px-4 lg:px-6 bg-background">
+    <nav className="flex h-16 items-center border-b bg-background px-4 lg:px-6">
       <div className="w-64">
         <SidebarTrigger />
       </div>
@@ -22,11 +23,11 @@ export default async function Navbar() {
         height={40}
         className="mx-auto"
       />
-      <div className="w-64 flex justify-end items-center gap-4">
+      <div className="flex w-64 items-center justify-end gap-4">
         {/* Pricing link always visible */}
         <Link
           href="/pricing"
-          className="hidden sm:block transition-colors duration-200 hover:text-accent font-medium"
+          className="hidden font-medium transition-colors duration-200 hover:text-accent sm:block"
         >
           Pricing
         </Link>

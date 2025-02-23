@@ -32,7 +32,7 @@ export const SaveCodeDialog = ({ forceCreate = false }: Props) => {
     name: existingName,
     description: existingDescription,
     isEditing,
-    isAutoPlaying
+    isAutoPlaying,
   } = useUIStore();
   const isCreating = forceCreate || !animationId;
 

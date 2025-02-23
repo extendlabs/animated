@@ -5,12 +5,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { DiffResult } from "types/code-presentation.type";
-import { computeDiff } from "@/lib/code-diff";
+
 import ExtendUILogo from "@/app/_components/logo";
 import { cn } from "@/lib/utils";
 import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentation/_components/highlight-code";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { CardHeader } from "@/app/dashboard/(main)/_components/code-presentation/_components/card-header";
+import { computeDiff } from "@/helpers/code-diff";
 
 const slides = [
   {
