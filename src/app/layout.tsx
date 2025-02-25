@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable}`}
+      className={`${GeistSans.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>

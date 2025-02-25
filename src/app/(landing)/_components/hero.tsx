@@ -7,7 +7,8 @@ import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import LandingPresentation from "./landing-presentation";
-import { Redo, Undo } from "lucide-react";
+import { ArrowRight, ChevronRight, Redo, Undo } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const INITIAL_SCALE = 1.1;
 const MIN_SCALE = 0.8;
@@ -54,15 +55,23 @@ export default function HeroSection() {
         <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 py-[15dvh] text-center">
           <div className="relative mb-24">
             <FadeUp delay={0.2} duration={0.8}>
-              <h1 className="bg-gradient-to-br from-black via-zinc-600 to-zinc-400 bg-clip-text text-center text-3xl font-bold tracking-wide dark:from-white dark:via-neutral-200 dark:to-black/[0.6] sm:text-center sm:text-4xl md:text-6xl">
-                Bring your code to life.
+              <Link href="https://x.com/extendui_pro" className="group">
+                <Badge className="mb-8 rounded-full border border-gray-900 bg-gray-800 px-3 py-1 text-sm font-medium text-gray-200 hover:bg-gray-900">
+                  Launched for early access 🎉
+                  <ChevronRight className="h-4 w-4 translate-x-0 transform opacity-0 transition-all duration-200 ease-in-out group-hover:translate-x-1 group-hover:opacity-100" />
+                </Badge>
+              </Link>
+              <h1 className="bg-gradient-to-br from-black via-zinc-600 to-zinc-400 bg-clip-text text-center text-3xl font-bold tracking-tight dark:from-white dark:via-neutral-200 dark:to-black/[0.6] sm:text-center sm:text-4xl md:text-6xl">
+                Bring
+                <span className="inline bg-gradient-to-br from-green-700 to-green-900 bg-clip-text text-transparent">
+                  {" your "}
+                </span>{" "}
+                code to life.
               </h1>
             </FadeUp>
             <FadeUp delay={0.4} duration={0.8}>
-              <p className="mx-2 mt-6 max-w-2xl text-base font-light tracking-tight dark:text-zinc-300 sm:text-lg">
-                Create vivid, engaging{" "}
-                <span className="inline font-semibold">recordings</span>{" "}
-                {`that
+              <p className="mx-2 mt-6 max-w-2xl text-base font-medium tracking-wide dark:text-zinc-300 sm:text-lg">
+                {`Create vivid, engaging recordings that
                 showcase your code in motion. Perfect for tutorials,
                 documentation, and those 'aha' moments that deserve to be
                 shared.`}
@@ -73,7 +82,7 @@ export default function HeroSection() {
                 <Link href="/dashboard">
                   <Button
                     variant="default"
-                    className="flex items-center justify-center gap-1 bg-emerald-500 hover:bg-emerald-600"
+                    className="flex items-center justify-center gap-1 rounded-full bg-emerald-800 font-semibold text-neutral-100 hover:bg-emerald-700"
                   >
                     Get started for free
                   </Button>
@@ -89,7 +98,7 @@ export default function HeroSection() {
 
           <div className="relative mx-auto w-full">
             <FadeUp delay={1} duration={1.2}>
-              <div className="relative mt-16">
+              <div className="relative mt-8">
                 <motion.div
                   className="relative rounded-lg shadow-lg"
                   style={{

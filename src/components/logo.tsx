@@ -19,7 +19,7 @@ export default function Logo({ className }: { className?: string }) {
           alt="logo"
           width={500}
           height={500}
-          className="h-[18px] w-fit"
+          className="h-5 w-fit"
         />
         <span className="sr-only">Animated</span>
       </div>

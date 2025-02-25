@@ -19,12 +19,18 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
   );
   const [currentVideo, setCurrentVideo] = useState<string>(defaultVideo);
 
-  const handleFeatureClick = (feature: Feature) => {
+  const handleFeatureClick = (feature: Feature, index: number) => {
     setActiveFeature(feature.name);
+
     if (feature.videoUrl) {
       setCurrentVideo(feature.videoUrl);
     }
   };
+
+  const activeIndex = features.findIndex((f) => f.name === activeFeature);
+
+  const transformPercentage =
+    features.length > 1 ? (activeIndex / (features.length - 1)) * 218 : 0;
 
   return (
     <section className="space-y-16 py-24 md:py-32">
@@ -38,16 +44,16 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
           professional demonstrations with ease.`}
         </p>
       </div>
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-12">
+      <div className="relative mx-auto flex max-w-5xl items-start justify-between gap-12">
         <div className="flex flex-col gap-4">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <div
               key={feature.name}
-              onClick={() => handleFeatureClick(feature)}
+              onClick={() => handleFeatureClick(feature, index)}
               className={`group relative flex max-w-lg cursor-pointer flex-col justify-between overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out ${
                 activeFeature === feature.name
-                  ? "bg-emerald-500/20"
-                  : "hover:bg-emerald-500/10"
+                  ? "bg-emerald-800/50"
+                  : "hover:bg-emerald-900/50"
               }`}
             >
               <div>
@@ -61,7 +67,12 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
             </div>
           ))}
         </div>
-        <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border">
+        <figure
+          className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out"
+          style={{
+            transform: `translateY(${transformPercentage}px)`,
+          }}
+        >
           <div className="absolute inset-0">
             <video
               autoPlay
@@ -69,7 +80,7 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
               playsInline
               preload="auto"
               muted
-              className="h-full w-full object-cover"
+              className="h-full w-full rounded-2xl object-cover p-1"
             >
               <source src={currentVideo} type="video/mp4" />
             </video>
@@ -89,12 +100,19 @@ export function FeaturesCustomization({
   );
   const [currentVideo, setCurrentVideo] = useState<string>(defaultVideo);
 
-  const handleFeatureClick = (feature: Feature) => {
+  const handleFeatureClick = (feature: Feature, index: number) => {
     setActiveFeature(feature.name);
+
     if (feature.videoUrl) {
       setCurrentVideo(feature.videoUrl);
     }
   };
+
+  const activeIndex = features.findIndex((f) => f.name === activeFeature);
+
+  const transformPercentage =
+    features.length > 1 ? (activeIndex / (features.length - 1)) * 50 : 0;
+
   return (
     <section className="space-y-16 py-24 md:py-32">
       <div className="mx-auto max-w-[58rem] text-center">
@@ -107,16 +125,16 @@ export function FeaturesCustomization({
           content exactly how you envision it.
         </p>
       </div>
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-12">
+      <div className="relative mx-auto flex max-w-5xl items-start justify-between gap-12">
         <div className="flex flex-col gap-4">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <div
               key={feature.name}
-              onClick={() => handleFeatureClick(feature)}
+              onClick={() => handleFeatureClick(feature, index)}
               className={`group relative flex max-w-lg cursor-pointer flex-col justify-between overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out ${
                 activeFeature === feature.name
-                  ? "bg-emerald-500/20"
-                  : "hover:bg-emerald-500/10"
+                  ? "bg-emerald-800/50"
+                  : "hover:bg-emerald-900/50"
               }`}
             >
               <div>
@@ -130,7 +148,12 @@ export function FeaturesCustomization({
             </div>
           ))}
         </div>
-        <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border">
+        <figure
+          className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out"
+          style={{
+            transform: `translateY(${transformPercentage}px)`,
+          }}
+        >
           <div className="absolute inset-0">
             <video
               autoPlay
@@ -138,7 +161,7 @@ export function FeaturesCustomization({
               playsInline
               preload="auto"
               muted
-              className="h-full w-full object-cover"
+              className="h-full w-full rounded-2xl object-cover p-1"
             >
               <source src={currentVideo} type="video/mp4" />
             </video>
