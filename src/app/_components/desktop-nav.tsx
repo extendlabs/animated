@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { User, Settings, UserCircle, LogOut } from "lucide-react";
+import { User, Settings, UserCircle, LogOut, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -71,6 +71,13 @@ export function DesktopNav({ user }: DesktopNavProps) {
             Slides & Themes
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/pricing" className="flex items-center gap-2">
+            <DollarSign className="h-4 w-4" />
+            Pricing
+          </Link>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
         <form onSubmit={handleSignOut}>
           <DropdownMenuItem asChild className="cursor-pointer">
