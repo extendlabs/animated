@@ -6,9 +6,11 @@ import { type DiffResult } from "types/code-presentation.type";
 import { AnimatedLine } from "./animated-line";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-import ExtendUILogo from "@/app/_components/logo";
+import ExtendUILogo from "@/app/_components/watermark";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
+import Logo from "@/components/logo";
+import Watermark from "@/app/_components/watermark";
 
 type Props = {
   currentCode: string;
@@ -121,8 +123,8 @@ export const HighlightCode = ({
         }}
       </Highlight>
       {!limitations.proUser && !thumbnail && (
-        <div className="absolute -bottom-3 right-1 text-white">
-          <ExtendUILogo />
+        <div className="absolute -bottom-3 right-2">
+          <Watermark />
         </div>
       )}
     </div>
