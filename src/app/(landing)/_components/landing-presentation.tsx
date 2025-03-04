@@ -5,8 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { DiffResult } from "types/code-presentation.type";
-
-import ExtendUILogo from "@/app/_components/logo";
 import { cn } from "@/lib/utils";
 import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentation/_components/highlight-code";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
@@ -142,8 +140,8 @@ export default function LandingPresentation({
     ]);
   };
   return (
-    <div className="z-50 flex h-full">
-      <div className="h-full w-1/4">
+    <div className="z-50 flex h-full border border-primary">
+      <div className="h-full w-36">
         <div className="z-50 flex h-full flex-col">
           <div className="space-y-2 p-2 text-left">
             {slides.map((slide, index) => (
@@ -184,10 +182,6 @@ export default function LandingPresentation({
                           width: width,
                         }}
                       >
-                        <div className="absolute bottom-2 right-2 text-white">
-                          <ExtendUILogo />
-                        </div>
-
                         <div
                           className={cn("p-1 shadow-xl")}
                           style={{

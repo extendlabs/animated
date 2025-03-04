@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import LandingPresentation from "./landing-presentation";
-import { ArrowRight, ChevronRight, Redo, Undo } from "lucide-react";
+import { ChevronRight, Redo } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const INITIAL_SCALE = 1.1;
+const INITIAL_SCALE = 1;
 const MIN_SCALE = 0.8;
-const SCROLL_FACTOR = 0.001;
+const SCROLL_FACTOR = 0.0005;
 
 interface ScaleState {
   scale: number;
@@ -32,7 +31,7 @@ export default function HeroSection() {
         MIN_SCALE,
         INITIAL_SCALE - scrollPosition * SCROLL_FACTOR,
       );
-      const opacityThreshold = 0.9;
+      const opacityThreshold = 0.85;
       const opacityRange = opacityThreshold - MIN_SCALE;
       const opacity =
         newScale <= opacityThreshold
@@ -50,10 +49,10 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section id="hero" className="mb-44 space-y-10">
+    <section id="hero" className="relative space-y-10 sm:mb-44">
       <div className="min-h-[calc(100dvh-4rem)] md:h-[100dvh] md:space-y-24">
         <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 py-[15dvh] text-center">
-          <div className="relative mb-24">
+          <div className="relative mb-8">
             <FadeUp delay={0.2} duration={0.8}>
               <Link href="https://x.com/extendui_pro" className="group">
                 <Badge className="mb-8 rounded-full border border-gray-900 bg-gray-800 px-3 py-1 text-sm font-medium text-gray-200 hover:bg-gray-900">
@@ -62,11 +61,7 @@ export default function HeroSection() {
                 </Badge>
               </Link>
               <h1 className="bg-gradient-to-br from-black via-zinc-600 to-zinc-400 bg-clip-text text-center text-3xl font-bold tracking-tight dark:from-white dark:via-neutral-200 dark:to-black/[0.6] sm:text-center sm:text-4xl md:text-6xl">
-                Bring
-                <span className="inline bg-gradient-to-br from-green-700 to-green-900 bg-clip-text text-transparent">
-                  {" your "}
-                </span>{" "}
-                code to life.
+                Bring your code to life.
               </h1>
             </FadeUp>
             <FadeUp delay={0.4} duration={0.8}>
@@ -96,9 +91,9 @@ export default function HeroSection() {
             </FadeUp>
           </div>
 
-          <div className="relative mx-auto w-full">
+          <div className="relative max-w-full">
             <FadeUp delay={1} duration={1.2}>
-              <div className="relative mt-8">
+              <div className="relative mt-4">
                 <motion.div
                   className="relative rounded-lg shadow-lg"
                   style={{
@@ -113,13 +108,28 @@ export default function HeroSection() {
                   }}
                 >
                   <div className="group relative z-10 rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
-                    <Image
+                    {/* <Image
                       src="https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPSffPdKz4crUtnskQM6JR0f94vmwAdeE7WBpY"
                       alt="screen"
                       width={3818}
                       height={2160}
                       className="rounded-md border transition-all duration-200 ease-out"
-                    />
+                    /> */}
+                    <video
+                      autoPlay
+                      loop
+                      playsInline
+                      preload="auto"
+                      muted
+                      className="rounded-md border transition-all duration-200 ease-out"
+                    >
+                      <source
+                        src={
+                          "https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPnGTruaQshRk0CQS4IywLjO3lae16nDZTmqtG"
+                        }
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </motion.div>
                 <motion.div
@@ -135,7 +145,7 @@ export default function HeroSection() {
                     scale: { duration: 0.1, ease: "easeOut" },
                   }}
                 >
-                  <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                  <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 px-2 py-4 ring-1 ring-slate-200/50">
                     <LandingPresentation />
                   </div>
                   <div className="absolute -right-16 -top-4 flex rotate-12 flex-col items-center justify-center">

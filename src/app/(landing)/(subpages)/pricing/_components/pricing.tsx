@@ -134,7 +134,7 @@ export const Pricing = ({ user, products, subscriptionStatus }: Props) => {
               interval="month"
               features={PRICING_FREE_DATA.features}
               buttonText="Get started"
-              onButtonClick={() => router.push("/")}
+              onButtonClick={() => router.push("/dashboard")}
             />
 
             {subscriptionProducts.map((product) => {

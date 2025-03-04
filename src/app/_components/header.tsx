@@ -110,7 +110,7 @@ function LandingDesktopNav({ user }: { user: any }) {
           <Link
             href={"/dashboard"}
             className={cn(
-              "rounded-3xl bg-emerald-400/30 px-3.5 py-1.5 text-sm transition-colors duration-200 hover:bg-emerald-400/40",
+              "rounded-3xl bg-emerald-800 px-3.5 py-1.5 text-sm transition-colors duration-200 hover:bg-emerald-900",
             )}
           >
             Dashboard
