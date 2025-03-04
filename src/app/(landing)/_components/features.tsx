@@ -33,7 +33,7 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
     features.length > 1 ? (activeIndex / (features.length - 1)) * 218 : 0;
 
   return (
-    <section className="space-y-16 py-24 md:py-32">
+    <section className="space-y-16 sm:py-24 md:py-32">
       <div className="mx-auto max-w-[58rem] text-center">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Simple Tools, Powerful Results

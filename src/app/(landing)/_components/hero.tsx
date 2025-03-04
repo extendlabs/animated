@@ -49,7 +49,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section id="hero" className="relative space-y-10 sm:mb-44">
+    <section id="hero" className="relative space-y-10 lg:mb-44">
       <div className="min-h-[calc(100dvh-4rem)] md:h-[100dvh] md:space-y-24">
         <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 py-[15dvh] text-center">
           <div className="relative mb-8">
@@ -91,9 +91,30 @@ export default function HeroSection() {
             </FadeUp>
           </div>
 
-          <div className="relative max-w-full">
+          <div className="relative m-4 max-w-full">
             <FadeUp delay={1} duration={1.2}>
-              <div className="relative mt-4">
+              <div className="relative lg:hidden">
+                <div className="relative rounded-lg shadow-lg">
+                  <div className="group relative z-10 rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                    <video
+                      autoPlay
+                      loop
+                      playsInline
+                      preload="auto"
+                      muted
+                      className="rounded-md border transition-all duration-200 ease-out"
+                    >
+                      <source
+                        src={
+                          "https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPnGTruaQshRk0CQS4IywLjO3lae16nDZTmqtG"
+                        }
+                        type="video/mp4"
+                      />
+                    </video>
+                  </div>
+                </div>
+              </div>
+              <div className="relative mt-4 hidden lg:block">
                 <motion.div
                   className="relative rounded-lg shadow-lg"
                   style={{
@@ -145,7 +166,7 @@ export default function HeroSection() {
                     scale: { duration: 0.1, ease: "easeOut" },
                   }}
                 >
-                  <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 px-2 py-4 ring-1 ring-slate-200/50">
+                  <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
                     <LandingPresentation />
                   </div>
                   <div className="absolute -right-16 -top-4 flex rotate-12 flex-col items-center justify-center">
