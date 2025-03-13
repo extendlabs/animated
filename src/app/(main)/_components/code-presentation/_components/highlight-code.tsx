@@ -58,7 +58,7 @@ export const HighlightCode = ({
             <pre
               className={cn(
                 className,
-                "overflow-hidden pl-5 pt-4 text-sm transition-[height] duration-500 ease-in-out will-change-[height]",
+                "overflow-hidden pl-5 pt-4 text-sm will-change-contents",
                 thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
               )}
               style={style}
