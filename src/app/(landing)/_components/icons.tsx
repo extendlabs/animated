@@ -217,3 +217,250 @@ export const C = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
+export const XformerlyTwitter = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    fill="none"
+    viewBox="0 0 1200 1227"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"
+    />
+  </svg>
+);
+
+export const LinkedIn = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width="1em"
+    height="1em"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid"
+    viewBox="0 0 256 256"
+    {...props}
+  >
+    <path
+      d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+export const Reddit = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    className="_1O4jTk-dZ-VIxsCuYB6OR8"
+    viewBox="0 0 216 216"
+    width="1em"
+    height="1em"
+    {...props}
+  >
+    <defs>
+      <radialGradient
+        id="snoo-radial-gragient"
+        cx={169.75}
+        cy={92.19}
+        r={50.98}
+        fx={169.75}
+        fy={92.19}
+        gradientTransform="matrix(1 0 0 .87 0 11.64)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} stopColor="#feffff" />
+        <stop offset={0.4} stopColor="#feffff" />
+        <stop offset={0.51} stopColor="#f9fcfc" />
+        <stop offset={0.62} stopColor="#edf3f5" />
+        <stop offset={0.7} stopColor="#dee9ec" />
+        <stop offset={0.72} stopColor="#d8e4e8" />
+        <stop offset={0.76} stopColor="#ccd8df" />
+        <stop offset={0.8} stopColor="#c8d5dd" />
+        <stop offset={0.83} stopColor="#ccd6de" />
+        <stop offset={0.85} stopColor="#d8dbe2" />
+        <stop offset={0.88} stopColor="#ede3e9" />
+        <stop offset={0.9} stopColor="#ffebef" />
+      </radialGradient>
+      <radialGradient
+        xlinkHref="#snoo-radial-gragient"
+        id="snoo-radial-gragient-2"
+        cx={47.31}
+        r={50.98}
+        fx={47.31}
+      />
+      <radialGradient
+        xlinkHref="#snoo-radial-gragient"
+        id="snoo-radial-gragient-3"
+        cx={109.61}
+        cy={85.59}
+        r={153.78}
+        fx={109.61}
+        fy={85.59}
+        gradientTransform="matrix(1 0 0 .7 0 25.56)"
+      />
+      <radialGradient
+        id="snoo-radial-gragient-4"
+        cx={-6.01}
+        cy={64.68}
+        r={12.85}
+        fx={-6.01}
+        fy={64.68}
+        gradientTransform="matrix(1.07 0 0 1.55 81.08 27.26)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} stopColor="#f60" />
+        <stop offset={0.5} stopColor="#ff4500" />
+        <stop offset={0.7} stopColor="#fc4301" />
+        <stop offset={0.82} stopColor="#f43f07" />
+        <stop offset={0.92} stopColor="#e53812" />
+        <stop offset={1} stopColor="#d4301f" />
+      </radialGradient>
+      <radialGradient
+        xlinkHref="#snoo-radial-gragient-4"
+        id="snoo-radial-gragient-5"
+        cx={-73.55}
+        cy={64.68}
+        r={12.85}
+        fx={-73.55}
+        fy={64.68}
+        gradientTransform="matrix(-1.07 0 0 1.55 62.87 27.26)"
+      />
+      <radialGradient
+        id="snoo-radial-gragient-6"
+        cx={107.93}
+        cy={166.96}
+        r={45.3}
+        fx={107.93}
+        fy={166.96}
+        gradientTransform="matrix(1 0 0 .66 0 57.4)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} stopColor="#172e35" />
+        <stop offset={0.29} stopColor="#0e1c21" />
+        <stop offset={0.73} stopColor="#030708" />
+        <stop offset={1} />
+      </radialGradient>
+      <radialGradient
+        xlinkHref="#snoo-radial-gragient"
+        id="snoo-radial-gragient-7"
+        cx={147.88}
+        cy={32.94}
+        r={39.77}
+        fx={147.88}
+        fy={32.94}
+        gradientTransform="matrix(1 0 0 .98 0 .54)"
+      />
+      <radialGradient
+        id="snoo-radial-gragient-8"
+        cx={131.31}
+        cy={73.08}
+        r={32.6}
+        fx={131.31}
+        fy={73.08}
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0.48} stopColor="#7a9299" />
+        <stop offset={0.67} stopColor="#172e35" />
+        <stop offset={0.75} />
+        <stop offset={0.82} stopColor="#172e35" />
+      </radialGradient>
+      <style>
+        {"\n            .snoo-cls-11{stroke-width:0;fill:#ffc49c}\n        "}
+      </style>
+    </defs>
+    <path
+      fill="currentColor"
+      strokeWidth={0}
+      d="M108 0C48.35 0 0 48.35 0 108c0 29.82 12.09 56.82 31.63 76.37l-20.57 20.57C6.98 209.02 9.87 216 15.64 216H108c59.65 0 108-48.35 108-108S167.65 0 108 0Z"
+    />
+    <circle cx={169.22} cy={106.98} r={25.22} fill="black" strokeWidth={0} />
+    <circle cx={46.78} cy={106.98} r={25.22} fill="black" strokeWidth={0} />
+    <ellipse
+      cx={108.06}
+      cy={128.64}
+      fill="black"
+      strokeWidth={0}
+      rx={72}
+      ry={54}
+    />
+    <path
+      fill="currentColor"
+      strokeWidth={0}
+      d="M86.78 123.48c-.42 9.08-6.49 12.38-13.56 12.38s-12.46-4.93-12.04-14.01c.42-9.08 6.49-15.02 13.56-15.02s12.46 7.58 12.04 16.66Z"
+    />
+    <path
+      fill="currentColor"
+      strokeWidth={0}
+      d="M129.35 123.48c.42 9.08 6.49 12.38 13.56 12.38s12.46-4.93 12.04-14.01c-.42-9.08-6.49-15.02-13.56-15.02s-12.46 7.58-12.04 16.66Z"
+    />
+    <ellipse cx={79.63} cy={116.37} fill="currentColor" rx={2.8} ry={3.05} />
+    <ellipse cx={146.21} cy={116.37} fill="currentColor" rx={2.8} ry={3.05} />
+    <path
+      fill="currentColor"
+      strokeWidth={0}
+      d="M108.06 142.92c-8.76 0-17.16.43-24.92 1.22-1.33.13-2.17 1.51-1.65 2.74 4.35 10.39 14.61 17.69 26.57 17.69s22.23-7.3 26.57-17.69c.52-1.23-.33-2.61-1.65-2.74-7.77-.79-16.16-1.22-24.92-1.22Z"
+    />
+    <circle cx={147.49} cy={49.43} r={17.87} fill="black" strokeWidth={0} />
+    <path
+      fill="black"
+      strokeWidth={0}
+      d="M107.8 76.92c-2.14 0-3.87-.89-3.87-2.27 0-16.01 13.03-29.04 29.04-29.04 2.14 0 3.87 1.73 3.87 3.87s-1.73 3.87-3.87 3.87c-11.74 0-21.29 9.55-21.29 21.29 0 1.38-1.73 2.27-3.87 2.27Z"
+    />
+    <path
+      fill="black"
+      strokeWidth={0}
+      d="M62.82 122.65c.39-8.56 6.08-14.16 12.69-14.16 6.26 0 11.1 6.39 11.28 14.33.17-8.88-5.13-15.99-12.05-15.99s-13.14 6.05-13.56 15.2c-.42 9.15 4.97 13.83 12.04 13.83h.52c-6.44-.16-11.3-4.79-10.91-13.2Zm90.48 0c-.39-8.56-6.08-14.16-12.69-14.16-6.26 0-11.1 6.39-11.28 14.33-.17-8.88 5.13-15.99 12.05-15.99 7.07 0 13.14 6.05 13.56 15.2.42 9.15-4.97 13.83-12.04 13.83h-.52c6.44-.16 11.3-4.79 10.91-13.2Z"
+    />
+  </svg>
+);
+
+export const Meta = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    preserveAspectRatio="xMidYMid"
+    viewBox="0 0 256 171"
+    {...props}
+  >
+    <defs>
+      <linearGradient
+        id="a"
+        x1="13.878%"
+        x2="89.144%"
+        y1="55.934%"
+        y2="58.694%"
+      >
+        <stop offset="0%" stopColor="#0064E1" />
+        <stop offset="40%" stopColor="#0064E1" />
+        <stop offset="83%" stopColor="#0073EE" />
+        <stop offset="100%" stopColor="#0082FB" />
+      </linearGradient>
+      <linearGradient
+        id="b"
+        x1="54.315%"
+        x2="54.315%"
+        y1="82.782%"
+        y2="39.307%"
+      >
+        <stop offset="0%" stopColor="#0082FB" />
+        <stop offset="100%" stopColor="#0064E0" />
+      </linearGradient>
+    </defs>
+    <path
+      fill="currentColor"
+      d="M27.651 112.136c0 9.775 2.146 17.28 4.95 21.82 3.677 5.947 9.16 8.466 14.751 8.466 7.211 0 13.808-1.79 26.52-19.372 10.185-14.092 22.186-33.874 30.26-46.275l13.675-21.01c9.499-14.591 20.493-30.811 33.1-41.806C161.196 4.985 172.298 0 183.47 0c18.758 0 36.625 10.87 50.3 31.257C248.735 53.584 256 81.707 256 110.729c0 17.253-3.4 29.93-9.187 39.946-5.591 9.686-16.488 19.363-34.818 19.363v-27.616c15.695 0 19.612-14.422 19.612-30.927 0-23.52-5.484-49.623-17.564-68.273-8.574-13.23-19.684-21.313-31.907-21.313-13.22 0-23.859 9.97-35.815 27.75-6.356 9.445-12.882 20.956-20.208 33.944l-8.066 14.289c-16.203 28.728-20.307 35.271-28.408 46.07-14.2 18.91-26.324 26.076-42.287 26.076-18.935 0-30.91-8.2-38.325-20.556C2.973 139.413 0 126.202 0 111.148l27.651.988Z"
+    />
+    <path
+      fill="currentColor"
+      d="M21.802 33.206C34.48 13.666 52.774 0 73.757 0 85.91 0 97.99 3.597 110.605 13.897c13.798 11.261 28.505 29.805 46.853 60.368l6.58 10.967c15.881 26.459 24.917 40.07 30.205 46.49 6.802 8.243 11.565 10.7 17.752 10.7 15.695 0 19.612-14.422 19.612-30.927l24.393-.766c0 17.253-3.4 29.93-9.187 39.946-5.591 9.686-16.488 19.363-34.818 19.363-11.395 0-21.49-2.475-32.654-13.007-8.582-8.083-18.615-22.443-26.334-35.352l-22.96-38.352C118.528 64.08 107.96 49.73 101.845 43.23c-6.578-6.988-15.036-15.428-28.532-15.428-10.923 0-20.2 7.666-27.963 19.39L21.802 33.206Z"
+    />
+    <path
+      fill="currentColor"
+      d="M73.312 27.802c-10.923 0-20.2 7.666-27.963 19.39-10.976 16.568-17.698 41.245-17.698 64.944 0 9.775 2.146 17.28 4.95 21.82L9.027 149.482C2.973 139.413 0 126.202 0 111.148 0 83.772 7.514 55.24 21.802 33.206 34.48 13.666 52.774 0 73.757 0l-.445 27.802Z"
+    />
+  </svg>
+);
