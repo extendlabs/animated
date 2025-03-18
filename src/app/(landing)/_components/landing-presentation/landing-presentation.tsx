@@ -1,0 +1,219 @@
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { PauseIcon, PlayIcon } from "lucide-react";
+import { DiffResult } from "types/code-presentation.type";
+import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentation/_components/highlight-code";
+import { getThemeStyles } from "@/helpers/get-theme-styles";
+import { computeDiff } from "@/helpers/code-diff";
+import { CardHeader } from "@/app/dashboard/(main)/_components/code-presentation/_components/card-header";
+import { SidebarCardLanding } from "./_components/landing-sidebar-card";
+
+export const slides = [
+  {
+    id: 0,
+    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      Count: {count}\n    </div>\n  );\n}",
+    file_name: "",
+    description: "",
+  },
+  {
+    id: 1,
+    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}",
+    file_name: "",
+    description: "",
+  },
+  {
+    id: 2,
+    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}",
+    file_name: "",
+    description: "",
+  },
+];
+
+const DEFAULT_THEME_NAME = "vsDark";
+const initialThemeStyles = getThemeStyles(DEFAULT_THEME_NAME);
+
+interface Settings {
+  name: string;
+  background: string;
+  width: number;
+  radius: number;
+  language: string;
+  withLineIndex: boolean;
+  cardTheme: string;
+  themeName: string;
+  theme: any;
+  themeStyles?: {
+    bg: string;
+    border: string;
+    text: string;
+  };
+  selectedThemeId: string | null;
+}
+
+type Props = {
+  autoPlayInterval?: number;
+};
+
+export const initialState: Settings = {
+  background: "linear-gradient(to right, #11998e, #38ef7d)",
+  width: 500,
+  radius: 10,
+  language: "tsx",
+  withLineIndex: true,
+  cardTheme: "default",
+  themeName: DEFAULT_THEME_NAME,
+  theme: initialThemeStyles.theme,
+  themeStyles: initialThemeStyles.styles,
+  name: "",
+  selectedThemeId: null,
+};
+
+export default function LandingPresentation({
+  autoPlayInterval = 1500,
+}: Props) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+
+  const [diffMap, setDiffMap] = useState<DiffResult>({
+    lineDiff: {},
+    oldTokens: [],
+    newTokens: [],
+  });
+
+  const currentCode = useMemo(
+    () => slides[currentSlide]?.code ?? "",
+    [slides, currentSlide],
+  );
+
+  const handleSlideChange = useCallback(
+    (direction: "next" | "prev") => {
+      const newIndex =
+        direction === "next"
+          ? Math.min(currentSlide + 1, slides.length - 1)
+          : Math.max(currentSlide - 1, 0);
+
+      if (newIndex !== currentSlide) {
+        if (slides[newIndex] && slides[currentSlide]) {
+          const newDiff = computeDiff(
+            slides[currentSlide].code,
+            slides[newIndex].code,
+          );
+          setDiffMap(newDiff);
+          setCurrentSlide(newIndex);
+        }
+      }
+    },
+    [currentSlide, slides, setCurrentSlide],
+  );
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isAutoPlaying) {
+      interval = setInterval(() => {
+        if (currentSlide < slides.length - 1) {
+          handleSlideChange("next");
+        } else {
+          setIsAutoPlaying(false);
+          setDiffMap({
+            lineDiff: {},
+            oldTokens: [],
+            newTokens: [],
+          });
+        }
+      }, autoPlayInterval);
+    }
+
+    return () => clearInterval(interval);
+  }, [
+    isAutoPlaying,
+    currentSlide,
+    slides.length,
+    autoPlayInterval,
+    handleSlideChange,
+    setIsAutoPlaying,
+  ]);
+
+  return (
+    <div className="z-50 flex h-full rounded border">
+      <div className="h-full w-[15%] rounded-l bg-sidebar">
+        <div className="z-50 flex h-full flex-col">
+          <div className="space-y-1.5 p-2 pr-3 pt-2 text-left">
+            {slides.map((slide, index) => (
+              <SidebarCardLanding
+                key={slide.id}
+                slide={slide}
+                index={index}
+                currentSlide={currentSlide}
+                setCurrentSlide={setCurrentSlide}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex h-full w-[85%] flex-col rounded-r bg-background">
+        <div className="pt-8 text-left">
+          <div className="mx-auto pl-1">
+            <motion.div className="space-y-4 rounded-lg p-4">
+              <div
+                className="relative mx-auto h-[80%] w-[56%] items-center justify-center overflow-hidden rounded-md"
+                style={{ background: initialState.background }}
+              >
+                <div className="hidden sm:block">
+                  <div className="scale-80 relative mx-auto overflow-hidden rounded-md transition-all duration-500 ease-in-out will-change-[height]">
+                    <div
+                      className="m-12 rounded-md p-1 transition-[height] duration-500 ease-in-out will-change-[height]"
+                      style={{
+                        background: initialState.themeStyles?.bg,
+                      }}
+                    >
+                      <CardHeader
+                        cardTheme={initialState.cardTheme}
+                        themeBorder={initialState.themeStyles?.border}
+                        themeText={initialState.themeStyles?.text}
+                      />
+                      <HighlightCode
+                        currentCode={currentCode}
+                        language={initialState.language}
+                        currentSlide={currentSlide}
+                        diffMap={diffMap}
+                        isAutoPlayingProp={isAutoPlaying}
+                      />
+                      <div className="py-2" />
+                    </div>
+                  </div>
+                </div>
+                <div className="block sm:hidden">
+                  <p className="mx-2 my-6 max-w-2xl text-center text-base font-light tracking-tight dark:text-zinc-300">
+                    Flip your phone to see preview card.
+                  </p>
+                </div>
+              </div>
+              <div className="flex justify-center max-sm:hidden">
+                <div className="mt-4 flex items-center space-x-4">
+                  <Button
+                    onClick={() => {
+                      setCurrentSlide(0);
+                      setIsAutoPlaying(!isAutoPlaying);
+                    }}
+                    aria-label={isAutoPlaying ? "Pause" : "Play"}
+                    disabled={isAutoPlaying}
+                    variant="ghost"
+                    size="icon"
+                  >
+                    {isAutoPlaying ? (
+                      <PauseIcon className="h-4 w-4" />
+                    ) : (
+                      <PlayIcon className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

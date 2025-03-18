@@ -6,10 +6,8 @@ import { type DiffResult } from "types/code-presentation.type";
 import { AnimatedLine } from "./animated-line";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-import ExtendUILogo from "@/app/_components/watermark";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
-import Logo from "@/components/logo";
 import Watermark from "@/app/_components/watermark";
 
 type Props = {
@@ -18,12 +16,14 @@ type Props = {
   currentSlide: number;
   diffMap: DiffResult | null;
   thumbnail?: boolean;
+  isAutoPlayingProp?: boolean;
 };
 export const HighlightCode = ({
   currentCode,
   language,
   diffMap,
   thumbnail,
+  isAutoPlayingProp,
 }: Props) => {
   const prevTokensRef = useRef<string[]>([]);
   const [exitingLines, setExitingLines] = useState<Set<number>>(new Set());
@@ -41,7 +41,9 @@ export const HighlightCode = ({
     prevTokensRef.current = currentLines;
   }, [currentCode]);
 
-  const { isAutoPlaying } = useUIStore();
+  const storeIsAutoPlaying = useUIStore((state) => state.isAutoPlaying);
+  const isAutoPlaying =
+    isAutoPlayingProp !== undefined ? isAutoPlayingProp : storeIsAutoPlaying;
   const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
 

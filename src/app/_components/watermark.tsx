@@ -5,7 +5,7 @@ export default function Watermark({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-2 rounded-md p-1.5 pr-0 text-zinc-100/30",
+        "flex items-center justify-center gap-2 rounded-md p-1.5 pr-0 text-zinc-100/30 mix-blend-overlay",
         className,
       )}
     >
