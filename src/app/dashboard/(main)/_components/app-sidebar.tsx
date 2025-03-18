@@ -16,8 +16,6 @@ import { useEffect } from "react";
 import { getUserSubscriptionStatus } from "@/lib/supabase/queries";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
-import { stat } from "fs";
-import Image from "next/image";
 
 export function AppSidebar({
   className,
@@ -62,13 +60,13 @@ export function AppSidebar({
 
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
-      console.log(supabase);
+      // console.log(supabase);
       const status = await getUserSubscriptionStatus(supabase);
       if (status) {
         setSubscription(status.subscription);
         setPurchase(status.lifetimePurchase);
       }
-      console.log(status);
+      // console.log(status);
     };
 
     fetchSubscriptionStatus();
@@ -96,7 +94,6 @@ export function AppSidebar({
                       currentSlide={currentSlide}
                       setCurrentSlide={setCurrentSlide}
                       handleDeleteSlide={handleDeleteSlide}
-                      // disabled={isRecordingMode}
                     />
                   ))}
                 </div>
