@@ -2,6 +2,8 @@ import { CardHeader } from "./card-header";
 import { HighlightCode } from "./highlight-code";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { type DiffResult } from "types/code-presentation.type";
+import { useEffect, useRef, useState } from "react";
+import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
   currentCode: string;
@@ -12,16 +14,39 @@ type Props = {
 export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
   const { width, radius, language, cardTheme, themeStyles } =
     useSettingsStore();
+  const { isAutoPlaying } = useUIStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState<number>(0);
+
+  useEffect(() => {
+    updateHeight();
+    const timeoutId = setTimeout(updateHeight, 10);
+    return () => clearTimeout(timeoutId);
+  }, [currentCode, currentSlide, isAutoPlaying]);
+
+  const updateHeight = () => {
+    if (measureRef.current) {
+      const height = measureRef.current.scrollHeight;
+      const extraPadding = 20;
+      setContainerHeight(height + extraPadding);
+    }
+  };
 
   return (
     <>
       <div className="hidden sm:block">
         <div
-          className="relative mx-auto my-10 overflow-hidden shadow-lg transition-all duration-500 ease-in-out will-change-[height]"
-          style={{ width: width, borderRadius: radius }}
+          ref={containerRef}
+          className="relative mx-auto my-10 overflow-hidden transition-[height] duration-500 ease-in-out will-change-[height]"
+          style={{
+            width: width,
+            borderRadius: radius,
+            height: containerHeight > 0 ? `${containerHeight}px` : "auto",
+          }}
         >
           <div
-            className="p-1 transition-[height] duration-500 ease-in-out will-change-[height]"
+            className="p-1"
             style={{
               background: themeStyles?.bg,
               borderRadius: radius,
@@ -32,13 +57,30 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
               themeBorder={themeStyles?.border}
               themeText={themeStyles?.text}
             />
-            <div className="transition-[height] duration-500 ease-in-out will-change-[height]">
+            <div className="overflow-hidden transition-[height] duration-500 ease-in-out will-change-[height]">
               <HighlightCode
                 currentCode={currentCode}
                 language={language}
                 currentSlide={currentSlide}
                 diffMap={diffMap}
               />
+            </div>
+            <div className="py-2" />
+          </div>
+
+          {/* Hidden measurement div */}
+          <div
+            ref={measureRef}
+            className="pointer-events-none absolute left-0 top-0 p-1 opacity-0"
+            style={{ width: "100%" }}
+          >
+            <div style={{ height: "40px" }} /> {/* Estimate of header height */}
+            <div>
+              <pre className="pl-5 pt-4 text-sm">
+                {currentCode.split("\n").map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </pre>
             </div>
             <div className="py-2" />
           </div>
