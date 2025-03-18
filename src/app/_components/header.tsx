@@ -2,7 +2,7 @@ import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import XformerlyTwitter from "@/components/twitter-logo";
+
 import {
   Sheet,
   SheetContent,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { XformerlyTwitter } from "../(landing)/_components/icons";
 
 export default async function Header() {
   const supabase = await createClient();
@@ -20,14 +21,10 @@ export default async function Header() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="fixed inset-0 z-20 h-16 w-full bg-background/70 p-4 backdrop-blur-md lg:p-6">
+    <header className="fixed inset-0 z-20 h-16 w-full border bg-background/70 p-4 px-6 backdrop-blur-md lg:p-6">
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between">
         <Logo />
-        {/* Desktop Navigation */}
-
         <LandingDesktopNav user={user} />
-
-        {/* Mobile Navigation */}
         <div className="sm:hidden">
           <LandingMobileNav user={user} />
         </div>
@@ -92,7 +89,7 @@ function LandingMobileNav({ user }: { user: any }) {
 function LandingDesktopNav({ user }: { user: any }) {
   return (
     <>
-      <nav className="hidden items-center gap-5 sm:flex">
+      <nav className="hidden items-center gap-5 text-zinc-400 sm:flex">
         <Link
           href={"/"}
           className={cn("transition-colors duration-200 hover:text-accent")}
