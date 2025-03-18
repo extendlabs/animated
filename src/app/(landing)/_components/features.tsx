@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Feature = {
   name: string;
@@ -18,6 +18,8 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
     features[0]?.name ?? "",
   );
   const [currentVideo, setCurrentVideo] = useState<string>(defaultVideo);
+  const [featureHeight, setFeatureHeight] = useState<number>(120); // Default estimate
+  const featuresContainerRef = useRef<HTMLDivElement>(null);
 
   const handleFeatureClick = (feature: Feature, index: number) => {
     setActiveFeature(feature.name);
@@ -29,11 +31,59 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
 
   const activeIndex = features.findIndex((f) => f.name === activeFeature);
 
-  const transformPercentage =
-    features.length > 1 ? (activeIndex / (features.length - 1)) * 218 : 0;
+  // Calculate dynamic transform based on viewport height and number of features
+  const calculateTransform = () => {
+    if (features.length <= 1) return 0;
+
+    // Calculate total movement range based on actual feature height
+    // Apply a scaling factor to reduce the amount of movement (0.6 = 60% of original movement)
+    const scalingFactor = 0.38;
+    const totalRange = (features.length - 1) * featureHeight * scalingFactor;
+
+    // Calculate current position percentage
+    return (activeIndex / (features.length - 1)) * totalRange;
+  };
+
+  // Calculate the transform dynamically
+  const transformPercentage = calculateTransform();
+
+  // Update feature height based on actual DOM measurements
+  useEffect(() => {
+    const updateFeatureHeight = () => {
+      if (featuresContainerRef.current) {
+        const featureElements =
+          featuresContainerRef.current.querySelectorAll(".feature-item");
+        if (featureElements.length > 0) {
+          // Calculate average height of feature items including gap
+          const firstFeature = featureElements[0] as HTMLElement;
+          const lastFeature = featureElements[
+            featureElements.length - 1
+          ] as HTMLElement;
+
+          if (firstFeature && lastFeature && featureElements.length > 1) {
+            // Get total height and divide by number of features minus 1 to get average height with gap
+            const totalHeight =
+              lastFeature.offsetTop +
+              lastFeature.offsetHeight -
+              firstFeature.offsetTop;
+            const avgHeight = totalHeight / (featureElements.length - 1);
+            setFeatureHeight(avgHeight);
+          }
+        }
+      }
+    };
+
+    // Update immediately and on window resize
+    updateFeatureHeight();
+    window.addEventListener("resize", updateFeatureHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateFeatureHeight);
+    };
+  }, [features.length]);
 
   return (
-    <section className="space-y-16 sm:py-24 md:py-32">
+    <section className="space-y-16 px-6 sm:pb-24 md:pb-32">
       <div className="mx-auto max-w-[58rem] text-center">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Simple Tools, Powerful Results
@@ -44,19 +94,20 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
           professional demonstrations with ease.`}
         </p>
       </div>
-      <div className="relative mx-auto flex max-w-5xl items-start justify-between gap-12">
-        <div className="flex flex-col gap-4">
-          {features.map((feature, index) => (
-            <div
-              key={feature.name}
-              onClick={() => handleFeatureClick(feature, index)}
-              className={`group relative flex max-w-lg cursor-pointer flex-col justify-between overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out ${
-                activeFeature === feature.name
-                  ? "bg-emerald-800/50"
-                  : "hover:bg-emerald-900/50"
-              }`}
-            >
-              <div>
+      <div className="relative mx-auto flex max-w-5xl flex-col items-start justify-between gap-12 md:flex-row">
+        {/* Feature selection container - fixed horizontal scrolling */}
+        <div className="scrollbar-hide flex w-full items-center gap-4 overflow-x-auto pb-4 md:w-auto md:flex-col md:pb-0">
+          <div className="flex gap-4 md:flex-col" ref={featuresContainerRef}>
+            {features.map((feature, index) => (
+              <div
+                key={feature.name}
+                onClick={() => handleFeatureClick(feature, index)}
+                className={`feature-item group relative flex min-w-[280px] cursor-pointer flex-col justify-center overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out md:min-w-0 md:max-w-lg ${
+                  activeFeature === feature.name
+                    ? "bg-emerald-800/50"
+                    : "hover:bg-emerald-900/50"
+                }`}
+              >
                 <div className="flex items-center gap-4">
                   <h3 className="font-semibold text-white">{feature.name}</h3>
                 </div>
@@ -64,15 +115,31 @@ export function FeaturesTools({ features, defaultVideo }: FeatureProps) {
                   {feature.description}
                 </p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+        {/* Desktop video */}
         <figure
-          className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out"
+          className="relative hidden aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:block"
           style={{
             transform: `translateY(${transformPercentage}px)`,
           }}
         >
+          <div className="absolute inset-0">
+            <video
+              autoPlay
+              loop
+              playsInline
+              preload="auto"
+              muted
+              className="h-full w-full rounded-2xl object-cover p-1"
+            >
+              <source src={currentVideo} type="video/mp4" />
+            </video>
+          </div>
+        </figure>
+        {/* Mobile video */}
+        <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:hidden">
           <div className="absolute inset-0">
             <video
               autoPlay
@@ -114,7 +181,7 @@ export function FeaturesCustomization({
     features.length > 1 ? (activeIndex / (features.length - 1)) * 50 : 0;
 
   return (
-    <section className="space-y-16 py-24 md:py-32">
+    <section className="space-y-16 px-6 py-24 md:py-32">
       <div className="mx-auto max-w-[58rem] text-center">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Make It Your Own
