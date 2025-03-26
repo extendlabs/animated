@@ -112,7 +112,15 @@ export const AVAILABLE_CARD_THEMES = [
   { value: "centerName", label: "Center Name" },
   { value: "rightName", label: "Right Name" },
   { value: "window", label: "Window" },
-];
+  { value: "terminal", label: "Terminal" },
+  { value: "tabbed", label: "Tabbed" },
+  { value: "modern", label: "Modern" },
+  { value: "collapsible", label: "Collapsible" },
+  { value: "toolbar", label: "Toolbar" },
+  { value: "pill", label: "Pill" },
+  { value: "gradient", label: "Gradient" },
+  { value: "none", label: "None" },
+]
 
 export const LANGUAGE_OPTIONS = [
   "markup",
