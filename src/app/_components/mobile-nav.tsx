@@ -56,14 +56,14 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               </div>
               <Link
-                href="/account"
+                href="/dashboard/account"
                 className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <UserCircle className="h-4 w-4" />
                 Account
               </Link>
               <Link
-                href="/settings"
+                href="/dashboard/settings"
                 className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <Settings className="h-4 w-4" />

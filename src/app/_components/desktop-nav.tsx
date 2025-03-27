@@ -60,13 +60,13 @@ export function DesktopNav({ user }: DesktopNavProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/account" className="flex items-center gap-2">
+          <Link href="/dashboard/account" className="flex items-center gap-2">
             <UserCircle className="h-4 w-4" />
             Account
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/settings" className="flex items-center gap-2">
+          <Link href="/dashboard/settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
             Slides & Themes
           </Link>
