@@ -83,10 +83,45 @@ export default {
             height: "0",
           },
         },
+        glow: {
+          "0%, 100%": {
+            boxShadow:
+              "0 0 5px rgba(52, 211, 153, 0.5), 0 0 10px rgba(52, 211, 153, 0.3)",
+          },
+          "50%": {
+            boxShadow:
+              "0 0 10px rgba(52, 211, 153, 0.8), 0 0 20px rgba(52, 211, 153, 0.5)",
+          },
+        },
+        shimmer: {
+          "0%": {
+            backgroundPosition: "200% 0",
+          },
+          "100%": {
+            backgroundPosition: "-200% 0",
+          },
+        },
+        perimeterShimmer: {
+          "0%, 100%": {
+            clipPath: "inset(0 0 calc(100% - 2px) 0)",
+          },
+          "25%": {
+            clipPath: "inset(0 0 0 calc(100% - 2px))",
+          },
+          "50%": {
+            clipPath: "inset(calc(100% - 2px) 0 0 0)",
+          },
+          "75%": {
+            clipPath: "inset(0 calc(100% - 2px) 0 0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        glow: "glow 2s ease-in-out infinite",
+        shimmer: "shimmer 3s linear infinite",
+        perimeterShimmer: "perimeterShimmer 4s linear infinite",
       },
     },
   },
