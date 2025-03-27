@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DesktopNav } from "@/app/_components/desktop-nav";
 import { MobileNav } from "@/app/_components/mobile-nav";
+import Logo from "@/components/logo";
 
 export default async function SubpageNavbar() {
   const supabase = await createClient();
@@ -12,15 +13,7 @@ export default async function SubpageNavbar() {
 
   return (
     <nav className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
-      <Link href="/">
-        <Image
-          src="/logo.svg"
-          alt="logo"
-          width={40}
-          height={40}
-          className="mx-auto"
-        />
-      </Link>
+      <Logo />
 
       <div className="flex w-64 items-center justify-end gap-4">
         {/* Pricing link always visible */}
