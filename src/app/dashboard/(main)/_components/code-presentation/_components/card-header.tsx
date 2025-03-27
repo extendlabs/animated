@@ -1,5 +1,27 @@
+"use client";
+
+import type React from "react";
+
 import { useState } from "react";
-import { Minus, Square, X } from "lucide-react";
+import {
+  Minus,
+  Square,
+  X,
+  Menu,
+  ChevronDown,
+  ChevronUp,
+  Maximize2,
+  Minimize2,
+  MoreHorizontal,
+  Terminal,
+  Code,
+  FileText,
+  Settings,
+  Bookmark,
+  Coffee,
+  Command,
+  Zap,
+} from "lucide-react";
 import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
@@ -10,6 +32,7 @@ type Props = {
 
 export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const { fileName, setFileName, isAutoPlaying } = useUIStore();
 
@@ -141,13 +164,130 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
           >
             <div className="w-[80px]" />
             {renderFileName()}
-            <div className="flex items-center gap-4">
-              <Minus className="h-4 w-4" style={{ color: themeText }} />
-              <Square className="h-4 w-4" style={{ color: themeText }} />
-              <X className="h-4 w-4" style={{ color: themeText }} />
+            <div className="flex items-center gap-3">
+              <Minus className="h-3.5 w-3.5" style={{ color: themeText }} />
+              <Square className="h-3.5 w-3.5" style={{ color: themeText }} />
+              <X className="h-3.5 w-3.5" style={{ color: themeText }} />
             </div>
           </div>
         );
+
+      case "terminal":
+        return (
+          <div
+            className="flex items-center justify-between border-b px-4 py-2"
+            style={headerStyles}
+          >
+            <div className="flex items-center gap-2">
+              <Terminal className="h-4 w-4" style={{ color: themeText }} />
+              <div className="font-mono text-sm" style={{ color: themeText }}>
+                {renderFileName()}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Minus className="h-3.5 w-3.5" style={{ color: themeText }} />
+              <X className="h-3.5 w-3.5" style={{ color: themeText }} />
+            </div>
+          </div>
+        );
+
+      case "tabbed":
+        return (
+          <div className="border-b" style={headerStyles}>
+            <div className="flex">
+              <div className="relative rounded-t-md bg-slate-300 bg-opacity-20 px-4 py-2">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" style={{ color: themeText }} />
+                  {renderFileName()}
+                </div>
+              </div>
+              <div className="flex-1 border-b" style={headerStyles}></div>
+            </div>
+          </div>
+        );
+
+      case "modern":
+        return (
+          <div
+            className="flex items-center justify-between border-b px-5 py-3.5"
+            style={headerStyles}
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-red-500" />
+              <div className="h-2 w-2 rounded-full bg-yellow-500" />
+              <div className="h-2 w-2 rounded-full bg-green-500" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Code className="h-4 w-4" style={{ color: themeText }} />
+              {renderFileName()}
+            </div>
+            <div className="w-[62px]" />
+          </div>
+        );
+
+      case "collapsible":
+        return (
+          <div className="border-b" style={headerStyles}>
+            <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-2">
+                <ChevronUp className="h-4 w-4" style={{ color: themeText }} />
+                {renderFileName()}
+              </div>
+              <div className="flex items-center gap-2">
+                <Settings className="h-4 w-4" style={{ color: themeText }} />
+              </div>
+            </div>
+          </div>
+        );
+
+      case "toolbar":
+        return (
+          <div
+            className="flex items-center justify-between border-b px-4 py-3"
+            style={headerStyles}
+          >
+            <div className="flex items-center gap-3">
+              <Menu className="h-4 w-4" style={{ color: themeText }} />
+              {renderFileName()}
+            </div>
+            <div className="flex items-center gap-3">
+              <Bookmark className="h-4 w-4" style={{ color: themeText }} />
+              <MoreHorizontal
+                className="h-4 w-4"
+                style={{ color: themeText }}
+              />
+            </div>
+          </div>
+        );
+
+      case "pill":
+        return (
+          <div className="px-4 pb-2 pt-4">
+            <div
+              className="flex items-center justify-center rounded-full bg-slate-200 bg-opacity-10 px-4 py-2 dark:bg-slate-700"
+              style={headerStyles}
+            >
+              {renderFileName()}
+            </div>
+          </div>
+        );
+
+      case "gradient":
+        return (
+          <div
+            className="flex items-center justify-between border-b bg-gradient-to-r from-blue-500/10 to-purple-500/10 px-4 py-3 dark:from-blue-500/20 dark:to-purple-500/20"
+            style={headerStyles}
+          >
+            <div className="flex items-center gap-2">
+              <Zap className="h-4 w-4" style={{ color: themeText }} />
+            </div>
+            {renderFileName()}
+            <div className="w-[24px]" />
+          </div>
+        );
+      case "none":
+        return <div className="pt-2" />;
+
       default:
         return null;
     }

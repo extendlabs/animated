@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState, useMemo, useEffect } from "react";
+import { Fragment, useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import {
@@ -23,7 +23,8 @@ import { AVAILABLE_CARD_THEMES, LANGUAGE_OPTIONS } from "@/constants/themes";
 import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { SaveThemeDialog } from "./save-theme-dialog";
 import { useUIStore } from "@/zustand/useUIStore";
-import { GradientStop } from "@/types/animated.type";
+import type { GradientStop } from "@/types/animated.type";
+import { isPatternOrImage } from "@/helpers/isPatternOrImage";
 
 const CUSTOM_GRADIENT = "custom";
 
@@ -67,7 +68,7 @@ export default function DraggableFooter() {
 
   const handleBackgroundSelect = (value: string) => {
     setBackground(value);
-    if (value.includes("linear-gradient")) {
+    if (value.includes("linear-gradient") && !value.includes("url(")) {
       const colors = value.match(/#[a-fA-F0-9]{6}/g) || [];
       const maxColors = Math.min(colors.length, 5);
       if (colors.length >= 2) {
@@ -229,8 +230,15 @@ export default function DraggableFooter() {
                       onChange={handleGradientChange}
                       direction="to right"
                       className="sm:w-[140px]"
-                      disabled={!limitations.proUser}
+                      disabled={
+                        !limitations.proUser || isPatternOrImage(background)
+                      }
                     />
+                    {isPatternOrImage(background) && (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Pattern selected. Use the background dropdown to change.
+                      </p>
+                    )}
                   </div>
                 </div>
 
