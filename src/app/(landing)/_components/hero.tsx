@@ -6,7 +6,7 @@ import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import LandingPresentation from "./landing-presentation/landing-presentation";
-import { Redo } from "lucide-react";
+import { Redo, Undo } from "lucide-react";
 
 const INITIAL_SCALE = 1;
 const MIN_SCALE = 0.8;
@@ -155,11 +155,11 @@ export default function HeroSection() {
                 <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
                   <LandingPresentation />
                 </div>
-                <div className="absolute -right-16 -top-4 flex rotate-12 flex-col items-center justify-center">
-                  <span className="text-3xl font-bold">Try demo yourself</span>
+                <div className="absolute -right-16 top-2 flex rotate-[15deg] flex-col items-center justify-center">
+                  <span className="text-3xl font-bold">Play demo yourself</span>
                   <Redo
-                    strokeWidth={3}
-                    className="size-16 rotate-[120deg] text-emerald-500"
+                    strokeWidth={2}
+                    className="size-16 rotate-[115deg] text-emerald-500"
                   />
                 </div>
               </motion.div>

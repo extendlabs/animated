@@ -57,10 +57,12 @@ export default function DraggableFooter() {
   const [gradient, setGradient] = useState(() => {
     // Ensure gradient is always parsed correctly
     const parsedGradient = parseGradient(background);
-    return parsedGradient.length > 0 ? parsedGradient : [
-      { color: "#FFFFFF", position: 0 },
-      { color: "#000000", position: 100 }
-    ];
+    return parsedGradient.length > 0
+      ? parsedGradient
+      : [
+          { color: "#FFFFFF", position: 0 },
+          { color: "#000000", position: 100 },
+        ];
   });
 
   const { subscriptionStatus } = useAuthStore();
@@ -68,7 +70,9 @@ export default function DraggableFooter() {
   const { isEditing } = useUIStore();
 
   const availableThemes = Object.keys(themes);
-  const filteredThemes = availableThemes.filter(theme => theme !== 'synthwave84');
+  const filteredThemes = availableThemes.filter(
+    (theme) => theme !== "synthwave84",
+  );
 
   const handleGradientChange = (newGradient: GradientStop[]) => {
     setGradient(newGradient);
@@ -200,9 +204,9 @@ export default function DraggableFooter() {
                           {selectedOption === CUSTOM_GRADIENT
                             ? "Custom"
                             : backgroundOptions
-                              .flatMap((group) => group.options)
-                              .find((opt) => opt.value === selectedOption)
-                              ?.label}
+                                .flatMap((group) => group.options)
+                                .find((opt) => opt.value === selectedOption)
+                                ?.label}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>

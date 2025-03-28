@@ -35,4 +35,9 @@ export const customization = [
     description:
       "Support for multiple programming languages. Expand to 10+ languages.",
   },
+  {
+    name: "Custom animations",
+    description:
+      "Edit your animation with ease. Add delays, custom durations, and more.",
+  },
 ];

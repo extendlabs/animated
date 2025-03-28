@@ -15,7 +15,7 @@ export default function Watermark({ className }: { className?: string }) {
           alt="logo"
           width={500}
           height={500}
-          className={cn("h-5 w-fit fill-transparent z-50")}
+          className={cn("z-50 h-5 w-fit fill-transparent")}
         />
       </div>
     </div>

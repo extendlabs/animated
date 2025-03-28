@@ -108,7 +108,6 @@ export const DeleteAccountForm = ({ hasActiveSubscription }: Props) => {
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}
-
                   >
                     {isDeleting ? (
                       <>

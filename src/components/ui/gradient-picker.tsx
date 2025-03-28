@@ -28,7 +28,7 @@ interface GradientPickerProps {
 const GradientPicker = forwardRef<
   HTMLInputElement,
   Omit<React.ComponentProps<typeof Button>, "value" | "onChange" | "onBlur"> &
-  GradientPickerProps
+    GradientPickerProps
 >(
   (
     {
@@ -51,9 +51,9 @@ const GradientPicker = forwardRef<
       return value.length > 0
         ? value
         : [
-          { color: "#FFFFFF", position: 0 },
-          { color: "#000000", position: 100 },
-        ];
+            { color: "#FFFFFF", position: 0 },
+            { color: "#000000", position: 100 },
+          ];
     }, [value]);
 
     const gradientStyle = useMemo(() => {

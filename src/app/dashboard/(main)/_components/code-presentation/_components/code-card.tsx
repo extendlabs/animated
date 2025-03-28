@@ -38,7 +38,6 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
   const { subscriptionStatus } = useAuthStore();
   const limitations = useSubscriptionLimitations(subscriptionStatus);
 
-
   return (
     <>
       <div className="hidden sm:block">

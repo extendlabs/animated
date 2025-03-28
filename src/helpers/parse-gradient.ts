@@ -6,7 +6,7 @@ export const parseGradient = (gradientString: string) => {
 
   const directionMatch = content.match(/^(to right|to bottom)/);
   const direction = directionMatch ? directionMatch[1] : "to right";
-  const stopsContent = content.replace(/^(to right|to bottom),\s*/, '');
+  const stopsContent = content.replace(/^(to right|to bottom),\s*/, "");
 
   const stops = stopsContent.split(",").map((stop) => stop.trim());
   const parsedGradient: GradientStop[] = [];
@@ -20,13 +20,18 @@ export const parseGradient = (gradientString: string) => {
         .replace(color, "")
         .trim()
         .match(/(\d+)%/);
-      
+
       let position: number;
       if (positionMatch && positionMatch[1]) {
         position = parseFloat(positionMatch[1]);
       } else {
         // If no position specified, distribute evenly
-        position = index === 0 ? 0 : index === stops.length - 1 ? 100 : (index / (stops.length - 1)) * 100;
+        position =
+          index === 0
+            ? 0
+            : index === stops.length - 1
+              ? 100
+              : (index / (stops.length - 1)) * 100;
       }
 
       position = Number(position.toFixed(2));
@@ -38,13 +43,13 @@ export const parseGradient = (gradientString: string) => {
   if (parsedGradient.length === 0) {
     parsedGradient.push(
       { color: "#FFFFFF", position: 0 },
-      { color: "#000000", position: 100 }
+      { color: "#000000", position: 100 },
     );
   } else if (parsedGradient.length === 1 && parsedGradient[0]) {
     // If only one stop, add a second stop
     parsedGradient.push({
-      color: parsedGradient[0].color === "#FFFFFF" ? "#000000" : "#FFFFFF", 
-      position: 100
+      color: parsedGradient[0].color === "#FFFFFF" ? "#000000" : "#FFFFFF",
+      position: 100,
     });
   }
 

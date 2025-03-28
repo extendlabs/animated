@@ -44,7 +44,6 @@ export const HighlightCode = ({
   const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
 
-
   const theme = themes[themeName as keyof typeof themes] || themes.vsDark;
 
   return (
@@ -120,7 +119,6 @@ export const HighlightCode = ({
           );
         }}
       </Highlight>
-
     </div>
   );
 };
