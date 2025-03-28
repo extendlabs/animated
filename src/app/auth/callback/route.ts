@@ -26,10 +26,12 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  console.log(requestUrl);
+
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
     getStatusRedirect(
-      `${requestUrl.origin}`,
+      `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`,
       "Success!",
       "You are now signed in.",
     ),
