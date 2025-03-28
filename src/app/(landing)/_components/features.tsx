@@ -98,7 +98,6 @@ export function Features({
         <p className="mt-4 sm:text-lg">{description}</p>
       </div>
       <div className="relative mx-auto flex max-w-5xl flex-col items-start justify-between gap-12 md:flex-row">
-        {/* Feature selection container - fixed horizontal scrolling */}
         <div className="scrollbar-hide flex w-full items-center gap-4 overflow-x-auto pb-4 md:w-auto md:flex-col md:pb-0">
           <div className="flex gap-4 md:flex-col" ref={featuresContainerRef}>
             {features.map((feature, index) => (
@@ -121,7 +120,6 @@ export function Features({
             ))}
           </div>
         </div>
-        {/* Desktop video */}
         <figure
           className="relative hidden aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:block"
           style={{
@@ -141,7 +139,6 @@ export function Features({
             </video>
           </div>
         </figure>
-        {/* Mobile video */}
         <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:hidden">
           <div className="absolute inset-0">
             <video
