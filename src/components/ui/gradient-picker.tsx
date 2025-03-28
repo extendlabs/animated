@@ -20,7 +20,7 @@ interface GradientStop {
 
 interface GradientPickerProps {
   value: GradientStop[];
-  onChange: (value: GradientStop[]) => void;
+  onChange?: (value: GradientStop[]) => void;
   onBlur?: () => void;
   direction?: "to right" | "to bottom";
 }
@@ -72,7 +72,7 @@ const GradientPicker = forwardRef<
         ...newStops[activeStopIndex],
         color,
       } as GradientStop;
-      onChange(newStops);
+      if (onChange) onChange(newStops);
     };
 
     const handlePositionChange = (
@@ -85,7 +85,7 @@ const GradientPicker = forwardRef<
         ...newStops[index],
         position,
       } as GradientStop;
-      onChange(newStops);
+      if (onChange) onChange(newStops);
     };
 
     const addStop = () => {
@@ -96,7 +96,7 @@ const GradientPicker = forwardRef<
           ...gradientStops,
           { color: newColor, position: newPosition },
         ];
-        onChange(newStops);
+        if (onChange) onChange(newStops);
         setActiveStopIndex(newStops.length - 1);
       }
     };
@@ -104,7 +104,7 @@ const GradientPicker = forwardRef<
     const removeStop = (index: number) => {
       if (gradientStops.length > 2) {
         const newStops = gradientStops.filter((_, i) => i !== index);
-        onChange(newStops);
+        if (onChange) onChange(newStops);
         setActiveStopIndex(Math.max(0, index - 1));
       }
     };

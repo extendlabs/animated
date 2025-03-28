@@ -272,7 +272,6 @@ export default function LandingPresentation({
                 </span>
                 <GradientPicker
                   value={parseGradient(initialState.background)}
-                  onChange={() => {}}
                   direction="to right"
                   className="sm:w-[140px]"
                   disabled={true}
