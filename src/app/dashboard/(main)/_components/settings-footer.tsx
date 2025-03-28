@@ -54,31 +54,41 @@ export default function DraggableFooter() {
   } = useSettingsStore();
 
   const [isExpanded, setExpanded] = useState(false);
-  const [gradient, setGradient] = useState(() => parseGradient(background));
-  const availableThemes = Object.keys(themes);
+  const [gradient, setGradient] = useState(() => {
+    // Ensure gradient is always parsed correctly
+    const parsedGradient = parseGradient(background);
+    return parsedGradient.length > 0
+      ? parsedGradient
+      : [
+          { color: "#FFFFFF", position: 0 },
+          { color: "#000000", position: 100 },
+        ];
+  });
+
   const { subscriptionStatus } = useAuthStore();
   const limitations = useSubscriptionLimitations(subscriptionStatus);
   const { isEditing } = useUIStore();
 
+  const availableThemes = Object.keys(themes);
+  const filteredThemes = availableThemes.filter(
+    (theme) => theme !== "synthwave84",
+  );
+
   const handleGradientChange = (newGradient: GradientStop[]) => {
     setGradient(newGradient);
-    const newBackground = `linear-gradient(to right, ${newGradient.map(({ color }) => color).join(", ")})`;
+    const newBackground = `linear-gradient(to right, ${newGradient
+      .sort((a, b) => a.position - b.position)
+      .map(({ color, position }) => `${color} ${position}%`)
+      .join(", ")})`;
     setBackground(newBackground);
   };
 
   const handleBackgroundSelect = (value: string) => {
     setBackground(value);
     if (value.includes("linear-gradient") && !value.includes("url(")) {
-      const colors = value.match(/#[a-fA-F0-9]{6}/g) || [];
-      const maxColors = Math.min(colors.length, 5);
-      if (colors.length >= 2) {
-        const gradientColors = colors
-          .slice(0, maxColors)
-          .map((color: any, index: number) => {
-            const position = Math.floor((index / (maxColors - 1)) * 100);
-            return { color, position };
-          });
-        setGradient(gradientColors);
+      const parsedGradient = parseGradient(value);
+      if (parsedGradient.length >= 2) {
+        setGradient(parsedGradient);
       }
     }
   };
@@ -170,7 +180,7 @@ export default function DraggableFooter() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {availableThemes.map((themeName) => (
+                        {filteredThemes.map((themeName) => (
                           <SelectItem key={themeName} value={themeName}>
                             {themeName}
                           </SelectItem>

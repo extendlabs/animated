@@ -275,7 +275,7 @@ export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
       case "gradient":
         return (
           <div
-            className="flex items-center justify-between border-b bg-gradient-to-r from-blue-500/10 to-purple-500/10 px-4 py-3 dark:from-blue-500/20 dark:to-purple-500/20"
+            className="flex items-center justify-between rounded-t-md border-b bg-gradient-to-r from-blue-500/10 to-purple-500/10 px-4 py-3 dark:from-blue-500/20 dark:to-purple-500/20"
             style={headerStyles}
           >
             <div className="flex items-center gap-2">

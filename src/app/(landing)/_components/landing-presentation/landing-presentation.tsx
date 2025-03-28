@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { DiffResult } from "types/code-presentation.type";
@@ -18,6 +18,7 @@ import SelectTrigger, {
 import { GradientPicker } from "@/components/ui/gradient-picker";
 import { Switch } from "@/components/ui/switch";
 import { parseGradient } from "@/helpers/parse-gradient";
+import Watermark from "@/app/_components/watermark";
 
 export const slides = [
   {
@@ -189,6 +190,7 @@ export default function LandingPresentation({
                         diffMap={diffMap}
                         isAutoPlayingProp={isAutoPlaying}
                       />
+
                       <div className="py-2" />
                     </div>
                   </div>

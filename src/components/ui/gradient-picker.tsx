@@ -92,11 +92,12 @@ const GradientPicker = forwardRef<
       if (gradientStops.length < 5) {
         const newPosition = 50;
         const newColor = "#808080";
-        onChange([
+        const newStops = [
           ...gradientStops,
           { color: newColor, position: newPosition },
-        ]);
-        setActiveStopIndex(gradientStops.length);
+        ];
+        onChange(newStops);
+        setActiveStopIndex(newStops.length - 1);
       }
     };
 
