@@ -12,19 +12,13 @@ interface FeatureProps {
   title: string;
   description: string;
   features: Feature[];
-  defaultVideo: string;
 }
 
-export function Features({
-  title,
-  description,
-  features,
-  defaultVideo,
-}: FeatureProps) {
+export function Features({ title, description, features }: FeatureProps) {
   const [activeFeature, setActiveFeature] = useState<string>(
     features[0]?.name ?? "",
   );
-  const [currentVideo, setCurrentVideo] = useState<string>(defaultVideo);
+  const [currentVideo, setCurrentVideo] = useState<string>();
   const [featureHeight, setFeatureHeight] = useState<number>(120); // Default estimate
   const featuresContainerRef = useRef<HTMLDivElement>(null);
 
