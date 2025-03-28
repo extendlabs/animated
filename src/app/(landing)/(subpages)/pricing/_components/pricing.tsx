@@ -105,7 +105,7 @@ export const Pricing = ({ user, products, subscriptionStatus }: Props) => {
   }
 
   return (
-    <section id="pricing" className="mb-8 space-y-4 overflow-hidden">
+    <section id="pricing" className="my-8 space-y-4 overflow-hidden">
       <div className="mx-auto flex max-w-7xl flex-col items-center space-y-4 px-8 py-[6dvh] text-center">
         <div className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
           <FadeUp delay={0.2} duration={0.8}>
