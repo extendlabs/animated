@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { DiffResult } from "types/code-presentation.type";
@@ -9,6 +9,15 @@ import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { computeDiff } from "@/helpers/code-diff";
 import { CardHeader } from "@/app/dashboard/(main)/_components/code-presentation/_components/card-header";
 import { SidebarCardLanding } from "./_components/landing-sidebar-card";
+import SelectTrigger, {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { GradientPicker } from "@/components/ui/gradient-picker";
+import { Switch } from "@/components/ui/switch";
+import { parseGradient } from "@/helpers/parse-gradient";
 
 export const slides = [
   {
@@ -152,7 +161,7 @@ export default function LandingPresentation({
           </div>
         </div>
       </div>
-      <div className="flex h-full w-[85%] flex-col rounded-r bg-background">
+      <div className="flex h-full w-[85%] flex-col rounded-r border-b bg-background">
         <div className="pt-8 text-left">
           <div className="mx-auto pl-1">
             <motion.div className="space-y-4 rounded-lg p-4">
@@ -211,6 +220,175 @@ export default function LandingPresentation({
                 </div>
               </div>
             </motion.div>
+          </div>
+        </div>
+        <div className="mt-4 scale-75 items-center justify-center px-10 text-left">
+          <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">
+                  Card Theme
+                </span>
+                <Select value={"default"} disabled={true}>
+                  <SelectTrigger className="h-8 w-full sm:w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Default</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <Select value={"vsDark"} disabled={true}>
+                  <SelectTrigger className="h-8 w-full sm:w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="vsDark">vsDark</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">
+                  Background
+                </span>
+                <Select value={"Emerald"} disabled={true}>
+                  <SelectTrigger className="h-8 w-full sm:w-[140px]">
+                    Emerald
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Emerald">Emerald</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">
+                  Gradient picker
+                </span>
+                <GradientPicker
+                  value={parseGradient(initialState.background)}
+                  onChange={() => {}}
+                  direction="to right"
+                  className="sm:w-[140px]"
+                  disabled={true}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">Language</span>
+                <Select value={"tsx"} disabled={true}>
+                  <SelectTrigger className="h-8 w-full sm:w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tsx">tsx</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">
+                  Line index
+                </span>
+                <Switch checked={true} disabled={true} />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">Width</span>
+                  <output className="text-sm tabular-nums text-muted-foreground">
+                    500
+                  </output>
+                </div>
+                <Slider
+                  min={400}
+                  max={700}
+                  step={1}
+                  value={[500]}
+                  disabled={true}
+                  className="cursor-not-allowed"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">Radius</span>
+                  <output className="text-sm tabular-nums text-muted-foreground">
+                    10
+                  </output>
+                </div>
+                <Slider
+                  min={0}
+                  max={35}
+                  step={1}
+                  value={[10]}
+                  disabled={true}
+                  className="cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    Interval
+                  </span>
+                  <output className="text-sm tabular-nums text-muted-foreground">
+                    2
+                  </output>
+                </div>
+                <Slider
+                  min={0}
+                  max={5}
+                  step={0.1}
+                  value={[2]}
+                  disabled={true}
+                  className="cursor-not-allowed"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    Line duration
+                  </span>
+                  <output className="text-sm tabular-nums text-muted-foreground">
+                    0.6
+                  </output>
+                </div>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  disabled={true}
+                  value={[0.6]}
+                  className="cursor-not-allowed"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    Token delay
+                  </span>
+                  <output className="text-sm tabular-nums text-muted-foreground">
+                    0.1
+                  </output>
+                </div>
+                <Slider
+                  min={0}
+                  max={0.25}
+                  step={0.01}
+                  value={[0.1]}
+                  disabled={true}
+                  className="cursor-not-allowed"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
