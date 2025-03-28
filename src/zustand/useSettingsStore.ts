@@ -44,7 +44,7 @@ const DEFAULT_THEME_NAME = "vsDark";
 const initialThemeStyles = getThemeStyles(DEFAULT_THEME_NAME);
 
 const initialState: Settings = {
-  background: "linear-gradient(to right, #3b82f6, #9333ea, #ec4899)",
+  background: "linear-gradient(to right, #11998e, #38ef7d)",
   width: 500,
   radius: 10,
   language: "tsx",

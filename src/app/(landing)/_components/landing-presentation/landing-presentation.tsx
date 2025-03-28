@@ -9,6 +9,7 @@ import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { computeDiff } from "@/helpers/code-diff";
 import { CardHeader } from "@/app/dashboard/(main)/_components/code-presentation/_components/card-header";
 import { SidebarCardLanding } from "./_components/landing-sidebar-card";
+import Watermark from "@/app/_components/watermark";
 
 export const slides = [
   {
@@ -180,6 +181,9 @@ export default function LandingPresentation({
                         diffMap={diffMap}
                         isAutoPlayingProp={isAutoPlaying}
                       />
+
+
+
                       <div className="py-2" />
                     </div>
                   </div>

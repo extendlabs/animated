@@ -92,11 +92,6 @@ export const themeStyles: Record<
     border: "#D1D1D1",
     text: "#4A4A4A", // Medium gray to reduce harshness of black
   },
-  synthwave84: {
-    bg: "#2D2A55",
-    border: "#4E4872",
-    text: "#FF77FF", // Bright pinkish-purple for a neon feel
-  },
   ultramin: {
     bg: "#FFFFFF",
     border: "#E0E0E0",

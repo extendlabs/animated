@@ -69,6 +69,7 @@ export const DeleteAccountForm = ({ hasActiveSubscription }: Props) => {
               <Button
                 disabled={hasActiveSubscription || isDeleting}
                 className="w-full sm:w-auto"
+                variant={"destructive"}
               >
                 {isDeleting ? (
                   <>
@@ -107,6 +108,7 @@ export const DeleteAccountForm = ({ hasActiveSubscription }: Props) => {
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}
+
                   >
                     {isDeleting ? (
                       <>

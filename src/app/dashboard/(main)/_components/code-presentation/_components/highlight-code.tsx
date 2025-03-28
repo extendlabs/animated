@@ -6,9 +6,6 @@ import { type DiffResult } from "types/code-presentation.type";
 import { AnimatedLine } from "./animated-line";
 import { useUIStore } from "@/zustand/useUIStore";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
-import Watermark from "@/app/_components/watermark";
 
 type Props = {
   currentCode: string;
@@ -47,8 +44,7 @@ export const HighlightCode = ({
   const { themeName } = useSettingsStore((state) => state);
   const { withLineIndex } = useSettingsStore((state) => state);
 
-  const { subscriptionStatus } = useAuthStore();
-  const limitations = useSubscriptionLimitations(subscriptionStatus);
+
   const theme = themes[themeName as keyof typeof themes] || themes.vsDark;
 
   return (
@@ -124,11 +120,7 @@ export const HighlightCode = ({
           );
         }}
       </Highlight>
-      {!limitations.proUser && !thumbnail && (
-        <div className="absolute -bottom-3 right-2">
-          <Watermark />
-        </div>
-      )}
+
     </div>
   );
 };
