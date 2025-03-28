@@ -50,7 +50,7 @@ function LandingMobileNav({ user }: { user: any }) {
         <SheetHeader>
           <SheetTitle hidden>Menu</SheetTitle>
         </SheetHeader>
-        <nav className="mt-8 flex flex-col gap-4 space-y-6">
+        <nav className="mt-8 flex flex-col items-center justify-center gap-4 space-y-6">
           <Link
             href={"/"}
             className={cn("transition-colors duration-200 hover:text-accent")}
@@ -89,7 +89,7 @@ function LandingMobileNav({ user }: { user: any }) {
 function LandingDesktopNav({ user }: { user: any }) {
   return (
     <>
-      <nav className="hidden items-center gap-5 text-zinc-400 sm:flex">
+      <nav className="hidden items-center justify-center gap-5 text-zinc-400 sm:flex">
         <Link
           href={"/"}
           className={cn("transition-colors duration-200 hover:text-accent")}
@@ -117,7 +117,7 @@ function LandingDesktopNav({ user }: { user: any }) {
       <Link
         href={"https://x.com/extendui_pro"}
         target="_blank"
-        className="hidden w-4 fill-current hover:text-accent sm:block"
+        className="hidden w-[104px] items-end justify-end fill-current hover:text-accent sm:flex"
       >
         <XformerlyTwitter />
       </Link>
