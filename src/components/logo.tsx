@@ -13,7 +13,7 @@ export default function Logo({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className="flex w-fit items-center justify-center gap-2 py-2 font-bold">
+      <div className="flex items-center justify-center gap-2 py-2 font-bold">
         <Image
           src="/logo.svg"
           alt="logo"
