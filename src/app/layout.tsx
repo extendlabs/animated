@@ -3,10 +3,8 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import Footer from "./_components/footer";
 import { siteConfig } from "@/config/site";
-import Header from "./_components/header";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -40,7 +38,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: `${siteConfig.url}site.webmanifest`,
+  manifest: `${siteConfig.url}/site.webmanifest`,
 };
 
 function generateSiteStructure() {

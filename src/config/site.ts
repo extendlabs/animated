@@ -4,7 +4,7 @@ export const siteConfig = {
   description: "Product of ExtendUI to animate your code.",
   links: {
     twitter: "https://x.com/extendui_pro",
-    github: "https://github.com/extendui/extendui",
+    github: "https://github.com/extendui/",
   },
   keywords: [
     "Extend UI",
