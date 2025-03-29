@@ -21,7 +21,7 @@ export default async function Header() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="fixed inset-0 z-20 h-16 w-full border bg-background/70 p-4 px-4 backdrop-blur-md lg:p-6">
+    <header className="fixed inset-0 z-20 h-16 w-full border-b bg-background/70 p-4 px-4 backdrop-blur-md lg:p-6">
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between">
         <Logo />
         <LandingDesktopNav user={user} />
