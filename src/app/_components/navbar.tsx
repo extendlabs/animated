@@ -15,11 +15,9 @@ export default async function Navbar() {
     getUserSubscriptionStatus(supabase),
   ]);
 
-  console.log(user, subscriptionStatus);
-
   return (
     <nav className="flex h-16 items-center border-b bg-background px-4 lg:px-6">
-      <div className="w-64">
+      <div className="w-64 max-sm:hidden">
         <SidebarTrigger />
       </div>
       <Logo className="mx-auto" />

@@ -60,13 +60,11 @@ export function AppSidebar({
 
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
-      // console.log(supabase);
       const status = await getUserSubscriptionStatus(supabase);
       if (status) {
         setSubscription(status.subscription);
         setPurchase(status.lifetimePurchase);
       }
-      // console.log(status);
     };
 
     fetchSubscriptionStatus();

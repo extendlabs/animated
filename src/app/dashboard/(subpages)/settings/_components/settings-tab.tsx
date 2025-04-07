@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EmptyTab } from "./empty-tab";
+import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
   animations: any[];
@@ -40,7 +41,7 @@ export const SettingsTab = ({
         icon={<FilmIcon className="mb-6 h-20 w-20 text-zinc-700" />}
       />
     );
-
+  const animationId = useUIStore((state) => state.id);
   return (
     <Accordion type="single" collapsible className="w-full">
       {animations.map((animation) => (
@@ -53,6 +54,7 @@ export const SettingsTab = ({
               size="icon"
               variant="ghost"
               onClick={() => onDelete(animation.id)}
+              disabled={animationId === animation.id}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

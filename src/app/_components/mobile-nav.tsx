@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Menu, Settings, UserCircle, LogOut, DollarSign } from "lucide-react";
+import { Menu, Settings, UserCircle, LogOut, DollarSign, Home } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -46,7 +46,7 @@ export function MobileNav({ user }: MobileNavProps) {
         <SheetHeader>
           <SheetTitle hidden>Menu</SheetTitle>
         </SheetHeader>
-        <div className="mt-6 flex flex-col gap-4">
+        <div className="mt-6 flex flex-col gap-2">
           {user ? (
             <>
               <div className="flex flex-col space-y-1 border-b pb-4">
@@ -56,26 +56,33 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               </div>
               <Link
-                href="/dashboard/account"
+                href="/dashboard"
                 className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
+              >
+                <Home className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                href="/dashboard/account"
+                className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <UserCircle className="h-4 w-4" />
                 Account
               </Link>
               <Link
                 href="/dashboard/settings"
-                className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
+                className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <Settings className="h-4 w-4" />
                 Slides & Themes
               </Link>
-              <Link
+              {/* <Link
                 href="/pricing"
                 className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <DollarSign className="h-4 w-4" />
                 Pricing
-              </Link>
+              </Link> */}
               <form
                 onSubmit={handleSignOut}
                 className="space-y-1 border-t pt-2"

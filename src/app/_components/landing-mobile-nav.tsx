@@ -40,13 +40,13 @@ export default function LandingMobileNav({ user }: { user: any }) {
           >
             Features
           </Link>
-          <Link
+          {/* <Link
             href={"/pricing"}
             className={cn("transition-colors duration-200 hover:text-accent")}
             onClick={() => setOpen(false)}
           >
             Pricing
-          </Link>
+          </Link> */}
           <Link
             href={"https://x.com/extendui_pro"}
             target="_blank"
@@ -55,17 +55,15 @@ export default function LandingMobileNav({ user }: { user: any }) {
           >
             Follow us on <XformerlyTwitter className="size-4" />
           </Link>
-          {user && (
-            <Link
-              href={"/dashboard"}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "w-full rounded-3xl border border-emerald-800 px-3.5 py-1.5 text-center text-lg transition-colors duration-200 hover:bg-emerald-900",
-              )}
-            >
-              Dashboard
-            </Link>
-          )}
+          <Link
+            href={"/dashboard"}
+            onClick={() => setOpen(false)}
+            className={cn(
+              "w-full rounded-3xl border border-emerald-800 px-3.5 py-1.5 text-center text-lg transition-colors duration-200 hover:bg-emerald-900",
+            )}
+          >
+            Dashboard
+          </Link>
         </nav>
       </SheetContent>
     </Sheet>

@@ -34,23 +34,20 @@ function LandingDesktopNav({ user }: { user: any }) {
         >
           Features
         </Link>
-        <Link
+        {/* <Link
           href={"/pricing"}
           className={cn("transition-colors duration-200 hover:text-accent")}
         >
           Pricing
+        </Link> */}
+        <Link
+          href={"/dashboard"}
+          className={cn(
+            "rounded-3xl bg-emerald-800 px-3.5 py-1.5 text-sm text-white transition-colors duration-200 hover:bg-emerald-900",
+          )}
+        >
+          Dashboard
         </Link>
-
-        {user && (
-          <Link
-            href={"/dashboard"}
-            className={cn(
-              "rounded-3xl bg-emerald-800 px-3.5 py-1.5 text-sm text-white transition-colors duration-200 hover:bg-emerald-900",
-            )}
-          >
-            Dashboard
-          </Link>
-        )}
       </nav>
       <Link
         href={"https://x.com/extendui_pro"}

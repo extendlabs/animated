@@ -161,7 +161,7 @@ export const CustomerPortalForm = ({
             </div>
           ) : !lifetimePurchase ? (
             <Link href="/pricing">
-              <Button>Choose your plan</Button>
+              <Button disabled>Choose your plan</Button>
             </Link>
           ) : null}
         </div>

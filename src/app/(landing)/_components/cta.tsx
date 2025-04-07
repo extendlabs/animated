@@ -13,7 +13,7 @@ export default function CTA() {
           {`Join developers worldwide who've transformed their code sharing,
           documentation, and teaching through engaging visual demonstrations.`}
         </p>
-        <Link href={"/pricing"}>
+        <Link href={"/dashboard"}>
           <PulsatingOutlineShadowButton size="lg">
             Get Started Today
           </PulsatingOutlineShadowButton>
