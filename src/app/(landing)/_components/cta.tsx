@@ -1,11 +1,10 @@
 import { PulsatingOutlineShadowButton } from "@/components/extendui/pulsating-shadow-button";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function CTA() {
   return (
-    <section className="px-6 py-20">
-      <div className="flex flex-col items-center justify-center gap-4 py-24 text-center md:py-32">
+    <section className="px-6 pb-20">
+      <div className="flex flex-col items-center justify-center gap-4  text-center md:py-32">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Ready to elevate your code sharing?
         </h2>

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import Link from "next/link";
+// import Link from "next/link";
 import { DesktopNav } from "@/app/_components/desktop-nav";
 import { MobileNav } from "@/app/_components/mobile-nav";
 import Logo from "@/components/logo";

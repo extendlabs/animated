@@ -3,7 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
-import { DiffResult } from "types/code-presentation.type";
+import { type DiffResult } from "types/code-presentation.type";
 import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentation/_components/highlight-code";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { computeDiff } from "@/helpers/code-diff";
@@ -18,7 +18,6 @@ import SelectTrigger, {
 import { GradientPicker } from "@/components/ui/gradient-picker";
 import { Switch } from "@/components/ui/switch";
 import { parseGradient } from "@/helpers/parse-gradient";
-import Watermark from "@/app/_components/watermark";
 
 export const slides = [
   {

@@ -21,7 +21,7 @@ export function Features({ title, description, features }: FeatureProps) {
   const [currentPoster, setCurrentPoster] = useState<string>("");
   const [featureHeight, setFeatureHeight] = useState<number>(120);
   const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
-  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  const [, setLoadedImages] = useState<Set<string>>(new Set());
 
   const featuresContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -239,11 +239,10 @@ export function Features({ title, description, features }: FeatureProps) {
               <div
                 key={feature.name}
                 onClick={() => handleFeatureClick(feature)}
-                className={`feature-item group relative flex min-w-[280px] cursor-pointer flex-col justify-center overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out md:min-w-0 md:max-w-lg ${
-                  activeFeature === feature.name
-                    ? "bg-emerald-800/50"
-                    : "hover:bg-emerald-900/50"
-                }`}
+                className={`feature-item group relative flex min-w-[280px] cursor-pointer flex-col justify-center overflow-hidden rounded-lg p-6 transition-all duration-500 ease-out md:min-w-0 md:max-w-lg ${activeFeature === feature.name
+                  ? "bg-emerald-800/50"
+                  : "hover:bg-emerald-900/50"
+                  }`}
               >
                 <div className="flex items-center gap-4">
                   <h3 className="font-semibold text-white">{feature.name}</h3>

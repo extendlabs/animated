@@ -1,5 +1,4 @@
 import React from "react";
-import { FilmIcon } from "lucide-react";
 
 type Props = {
   title: string;

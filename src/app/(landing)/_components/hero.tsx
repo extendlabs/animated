@@ -6,7 +6,7 @@ import FadeUp from "@/components/fadeup";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import LandingPresentation from "./landing-presentation/landing-presentation";
-import { Redo, Undo } from "lucide-react";
+import { Redo } from "lucide-react";
 
 const INITIAL_SCALE = 1;
 const MIN_SCALE = 0.8;

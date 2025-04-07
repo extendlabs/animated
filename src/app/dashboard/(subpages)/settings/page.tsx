@@ -41,7 +41,7 @@ export default function AnimationsPage() {
         title: "Animation deleted",
         description: "The animation has been successfully deleted.",
       });
-    } catch (_err) {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to delete animation.",
@@ -57,7 +57,7 @@ export default function AnimationsPage() {
         title: "Theme deleted",
         description: "Theme has been successfully deleted.",
       });
-    } catch (_err) {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to delete theme.",

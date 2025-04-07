@@ -25,6 +25,7 @@ export const SettingsTab = ({
   onSelectSlides,
   onDelete,
 }: Props) => {
+  const animationId = useUIStore((state) => state.id);
   if (loading)
     return (
       <EmptyTab
@@ -41,7 +42,7 @@ export const SettingsTab = ({
         icon={<FilmIcon className="mb-6 h-20 w-20 text-zinc-700" />}
       />
     );
-  const animationId = useUIStore((state) => state.id);
+
   return (
     <Accordion type="single" collapsible className="w-full">
       {animations.map((animation) => (

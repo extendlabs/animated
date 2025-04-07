@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { CodePreviewLanding } from "./landing-code-preview";
 import { useState } from "react";
-import { Slide } from "@/types/animated.type";
+import { type Slide } from "@/types/animated.type";
 import { initialState } from "../landing-presentation";
 
 interface SidebarCardLandingProps {

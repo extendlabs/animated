@@ -8,9 +8,9 @@ import { getStripe } from "@/lib/stripe/client";
 import { PRICING_FREE_DATA } from "@/constants/pricing";
 import { useLoginStore } from "@/zustand/useLoginStore";
 import {
-  BillingInterval,
-  Price,
-  UserSubscriptionStatus,
+  type BillingInterval,
+  type Price,
+  type UserSubscriptionStatus,
 } from "@/types/pricing.type";
 import { PricingCard } from "./pricing-card";
 import { BillingToggle } from "./billing-toggle";

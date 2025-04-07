@@ -7,8 +7,6 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-import { useAnimations } from "@/hooks/use-animations";
-import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
