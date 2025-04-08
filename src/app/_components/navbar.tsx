@@ -18,27 +18,17 @@ export default async function Navbar() {
 
   return (
     <nav className="flex h-16 items-center border-b bg-background px-4 lg:px-6">
-      {/* Container for the left side - logo on mobile, sidebar trigger on desktop */}
       <div className="flex items-center">
-        {/* Sidebar trigger only on desktop - vertically centered */}
         <div className="hidden items-center sm:flex">
           <SidebarTrigger />
         </div>
-
-        {/* Logo - left on mobile, will be centered via container on desktop */}
-        <div className="sm:hidden">
-          <Logo />
-        </div>
       </div>
 
-      {/* Logo centered for desktop only */}
-      <div className="hidden flex-1 items-center justify-center sm:flex">
+      <div className="flex items-center justify-start sm:flex-1 sm:justify-center">
         <Logo />
       </div>
 
-      {/* Navigation container */}
       <div className="ml-auto flex items-center gap-4">
-        {/* Upgrade button */}
         {subscriptionStatus?.hasLifetimePurchase === true ||
           (subscriptionStatus?.isSubscribed === true && (
             <Button
@@ -51,13 +41,11 @@ export default async function Navbar() {
               </Link>
             </Button>
           ))}
-
-        {/* Desktop Navigation */}
         <div className="hidden sm:block">
           <DesktopNav user={user} />
         </div>
 
-        {/* Mobile Navigation */}
+
         <div className="sm:hidden">
           {user ? (
             <MobileNav user={user} />

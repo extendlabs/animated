@@ -29,7 +29,7 @@ export function AuthDialog() {
           Login
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-2 border-slate-900 w-[95%] max-w-full sm:max-w-[425px] p-4 sm:p-6 mx-auto">
+      <DialogContent className="border-2  w-[95%] max-w-full sm:max-w-[425px] p-4 sm:p-6 mx-auto">
         <DialogHeader>
           <DialogTitle className="text-center text-xl sm:text-2xl font-bold">
             {isLogin ? "Welcome Back" : "Create an Account"}
