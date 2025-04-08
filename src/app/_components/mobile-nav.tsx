@@ -47,57 +47,51 @@ export function MobileNav({ user }: MobileNavProps) {
           <SheetTitle hidden>Menu</SheetTitle>
         </SheetHeader>
         <div className="mt-6 flex flex-col gap-2">
-          {user ? (
-            <>
-              <div className="flex flex-col space-y-1 border-b pb-4">
-                <p className="font-medium">{user?.user_metadata?.full_name}</p>
-                {user?.email && (
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
-                )}
-              </div>
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                href="/dashboard/account"
-                className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
-              >
-                <UserCircle className="h-4 w-4" />
-                Account
-              </Link>
-              <Link
-                href="/dashboard/settings"
-                className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
-              >
-                <Settings className="h-4 w-4" />
-                Slides & Themes
-              </Link>
-              {/* <Link
+          <>
+            <div className="flex flex-col space-y-1 border-b pb-4">
+              <p className="font-medium">{user?.user_metadata?.full_name}</p>
+              {user?.email && (
+                <p className="text-sm text-muted-foreground">{user.email}</p>
+              )}
+            </div>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
+            >
+              <Home className="h-4 w-4" />
+              Dashboard
+            </Link>
+            <Link
+              href="/dashboard/account"
+              className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
+            >
+              <UserCircle className="h-4 w-4" />
+              Account
+            </Link>
+            <Link
+              href="/dashboard/settings"
+              className="flex items-center gap-2 pb-2 text-sm font-medium transition-colors hover:text-accent"
+            >
+              <Settings className="h-4 w-4" />
+              Slides & Themes
+            </Link>
+            {/* <Link
                 href="/pricing"
                 className="flex items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent"
               >
                 <DollarSign className="h-4 w-4" />
                 Pricing
               </Link> */}
-              <form
-                onSubmit={handleSignOut}
-                className="space-y-1 border-t pt-2"
-              >
-                <button className="flex w-full items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent">
-                  <LogOut className="h-4 w-4" />
-                  Sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <div className="pt-4">
-              <AuthDialog />
-            </div>
-          )}
+            <form
+              onSubmit={handleSignOut}
+              className="space-y-1 border-t pt-2"
+            >
+              <button className="flex w-full items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent">
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+            </form>
+          </>
         </div>
       </SheetContent>
     </Sheet>

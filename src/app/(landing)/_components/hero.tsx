@@ -48,7 +48,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section id="hero" className="relative mt-32 space-y-10 px-6">
+    <section id="hero" className="relative mt-20 sm:mt-32 space-y-10 px-6">
       <div className="mx-auto flex max-w-7xl flex-col items-center pt-12 text-center">
         <div className="relative mb-16 space-y-6">
           <FadeUp delay={0.3} duration={1}>
@@ -87,7 +87,7 @@ export default function HeroSection() {
           <FadeUp delay={1.3} duration={1.3}>
             <div className="relative lg:hidden">
               <div className="relative rounded-lg shadow-lg">
-                <div className="group relative z-10 rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                <div className="group relative z-10 rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-500/20">
                   <video
                     autoPlay
                     loop
@@ -120,14 +120,14 @@ export default function HeroSection() {
                   scale: { duration: 0.1, ease: "easeOut" },
                 }}
               >
-                <div className="group relative z-10 rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                <div className="group relative z-10 rounded-2xl bg-slate-500/20 p-2 ring-1 ring-slate-500/20">
                   <video
                     autoPlay
                     loop
                     playsInline
                     preload="auto"
                     muted
-                    className="rounded-md border transition-all duration-200 ease-out"
+                    className="rounded-xl border transition-all duration-200 ease-out"
                     poster="https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPntWJ8UshRk0CQS4IywLjO3lae16nDZTmqtGo"
                   >
                     <source
@@ -152,7 +152,7 @@ export default function HeroSection() {
                   scale: { duration: 0.1, ease: "easeOut" },
                 }}
               >
-                <div className="z-50 h-full w-full rounded-xl bg-slate-500/20 p-2 ring-1 ring-slate-200/50">
+                <div className="z-50 h-full w-full rounded-2xl bg-slate-500/20 p-2 ring-1 ring-slate-500/20">
                   <LandingPresentation />
                 </div>
                 <div className="absolute -right-16 top-2 flex rotate-[15deg] flex-col items-center justify-center">

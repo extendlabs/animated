@@ -202,13 +202,13 @@ export function Features({ title, description, features }: FeatureProps) {
             preload="auto"
             muted
             poster={currentPoster}
-            className="h-full w-full rounded-2xl object-cover p-1"
+            className="h-full w-full rounded-2xl object-cover p-2 bg-slate-900/20 "
           >
             <source src={currentVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gray-800 p-1">
+          <div className="flex h-full w-full items-center justify-center rounded-2xl bg-slate-700/20 ring-slate-700/20 p-2">
             {currentPoster ? (
               <img
                 src={currentPoster}
@@ -257,7 +257,7 @@ export function Features({ title, description, features }: FeatureProps) {
 
         {/* Desktop video player with transform animation */}
         <figure
-          className="relative hidden aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:block"
+          className="relative hidden aspect-video w-full  border-slate-700/20 overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:block"
           style={{
             transform: `translateY(${transformPercentage}px)`,
           }}
@@ -266,7 +266,7 @@ export function Features({ title, description, features }: FeatureProps) {
         </figure>
 
         {/* Mobile video player */}
-        <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border transition-all duration-300 ease-in-out md:hidden">
+        <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-700/20 transition-all duration-300 ease-in-out md:hidden">
           <VideoPlayer />
         </figure>
       </div>
