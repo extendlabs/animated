@@ -28,10 +28,20 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
+    images: [
+      {
+        url: '/opengraph-image.png', // Path relative to the public directory
+        width: 1200,
+        height: 630,
+        alt: 'Extend UI - Reusable components built with shadcn/ui',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     title: "extendui_pro",
     card: "summary_large_image",
+    images: ['/opengraph-image.png']
   },
   icons: {
     icon: "/favicon.ico",
