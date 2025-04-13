@@ -48,7 +48,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section id="hero" className="relative mt-20 sm:mt-32 space-y-10 px-6">
+    <section id="hero" className="relative mt-20 space-y-10 px-6 sm:mt-32">
       <div className="mx-auto flex max-w-7xl flex-col items-center pt-12 text-center">
         <div className="relative mb-16 space-y-6">
           <FadeUp delay={0.3} duration={1}>

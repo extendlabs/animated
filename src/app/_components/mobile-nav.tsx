@@ -7,7 +7,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Menu, Settings, UserCircle, LogOut, DollarSign, Home } from "lucide-react";
+import {
+  Menu,
+  Settings,
+  UserCircle,
+  LogOut,
+  DollarSign,
+  Home,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -82,10 +89,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 <DollarSign className="h-4 w-4" />
                 Pricing
               </Link> */}
-            <form
-              onSubmit={handleSignOut}
-              className="space-y-1 border-t pt-2"
-            >
+            <form onSubmit={handleSignOut} className="space-y-1 border-t pt-2">
               <button className="flex w-full items-center gap-2 py-2 text-sm font-medium transition-colors hover:text-accent">
                 <LogOut className="h-4 w-4" />
                 Sign out

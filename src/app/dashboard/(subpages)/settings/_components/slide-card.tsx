@@ -30,7 +30,9 @@ export const SlideCard = ({ animation, onSelectSlides }: Props) => {
               </h3>
             </div>
             <pre className="mt-2 overflow-x-auto rounded p-2 text-sm">
-              <code className="text-sm text-muted-foreground">{slide.code}</code>
+              <code className="text-sm text-muted-foreground">
+                {slide.code}
+              </code>
             </pre>
           </div>
         ))}
@@ -43,5 +45,5 @@ export const SlideCard = ({ animation, onSelectSlides }: Props) => {
         </div>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};

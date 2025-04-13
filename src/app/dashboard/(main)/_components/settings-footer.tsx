@@ -60,9 +60,9 @@ export default function DraggableFooter() {
     return parsedGradient.length > 0
       ? parsedGradient
       : [
-        { color: "#FFFFFF", position: 0 },
-        { color: "#000000", position: 100 },
-      ];
+          { color: "#FFFFFF", position: 0 },
+          { color: "#000000", position: 100 },
+        ];
   });
 
   const { subscriptionStatus } = useAuthStore();
@@ -204,9 +204,9 @@ export default function DraggableFooter() {
                           {selectedOption === CUSTOM_GRADIENT
                             ? "Custom"
                             : backgroundOptions
-                              .flatMap((group) => group.options)
-                              .find((opt) => opt.value === selectedOption)
-                              ?.label}
+                                .flatMap((group) => group.options)
+                                .find((opt) => opt.value === selectedOption)
+                                ?.label}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>

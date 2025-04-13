@@ -24,24 +24,24 @@ export function AuthDialog() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-[#205a47] hover:bg-[#205a47] w-full sm:w-auto"
+          className="w-full border-[#205a47] hover:bg-[#205a47] sm:w-auto"
         >
           Login
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-2  w-[95%] max-w-full sm:max-w-[425px] p-4 sm:p-6 mx-auto">
+      <DialogContent className="mx-auto w-[95%] max-w-full border-2 p-4 sm:max-w-[425px] sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl sm:text-2xl font-bold">
+          <DialogTitle className="text-center text-xl font-bold sm:text-2xl">
             {isLogin ? "Welcome Back" : "Create an Account"}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 sm:space-y-6 mt-2">
+        <div className="mt-2 space-y-4 sm:space-y-6">
           {isLogin ? <PasswordSignIn /> : <PasswordSignUp />}
           <div className="text-center">
             <Button
               variant="link"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-sm sm:text-base p-0 h-auto"
+              className="h-auto p-0 text-sm sm:text-base"
             >
               {isLogin
                 ? "Don't have an account? Sign up"

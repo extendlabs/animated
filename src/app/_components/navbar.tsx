@@ -45,13 +45,8 @@ export default async function Navbar() {
           <DesktopNav user={user} />
         </div>
 
-
         <div className="sm:hidden">
-          {user ? (
-            <MobileNav user={user} />
-          ) : (
-            <AuthDialog />
-          )}
+          {user ? <MobileNav user={user} /> : <AuthDialog />}
         </div>
       </div>
     </nav>

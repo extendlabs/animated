@@ -1,9 +1,9 @@
 import Logo from "@/components/logo";
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { XformerlyTwitter } from "../(landing)/_components/icons";
 import LandingMobileNav from "./landing-mobile-nav";
+import { cn } from "@/lib/utils";
 
 export default async function Header() {
   const supabase = await createClient();
@@ -16,7 +16,7 @@ export default async function Header() {
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between">
         <Logo />
         <LandingDesktopNav user={user} />
-        <div className="sm:hidden">
+        <div className="flex sm:hidden">
           <LandingMobileNav user={user} />
         </div>
       </div>
@@ -28,26 +28,28 @@ function LandingDesktopNav({ user }: { user: any }) {
   return (
     <>
       <nav className="hidden items-center justify-center gap-5 text-zinc-400 sm:flex">
-        {/* <Link
+        <Link
           href={"/"}
           className={cn("transition-colors duration-200 hover:text-accent")}
         >
           Features
-        </Link> */}
-        {/* <Link
+        </Link>
+        <Link
           href={"/pricing"}
           className={cn("transition-colors duration-200 hover:text-accent")}
         >
           Pricing
-        </Link> */}
-        {/* <Link
-          href={"/dashboard"}
-          className={cn(
-            "rounded-3xl bg-emerald-800 px-3.5 py-1.5 text-sm text-white transition-colors duration-200 hover:bg-emerald-900",
-          )}
-        >
-          Dashboard
-        </Link> */}
+        </Link>
+        {user && (
+          <Link
+            href={"/dashboard"}
+            className={cn(
+              "rounded-3xl bg-emerald-800 px-3.5 py-1.5 text-sm text-white transition-colors duration-200 hover:bg-emerald-900",
+            )}
+          >
+            Dashboard
+          </Link>
+        )}
       </nav>
       <Link
         href={"https://x.com/extendui_pro"}
