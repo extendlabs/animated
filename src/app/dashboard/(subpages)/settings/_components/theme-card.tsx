@@ -63,7 +63,7 @@ export const ThemeCard = ({ theme, onSelect, onDelete }: Props) => {
             variant={isSelected ? "default" : "secondary"}
             className="w-full"
           >
-            {isSelected ? "Selected" : "Select Theme"}
+            {isSelected ? "Selected Theme" : "Select Theme"}
           </Button>
         </div>
       </CardContent>
@@ -72,6 +72,7 @@ export const ThemeCard = ({ theme, onSelect, onDelete }: Props) => {
         size="icon"
         variant="ghost"
         onClick={() => onDelete(theme.id!)}
+        disabled={isSelected}
       >
         <Trash2 className="h-4 w-4" />
       </Button>

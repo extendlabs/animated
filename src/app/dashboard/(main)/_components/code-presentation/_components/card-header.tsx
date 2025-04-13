@@ -8,18 +8,13 @@ import {
   Square,
   X,
   Menu,
-  ChevronDown,
   ChevronUp,
-  Maximize2,
-  Minimize2,
   MoreHorizontal,
   Terminal,
   Code,
   FileText,
   Settings,
   Bookmark,
-  Coffee,
-  Command,
   Zap,
 } from "lucide-react";
 import { useUIStore } from "@/zustand/useUIStore";
@@ -32,7 +27,7 @@ type Props = {
 
 export const CardHeader = ({ cardTheme, themeBorder, themeText }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(true);
+  // const [isExpanded, setIsExpanded] = useState(true);
 
   const { fileName, setFileName, isAutoPlaying } = useUIStore();
 

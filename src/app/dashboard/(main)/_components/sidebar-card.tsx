@@ -4,7 +4,7 @@ import { Trash } from "lucide-react";
 import { CodePreview } from "./code-preview";
 import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { useState } from "react";
-import { Slide } from "@/types/animated.type";
+import { type Slide } from "@/types/animated.type";
 
 type Props = {
   slide: Slide;

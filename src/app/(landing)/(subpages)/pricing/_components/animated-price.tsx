@@ -1,4 +1,4 @@
-import { BillingInterval } from "@/types/pricing.type";
+import { type BillingInterval } from "@/types/pricing.type";
 import React, { useEffect, useState } from "react";
 
 type Props = {

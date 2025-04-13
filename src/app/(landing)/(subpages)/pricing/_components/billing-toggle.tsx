@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch } from "@/components/ui/switch";
-import { BillingInterval } from "@/types/pricing.type";
+import { type BillingInterval } from "@/types/pricing.type";
 
 type Props = {
   billingInterval: BillingInterval;

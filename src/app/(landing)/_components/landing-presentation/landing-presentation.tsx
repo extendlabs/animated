@@ -3,7 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { PauseIcon, PlayIcon } from "lucide-react";
-import { DiffResult } from "types/code-presentation.type";
+import { type DiffResult } from "types/code-presentation.type";
 import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentation/_components/highlight-code";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { computeDiff } from "@/helpers/code-diff";
@@ -18,7 +18,6 @@ import SelectTrigger, {
 import { GradientPicker } from "@/components/ui/gradient-picker";
 import { Switch } from "@/components/ui/switch";
 import { parseGradient } from "@/helpers/parse-gradient";
-import Watermark from "@/app/_components/watermark";
 
 export const slides = [
   {
@@ -147,7 +146,7 @@ export default function LandingPresentation({
 
   return (
     <div className="z-50 flex h-full rounded border">
-      <div className="h-full w-[15%] rounded-l bg-sidebar">
+      <div className="h-full w-[15%] rounded-l-xl bg-sidebar">
         <div className="z-50 flex h-full flex-col">
           <div className="space-y-1.5 p-2 pr-3 pt-2 text-left">
             {slides.map((slide, index) => (
@@ -162,7 +161,7 @@ export default function LandingPresentation({
           </div>
         </div>
       </div>
-      <div className="flex h-full w-[85%] flex-col rounded-r border-b bg-background">
+      <div className="flex h-full w-[85%] flex-col rounded-r-xl border-b bg-background">
         <div className="pt-8 text-left">
           <div className="mx-auto pl-1">
             <motion.div className="space-y-4 rounded-lg p-4">

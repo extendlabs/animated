@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EmptyTab } from "./empty-tab";
+import { useUIStore } from "@/zustand/useUIStore";
 
 type Props = {
   animations: any[];
@@ -24,6 +25,7 @@ export const SettingsTab = ({
   onSelectSlides,
   onDelete,
 }: Props) => {
+  const animationId = useUIStore((state) => state.id);
   if (loading)
     return (
       <EmptyTab
@@ -53,6 +55,7 @@ export const SettingsTab = ({
               size="icon"
               variant="ghost"
               onClick={() => onDelete(animation.id)}
+              disabled={animationId === animation.id}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

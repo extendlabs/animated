@@ -255,7 +255,7 @@ export const CodePresentation = () => {
         )}
       >
         {!isRecordingMode && (
-          <div className="absolute right-4 top-4">
+          <div className="absolute right-4 top-4 max-sm:hidden">
             <div className="flex items-center gap-2">
               <EditButton />
               {limitations.proUser === true && (

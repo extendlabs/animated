@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 
 export default function TermsOfService() {
-  const lastUpdated = "December 19, 2024";
+  const lastUpdated = "March 31, 2025";
 
   return (
     <div className="mx-auto min-h-screen py-12">
@@ -180,9 +180,9 @@ export default function TermsOfService() {
             <div className="text-sm">
               <p>For questions about these terms, please contact us at:</p>
               <p className="mt-2">privacy@extendui.com</p>
-              <p className="mt-4">Krzysztof Wicki App Developer</p>
+              {/* <p className="mt-4">Krzysztof Wicki App Developer</p>
               <p>Antoniego Suchanka 11/8</p>
-              <p>Gdańsk, 80-772</p>
+              <p>Gdańsk, 80-772</p> */}
             </div>
           </CardContent>
         </Card>

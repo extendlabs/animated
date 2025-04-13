@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { type Tables } from "types_db";
+// import { type Tables } from "types_db";
 import {
   cancelStripeSubscription,
   redirectToCustomerPortalsubscriptionId,
@@ -14,8 +14,8 @@ import { getErrorRedirect, getStatusRedirect } from "@/lib/helpers";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { format } from "date-fns";
 import {
-  LifetimePurchaseWithProduct,
-  SubscriptionWithPriceAndProduct,
+  type LifetimePurchaseWithProduct,
+  type SubscriptionWithPriceAndProduct,
 } from "@/types/pricing.type";
 
 type Props = {
@@ -161,7 +161,7 @@ export const CustomerPortalForm = ({
             </div>
           ) : !lifetimePurchase ? (
             <Link href="/pricing">
-              <Button>Choose your plan</Button>
+              <Button disabled>Choose your plan</Button>
             </Link>
           ) : null}
         </div>

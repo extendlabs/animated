@@ -26,8 +26,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  console.log(requestUrl);
-
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
     getStatusRedirect(

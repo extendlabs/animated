@@ -2,7 +2,7 @@ import { HighlightCode } from "@/app/dashboard/(main)/_components/code-presentat
 import { PreviewCardHeader } from "@/app/dashboard/(main)/_components/preview-card-header";
 import { getThemeStyles } from "@/helpers/get-theme-styles";
 import { useMemo } from "react";
-import { CardTheme } from "types/code-presentation.type";
+import { type CardTheme } from "types/code-presentation.type";
 import { initialState, slides } from "../landing-presentation";
 
 interface CodePreviewLandingProps {

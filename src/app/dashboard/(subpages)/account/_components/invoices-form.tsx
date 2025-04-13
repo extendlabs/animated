@@ -54,7 +54,8 @@ export const InvoicesForm = () => {
             variant="outline"
             onClick={fetchInvoices}
             className="flex items-center gap-2 border-2 border-zinc-600 bg-zinc-900 text-primary"
-            disabled={loading}
+            // disabled={loading}
+            disabled
           >
             {loading ? (
               <>

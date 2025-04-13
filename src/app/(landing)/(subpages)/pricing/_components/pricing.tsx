@@ -8,9 +8,9 @@ import { getStripe } from "@/lib/stripe/client";
 import { PRICING_FREE_DATA } from "@/constants/pricing";
 import { useLoginStore } from "@/zustand/useLoginStore";
 import {
-  BillingInterval,
-  Price,
-  UserSubscriptionStatus,
+  type BillingInterval,
+  type Price,
+  type UserSubscriptionStatus,
 } from "@/types/pricing.type";
 import { PricingCard } from "./pricing-card";
 import { BillingToggle } from "./billing-toggle";
@@ -126,7 +126,7 @@ export const Pricing = ({ user, products, subscriptionStatus }: Props) => {
           </FadeUp>
         </div>
         <FadeUp delay={0.6} duration={0.8}>
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-2">
             <PricingCard
               name={PRICING_FREE_DATA.name}
               description={PRICING_FREE_DATA.description}
@@ -169,11 +169,12 @@ export const Pricing = ({ user, products, subscriptionStatus }: Props) => {
                   interval={billingInterval}
                   features={productFeatures}
                   buttonText={isCurrentPlan ? "Current Plan" : "Subscribe"}
-                  buttonDisabled={
-                    priceIdLoading === price.id ||
-                    isCurrentPlan ||
-                    subscriptionStatus?.hasLifetimePurchase
-                  }
+                  // buttonDisabled={
+                  //   priceIdLoading === price.id ||
+                  //   isCurrentPlan ||
+                  //   subscriptionStatus?.hasLifetimePurchase
+                  // }
+                  buttonDisabled
                   onButtonClick={() => handleStripeCheckout(price)}
                 />
               );
@@ -206,7 +207,8 @@ export const Pricing = ({ user, products, subscriptionStatus }: Props) => {
                   interval="lifetime"
                   features={productFeatures}
                   buttonText={isCurrentPlan ? "Purchased" : "Buy Lifetime"}
-                  buttonDisabled={priceIdLoading === price.id || isCurrentPlan}
+                  // buttonDisabled={priceIdLoading === price.id || isCurrentPlan}
+                  buttonDisabled
                   onButtonClick={() => handleStripeCheckout(price)}
                 />
               );
