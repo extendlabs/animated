@@ -95,6 +95,7 @@ export default function HeroSection() {
                     preload="auto"
                     muted
                     className="rounded-md border transition-all duration-200 ease-out"
+                    poster="https://xvylq80vkq.ufs.sh/f/d0hpkByvvVRPntWJ8UshRk0CQS4IywLjO3lae16nDZTmqtGo"
                   >
                     <source
                       src={
