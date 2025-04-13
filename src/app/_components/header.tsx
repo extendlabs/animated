@@ -15,10 +15,17 @@ export default async function Header() {
     <header className="fixed inset-0 z-20 h-16 w-full border-b bg-background/70 p-4 px-4 backdrop-blur-md lg:p-6">
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between">
         <Logo />
-        <LandingDesktopNav user={user} />
+        {/* <LandingDesktopNav user={user} />
         <div className="flex sm:hidden">
           <LandingMobileNav user={user} />
-        </div>
+        </div> */}
+        <Link
+          href={"https://x.com/extendui_pro"}
+          target="_blank"
+          className="flex w-[104px] items-end justify-end fill-current hover:text-accent"
+        >
+          <XformerlyTwitter />
+        </Link>
       </div>
     </header>
   );
