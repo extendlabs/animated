@@ -1,15 +1,13 @@
-"use client";
-
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export default function Logo({ className }: { className?: string }) {
   return (
     <Link
       href="/"
       className={cn(
-        "flex items-center justify-center gap-2 text-zinc-200 duration-200",
+        "flex items-center justify-start gap-2 text-zinc-200 duration-200",
         className,
       )}
     >
@@ -19,7 +17,7 @@ export default function Logo({ className }: { className?: string }) {
           alt="logo"
           width={500}
           height={500}
-          className={"h-5 w-full"}
+          className={"h-5 w-auto max-w-[150px]"}
         />
         <span className="sr-only">Animated</span>
       </div>
