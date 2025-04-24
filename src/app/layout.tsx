@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: "https://www.animated.extend-ui.com/opengraph-image.png", // Path relative to the public directory
+        url: "https://animated.extend-ui.com/opengraph-image.png", // Path relative to the public directory
         width: 1200,
         height: 630,
         alt: "Preview image for Animated",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "extendui_pro",
     card: "summary_large_image",
-    images: ["https://www.animated.extend-ui.com/opengraph-image.png"],
+    images: ["https://animated.extend-ui.com/opengraph-image.png"],
   },
   icons: {
     icon: "/favicon.ico",
