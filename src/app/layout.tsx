@@ -21,6 +21,28 @@ export const metadata: Metadata = {
     },
   ],
   creator: "extendui",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: `${siteConfig.url}/opengraph-image.png`, // Path relative to the public directory
+        width: 1200,
+        height: 630,
+        alt: "Preview image for Animated",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    title: "extendui_pro",
+    card: "summary_large_image",
+    images: [`${siteConfig.url}/opengraph-image.png`],
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
