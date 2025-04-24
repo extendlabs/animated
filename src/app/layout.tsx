@@ -30,10 +30,10 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: "/opengraph-image.png", // Path relative to the public directory
+        url: `${siteConfig.url}/opengraph-image.png`, // Path relative to the public directory
         width: 1200,
         height: 630,
-        alt: "Extend UI - Reusable components built with shadcn/ui",
+        alt: "Preview image for Animated",
         type: "image/png",
       },
     ],
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "extendui_pro",
     card: "summary_large_image",
-    images: ["/opengraph-image.png"],
+    images: [`${siteConfig.url}/opengraph-image.png`],
   },
   icons: {
     icon: "/favicon.ico",
