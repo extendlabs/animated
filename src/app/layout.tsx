@@ -87,6 +87,11 @@ export default function RootLayout({
             __html: JSON.stringify(generateSiteStructure()),
           }}
         />
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="82f6c66f-cbfb-457c-b4da-cc1fe194b3de"
+        ></script>
       </head>
       <body className="flex min-h-screen flex-col">
         {children}
