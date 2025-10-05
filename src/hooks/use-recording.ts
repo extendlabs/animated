@@ -14,6 +14,36 @@ export const useRecording = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const displayStreamRef = useRef<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const selectedMimeTypeRef = useRef<string | null>(null);
+
+  const selectBestSupportedMimeType = useCallback(() => {
+    const candidates = [
+      "video/mp4; codecs=h264",
+      "video/webm; codecs=vp9",
+      "video/webm; codecs=vp8",
+      "video/webm",
+    ];
+
+    const isSupported = (type: string) => {
+      try {
+        // Prefer the browser's MediaRecorder support matrix if available
+        if (
+          typeof window !== "undefined" &&
+          (window as any).MediaRecorder &&
+          typeof (window as any).MediaRecorder.isTypeSupported === "function"
+        ) {
+          return (window as any).MediaRecorder.isTypeSupported(type);
+        }
+      } catch (_) {}
+      // Fallback: let RecordRTC/UA handle it; return true to avoid blocking
+      return true;
+    };
+
+    for (const type of candidates) {
+      if (isSupported(type)) return type;
+    }
+    return candidates[candidates.length - 1];
+  }, []);
 
   const cleanup = useCallback((animationFrameId?: number) => {
     if (animationFrameId) {
@@ -123,9 +153,12 @@ export const useRecording = () => {
         drawVideo();
 
         const { default: RecordRTC } = await import("recordrtc");
+        const chosenMimeType: string =
+          selectBestSupportedMimeType() || "video/webm";
+        selectedMimeTypeRef.current = chosenMimeType ?? "video/webm";
         const recorder = new RecordRTC(canvasStream, {
           type: "video",
-          mimeType: "video/mp4; codecs=h264",
+          mimeType: chosenMimeType,
           frameRate: 60,
           quality: 100,
           videoBitsPerSecond: 5000000,
@@ -159,9 +192,20 @@ export const useRecording = () => {
       const blob = recorderRef.current.getBlob();
       const url = URL.createObjectURL(blob);
 
+      const inferredType =
+        (blob && blob.type) || selectedMimeTypeRef.current || "video/mp4";
+      let extension = "mp4";
+      if (inferredType.includes("webm")) extension = "webm";
+      else if (inferredType.includes("mp4")) extension = "mp4";
+      else if (
+        inferredType.includes("x-matroska") ||
+        inferredType.includes("mkv")
+      )
+        extension = "mkv";
+
       const a = document.createElement("a");
       a.href = url;
-      a.download = `recording-${Date.now()}.mp4`;
+      a.download = `recording-${Date.now()}.${extension}`;
       a.click();
 
       setState((prev) => ({ ...prev, recordedVideo: url }));

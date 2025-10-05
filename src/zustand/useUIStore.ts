@@ -38,18 +38,18 @@ export const useUIStore = create(
     id: null,
     name: "",
     description: "",
-    fileName: "Undefined-1.tsx",
+    fileName: "Counter.tsx",
     isRecordingMode: false,
     slides: [
       {
         id: 0,
-        code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      Count: {count}\n    </div>\n  );\n}",
+        code: "function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <>\n      Count: {count}\n    </>\n  );\n}",
         file_name: "",
         description: "",
       },
       {
         id: 1,
-        code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}",
+        code: "function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <>\n      <h1>Count: {count}</h1>\n    </>\n  );\n}",
         file_name: "",
         description: "",
       },

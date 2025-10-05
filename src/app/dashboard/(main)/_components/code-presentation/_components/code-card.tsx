@@ -36,7 +36,10 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
     }
   };
   const { subscriptionStatus } = useAuthStore();
-  const limitations = useSubscriptionLimitations(subscriptionStatus);
+  // const limitations = useSubscriptionLimitations(subscriptionStatus);
+  const limitations = {
+    proUser: true,
+  };
 
   return (
     <>

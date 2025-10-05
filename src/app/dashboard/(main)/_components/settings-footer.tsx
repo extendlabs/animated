@@ -66,7 +66,10 @@ export default function DraggableFooter() {
   });
 
   const { subscriptionStatus } = useAuthStore();
-  const limitations = useSubscriptionLimitations(subscriptionStatus);
+  // const limitations = useSubscriptionLimitations(subscriptionStatus);
+  const limitations = {
+    proUser: true,
+  };
   const { isEditing } = useUIStore();
 
   const availableThemes = Object.keys(themes);
@@ -132,7 +135,7 @@ export default function DraggableFooter() {
         <div className="mx-auto max-w-5xl p-8 pt-2">
           <div className="flex flex-col">
             <div className="flex justify-end">
-              {limitations.proUser === true && (
+              {/* {limitations.proUser === true && (
                 <div className="mb-2 flex gap-2">
                   {selectedThemeId ? (
                     <>
@@ -143,7 +146,7 @@ export default function DraggableFooter() {
                     <SaveThemeDialog variant="create" />
                   )}
                 </div>
-              )}
+              )} */}
             </div>
             <div className="mt-4 items-center justify-center">
               <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">

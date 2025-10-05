@@ -41,13 +41,13 @@ export default async function Navbar() {
               </Link>
             </Button>
           ))}
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <DesktopNav user={user} />
-        </div>
+        </div> */}
 
-        <div className="sm:hidden">
+        {/* <div className="sm:hidden">
           {user ? <MobileNav user={user} /> : <AuthDialog />}
-        </div>
+        </div> */}
       </div>
     </nav>
   );

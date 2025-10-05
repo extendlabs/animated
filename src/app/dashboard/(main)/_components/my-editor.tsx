@@ -1,12 +1,18 @@
 import { Editor } from "@monaco-editor/react";
+import type { Monaco } from "@monaco-editor/react";
+import type * as MonacoEditor from "monaco-editor";
 import { CardHeader } from "./code-presentation/_components/card-header";
+import { useToast } from "@/hooks/use-toast";
 
 type Props = {
   value: string;
   handleUpdateSlide: (value: string | undefined) => void;
 };
 export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
-  const customTheme = {
+  const { toast } = useToast();
+  const MAX_LINES = 25;
+
+  const customTheme: MonacoEditor.editor.IStandaloneThemeData = {
     base: "vs-dark",
     inherit: true,
     rules: [],
@@ -23,12 +29,70 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
     },
   };
 
-  const handleEditorWillMount = (monacoInstance: any) => {
+  const handleEditorWillMount = (monacoInstance: Monaco) => {
     monacoInstance.editor.defineTheme("customTheme", customTheme);
     monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
       noSemanticValidation: true,
       noSyntaxValidation: true,
     });
+  };
+
+  const handleEditorMount = (
+    editor: MonacoEditor.editor.IStandaloneCodeEditor,
+    monacoInstance: Monaco,
+  ) => {
+    editor.onKeyDown((e: MonacoEditor.IKeyboardEvent) => {
+      const isEnter =
+        e.code === "Enter" ||
+        e.code === "NumpadEnter" ||
+        e.keyCode === monacoInstance.KeyCode.Enter;
+      if (!isEnter) return;
+
+      const model = editor.getModel();
+      if (!model) return;
+
+      const currentLines = model.getLineCount();
+      if (currentLines >= MAX_LINES) {
+        e.preventDefault();
+        e.stopPropagation();
+        toast({
+          title: "Line limit reached",
+          description: `You can enter up to ${MAX_LINES} lines.`,
+        });
+      }
+    });
+
+    editor.onDidPaste(() => {
+      const model = editor.getModel();
+      if (!model) return;
+      const text = model.getValue();
+      const lines = text.split("\n");
+      if (lines.length > MAX_LINES) {
+        const truncated = lines.slice(0, MAX_LINES).join("\n");
+        editor.executeEdits("truncate-lines", [
+          { range: model.getFullModelRange(), text: truncated },
+        ]);
+        toast({
+          title: "Line limit reached",
+          description: `Pasted content was trimmed to ${MAX_LINES} lines.`,
+        });
+      }
+    });
+  };
+
+  const handleEditorChange = (nextValue: string | undefined) => {
+    const safeValue = nextValue ?? "";
+    const lines = safeValue.split("\n");
+    if (lines.length > MAX_LINES) {
+      toast({
+        title: "Line limit reached",
+        description: `You can enter up to ${MAX_LINES} lines. Extra lines were removed.`,
+      });
+      const truncated = lines.slice(0, MAX_LINES).join("\n");
+      handleUpdateSlide(truncated);
+      return;
+    }
+    handleUpdateSlide(nextValue);
   };
 
   return (
@@ -50,8 +114,9 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
         theme="customTheme"
         height="400px"
         value={value}
-        onChange={handleUpdateSlide}
+        onChange={handleEditorChange}
         beforeMount={handleEditorWillMount}
+        onMount={handleEditorMount}
         options={{
           fontSize: 14,
           lineHeight: 20,

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CTA() {
   return (
-    <section className="px-6 pb-20">
+    <section className="mb-20 px-6 md:mb-32">
       <div className="flex flex-col items-center justify-center gap-4 text-center md:py-32">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           Ready to elevate your code sharing?

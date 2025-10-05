@@ -32,7 +32,10 @@ export function AppSidebar({
 
   const supabase = createClient();
   const { subscriptionStatus, setSubscription, setPurchase } = useAuthStore();
-  const limitations = useSubscriptionLimitations(subscriptionStatus);
+  // const limitations = useSubscriptionLimitations(subscriptionStatus);
+  const limitations = {
+    proUser: true,
+  };
 
   // Free users get 2 slides, pro users get unlimited
   const MAX_FREE_SLIDES = 2;

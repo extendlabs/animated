@@ -22,19 +22,19 @@ import { parseGradient } from "@/helpers/parse-gradient";
 export const slides = [
   {
     id: 0,
-    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      Count: {count}\n    </div>\n  );\n}",
+    code: 'import { useState } from "react";\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n\n  return (\n    <input\n      value={query}\n      onChange={(e) => setQuery(e.target.value)}\n      placeholder="Search..."\n    />\n  );\n}',
     file_name: "",
     description: "",
   },
   {
     id: 1,
-    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}",
+    code: 'import { useEffect, useState } from "react";\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n  const [results, setResults] = useState<string[]>([]);\n\n  useEffect(() => {\n    if (!query) {\n      setResults([]);\n      return;\n    }\n\n    const id = setTimeout(async () => {\n      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);\n      const data = await res.json();\n      setResults(data.items ?? []);\n    }, 300);\n\n    return () => clearTimeout(id);\n  }, [query]);\n\n  return (\n    <div>\n      <input\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder="Search..."\n      />\n      <ul>\n        {results.map((item) => (\n          <li key={item}>{item}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}',
     file_name: "",
     description: "",
   },
   {
     id: 2,
-    code: "function counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n      <h1>Count: {count}</h1>\n    </div>\n  );\n}",
+    code: 'import { useEffect, useMemo, useState } from "react";\n\nfunction useDebouncedValue<T>(value: T, delay = 300) {\n  const [debounced, setDebounced] = useState(value);\n  useEffect(() => {\n    const id = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(id);\n  }, [value, delay]);\n  return debounced;\n}\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n  const [results, setResults] = useState<string[]>([]);\n  const debouncedQuery = useDebouncedValue(query, 400);\n\n  useEffect(() => {\n    if (!debouncedQuery) {\n      setResults([]);\n      return;\n    }\n    (async () => {\n      const res = await fetch(`/api/search?q=${encodeURIComponent(debouncedQuery)}`);\n      const data = await res.json();\n      setResults(data.items ?? []);\n    })();\n  }, [debouncedQuery]);\n\n  const hasResults = useMemo(() => results.length > 0, [results]);\n\n  return (\n    <div>\n      <input\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder="Search..."\n      />\n      {hasResults ? (\n        <ul>\n          {results.map((item) => (\n            <li key={item}>{item}</li>\n          ))}\n        </ul>\n      ) : (\n        <p className="text-muted-foreground">No results</p>\n      )}\n    </div>\n  );\n}',
     file_name: "",
     description: "",
   },

@@ -69,7 +69,7 @@ export default function HeroSection() {
               <Link href="/dashboard">
                 <Button
                   variant="default"
-                  className="flex items-center justify-center gap-1 rounded-lg bg-gradient-to-br from-emerald-600 to-emerald-800 font-semibold text-zinc-100"
+                  className="flex items-center justify-center gap-1 rounded-lg bg-gradient-to-br from-emerald-600 to-emerald-800 font-semibold text-zinc-100 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]"
                 >
                   Get started for free
                 </Button>

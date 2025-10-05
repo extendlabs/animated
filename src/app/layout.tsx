@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    title: "extendui_pro",
+    title: "extend_labs",
     card: "summary_large_image",
     images: ["https://animated.extend-ui.com/opengraph-image.png"],
   },
