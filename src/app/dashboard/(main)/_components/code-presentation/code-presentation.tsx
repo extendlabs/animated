@@ -18,8 +18,6 @@ import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
 import { EditButton } from "../edit-button";
-import { SaveCodeDialog } from "../save-code-dialog";
-import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 import { useAuthStore } from "@/zustand/useAuthStore";
 
 export const CodePresentation = () => {

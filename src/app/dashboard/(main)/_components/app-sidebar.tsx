@@ -11,11 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/zustand/useUIStore";
 import { SidebarCard } from "./sidebar-card";
-import { createClient } from "@/lib/supabase/client";
-import { useEffect } from "react";
-import { getUserSubscriptionStatus } from "@/lib/supabase/queries";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
 
 export function AppSidebar({
   className,
@@ -29,9 +24,6 @@ export function AppSidebar({
     deleteSlide,
     isRecordingMode,
   } = useUIStore();
-
-  const supabase = createClient();
-  const { subscriptionStatus, setSubscription, setPurchase } = useAuthStore();
   // const limitations = useSubscriptionLimitations(subscriptionStatus);
   const limitations = {
     proUser: true,
@@ -60,18 +52,6 @@ export function AppSidebar({
     deleteSlide(id);
     setCurrentSlide(0);
   };
-
-  useEffect(() => {
-    const fetchSubscriptionStatus = async () => {
-      const status = await getUserSubscriptionStatus(supabase);
-      if (status) {
-        setSubscription(status.subscription);
-        setPurchase(status.lifetimePurchase);
-      }
-    };
-
-    fetchSubscriptionStatus();
-  }, [supabase, setSubscription, setPurchase]);
 
   const isAddDisabled = () => {
     if (isRecordingMode) return true;

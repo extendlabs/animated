@@ -16,12 +16,9 @@ import { Switch } from "@/components/ui/switch";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
-import { useAuthStore } from "@/zustand/useAuthStore";
 import { GradientPicker } from "@/components/ui/gradient-picker";
 import { parseGradient } from "@/helpers/parse-gradient";
 import { AVAILABLE_CARD_THEMES, LANGUAGE_OPTIONS } from "@/constants/themes";
-import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
-import { SaveThemeDialog } from "./save-theme-dialog";
 import { useUIStore } from "@/zustand/useUIStore";
 import type { GradientStop } from "@/types/animated.type";
 import { isPatternOrImage } from "@/helpers/isPatternOrImage";
@@ -40,7 +37,6 @@ export default function DraggableFooter() {
     autoPlayInterval,
     transitionDuration,
     transitionDelay,
-    selectedThemeId,
     setWidth,
     setRadius,
     setLanguage,
@@ -65,11 +61,6 @@ export default function DraggableFooter() {
         ];
   });
 
-  const { subscriptionStatus } = useAuthStore();
-  // const limitations = useSubscriptionLimitations(subscriptionStatus);
-  const limitations = {
-    proUser: true,
-  };
   const { isEditing } = useUIStore();
 
   const availableThemes = Object.keys(themes);
@@ -134,20 +125,7 @@ export default function DraggableFooter() {
         </div>
         <div className="mx-auto max-w-5xl p-8 pt-2">
           <div className="flex flex-col">
-            <div className="flex justify-end">
-              {/* {limitations.proUser === true && (
-                <div className="mb-2 flex gap-2">
-                  {selectedThemeId ? (
-                    <>
-                      <SaveThemeDialog variant="edit" />
-                      <SaveThemeDialog variant="create" />
-                    </>
-                  ) : (
-                    <SaveThemeDialog variant="create" />
-                  )}
-                </div>
-              )} */}
-            </div>
+            <div className="flex justify-end"></div>
             <div className="mt-4 items-center justify-center">
               <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">
                 <div className="space-y-4">
@@ -155,11 +133,7 @@ export default function DraggableFooter() {
                     <span className="text-sm text-muted-foreground">
                       Card Theme
                     </span>
-                    <Select
-                      value={cardTheme}
-                      onValueChange={setCardTheme}
-                      disabled={!limitations.proUser}
-                    >
+                    <Select value={cardTheme} onValueChange={setCardTheme}>
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
                       </SelectTrigger>
@@ -174,11 +148,7 @@ export default function DraggableFooter() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <span className="text-sm text-muted-foreground">Theme</span>
-                    <Select
-                      value={themeName}
-                      onValueChange={setThemeName}
-                      disabled={!limitations.proUser}
-                    >
+                    <Select value={themeName} onValueChange={setThemeName}>
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
                       </SelectTrigger>
@@ -200,7 +170,6 @@ export default function DraggableFooter() {
                     <Select
                       value={selectedOption}
                       onValueChange={handleBackgroundSelect}
-                      disabled={!limitations.proUser}
                     >
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue placeholder="Select background">
@@ -243,9 +212,7 @@ export default function DraggableFooter() {
                       onChange={handleGradientChange}
                       direction="to right"
                       className="sm:w-[140px]"
-                      disabled={
-                        !limitations.proUser || isPatternOrImage(background)
-                      }
+                      disabled={isPatternOrImage(background)}
                     />
                     {isPatternOrImage(background) && (
                       <p className="mt-1 text-xs text-muted-foreground">
@@ -260,11 +227,7 @@ export default function DraggableFooter() {
                     <span className="text-sm text-muted-foreground">
                       Language
                     </span>
-                    <Select
-                      value={language}
-                      onValueChange={setLanguage}
-                      disabled={!limitations.proUser}
-                    >
+                    <Select value={language} onValueChange={setLanguage}>
                       <SelectTrigger className="h-8 w-full sm:w-[140px]">
                         <SelectValue />
                       </SelectTrigger>
@@ -284,7 +247,6 @@ export default function DraggableFooter() {
                     <Switch
                       checked={withLineIndex}
                       onCheckedChange={setWithLineIndex}
-                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>
@@ -304,7 +266,6 @@ export default function DraggableFooter() {
                       step={1}
                       value={[Number(width)]}
                       onValueChange={([value]) => setWidth(value!)}
-                      disabled={!limitations.proUser}
                     />
                   </div>
 
@@ -323,7 +284,6 @@ export default function DraggableFooter() {
                       step={1}
                       value={[Number(radius)]}
                       onValueChange={([value]) => setRadius(value!)}
-                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>
@@ -343,7 +303,6 @@ export default function DraggableFooter() {
                       step={0.1}
                       value={[autoPlayInterval]}
                       onValueChange={([value]) => setAutoPlayInterval(value!)}
-                      disabled={!limitations.proUser}
                     />
                   </div>
 
@@ -362,7 +321,6 @@ export default function DraggableFooter() {
                       step={0.01}
                       value={[transitionDuration]}
                       onValueChange={([value]) => setTransitionDuration(value!)}
-                      disabled={!limitations.proUser}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -380,7 +338,6 @@ export default function DraggableFooter() {
                       step={0.01}
                       value={[transitionDelay]}
                       onValueChange={([value]) => setTransitionDelay(value!)}
-                      disabled={!limitations.proUser}
                     />
                   </div>
                 </div>

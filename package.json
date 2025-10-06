@@ -14,7 +14,9 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "prepare": "husky"
+    "prepare": "husky",
+    "knip": "knip",
+    "tsprune": "ts-prune -p tsconfig.json"
   },
   "dependencies": {
     "@babel/generator": "^7.26.2",
@@ -107,6 +109,7 @@
     "@typescript-eslint/parser": "^8.1.0",
     "eslint-config-next": "^15.0.1",
     "husky": "^9.1.7",
+    "knip": "^5.64.2",
     "lint-staged": "^15.4.3",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "opus-media-recorder": "^0.8.0",
@@ -114,6 +117,7 @@
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.3",
+    "ts-prune": "^0.10.3",
     "typescript": "^5.5.3"
   },
   "ct3aMetadata": {

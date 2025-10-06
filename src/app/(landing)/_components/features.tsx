@@ -26,7 +26,6 @@ export function Features({ title, description, features }: FeatureProps) {
   const featuresContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Preload all images
   useEffect(() => {
     if (features.length === 0) return;
 
@@ -67,19 +66,16 @@ export function Features({ title, description, features }: FeatureProps) {
     });
   }, [features]);
 
-  // Initialize the component with the first feature
   useEffect(() => {
     if (features.length > 0) {
       const firstFeature = features[0] as Feature;
       setActiveFeature(firstFeature.name);
 
-      // Find the first valid video URL
       const firstVideoUrl =
         firstFeature.videoUrl ||
         features.find((f) => f.videoUrl)?.videoUrl ||
         "";
 
-      // Set the poster image
       const firstPoster =
         firstFeature.firstFrame ||
         features.find((f) => f.firstFrame)?.firstFrame ||
@@ -90,11 +86,9 @@ export function Features({ title, description, features }: FeatureProps) {
     }
   }, [features]);
 
-  // Reload video when source changes
   useEffect(() => {
     const videoElement = videoRef.current;
     if (videoElement && currentVideo) {
-      // Force reload when source changes
       videoElement.load();
     }
   }, [currentVideo]);
@@ -102,20 +96,16 @@ export function Features({ title, description, features }: FeatureProps) {
   const handleFeatureClick = (feature: Feature) => {
     setActiveFeature(feature.name);
 
-    // Set video with fallback logic
     if (feature.videoUrl) {
       setCurrentVideo(feature.videoUrl);
     } else {
-      // Find first feature with a valid video URL as fallback
       const fallbackVideo = features.find((f) => f.videoUrl)?.videoUrl || "";
       setCurrentVideo(fallbackVideo);
     }
 
-    // Set poster image
     if (feature.firstFrame) {
       setCurrentPoster(feature.firstFrame);
     } else {
-      // Find first feature with a valid poster as fallback
       const fallbackPoster =
         features.find((f) => f.firstFrame)?.firstFrame || "";
       setCurrentPoster(fallbackPoster);
@@ -135,7 +125,6 @@ export function Features({ title, description, features }: FeatureProps) {
 
   const transformPercentage = calculateTransform();
 
-  // Update feature height based on actual DOM measurements
   useEffect(() => {
     const updateFeatureHeight = () => {
       if (featuresContainerRef.current) {
@@ -161,7 +150,6 @@ export function Features({ title, description, features }: FeatureProps) {
 
     updateFeatureHeight();
 
-    // Debounce resize event for better performance
     let resizeTimer: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimer);
@@ -175,7 +163,6 @@ export function Features({ title, description, features }: FeatureProps) {
     };
   }, [features.length]);
 
-  // Loading component shown while images preload
   const LoadingScreen = () => (
     <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-gray-800">
       <div className="text-center">
@@ -185,7 +172,6 @@ export function Features({ title, description, features }: FeatureProps) {
     </div>
   );
 
-  // Video player component to avoid duplication
   const VideoPlayer = () => {
     if (!imagesLoaded) {
       return <LoadingScreen />;
@@ -256,7 +242,6 @@ export function Features({ title, description, features }: FeatureProps) {
           </div>
         </div>
 
-        {/* Desktop video player with transform animation */}
         <figure
           className="relative hidden aspect-video w-full overflow-hidden rounded-2xl border border-slate-700/20 transition-all duration-300 ease-in-out md:block"
           style={{
@@ -266,13 +251,11 @@ export function Features({ title, description, features }: FeatureProps) {
           <VideoPlayer />
         </figure>
 
-        {/* Mobile video player */}
         <figure className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-700/20 transition-all duration-300 ease-in-out md:hidden">
           <VideoPlayer />
         </figure>
       </div>
 
-      {/* Hidden div to preload all images */}
       <div className="hidden">
         {features.map((feature) =>
           feature.firstFrame ? (

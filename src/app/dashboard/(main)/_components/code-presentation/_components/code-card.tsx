@@ -5,8 +5,6 @@ import { type DiffResult } from "types/code-presentation.type";
 import { useEffect, useRef, useState } from "react";
 import { useUIStore } from "@/zustand/useUIStore";
 import Watermark from "@/app/_components/watermark";
-import useSubscriptionLimitations from "@/hooks/use-subscription-limitation";
-import { useAuthStore } from "@/zustand/useAuthStore";
 
 type Props = {
   currentCode: string;
@@ -35,7 +33,6 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
       setContainerHeight(height + extraPadding);
     }
   };
-  const { subscriptionStatus } = useAuthStore();
   // const limitations = useSubscriptionLimitations(subscriptionStatus);
   const limitations = {
     proUser: true,
