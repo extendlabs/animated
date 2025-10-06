@@ -18,7 +18,6 @@ import { useRecording } from "@/hooks/use-recording";
 import { cn } from "@/lib/utils";
 import { useComponentScreenshot } from "@/hooks/use-component-screenshot";
 import { EditButton } from "../edit-button";
-import { useAuthStore } from "@/zustand/useAuthStore";
 
 export const CodePresentation = () => {
   const {
@@ -237,13 +236,6 @@ export const CodePresentation = () => {
     takeScreenshot(componentRef.current);
   };
 
-  const { subscriptionStatus } = useAuthStore();
-  const animationId = useUIStore((state) => state.id);
-  // const limitations = useSubscriptionLimitations(subscriptionStatus);
-  const limitations = {
-    proUser: true,
-  };
-
   return (
     <>
       <div
@@ -259,14 +251,6 @@ export const CodePresentation = () => {
           <div className="absolute right-4 top-4 max-sm:hidden">
             <div className="flex items-center gap-2">
               <EditButton />
-              {/* {limitations.proUser === true && (
-                <>
-                  <SaveCodeDialog key={animationId ? "update" : "create"} />
-                  {animationId && (
-                    <SaveCodeDialog key="create-new" forceCreate />
-                  )}
-                </>
-              )} */}
             </div>
           </div>
         )}

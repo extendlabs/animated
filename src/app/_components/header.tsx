@@ -11,7 +11,7 @@ export default async function Header() {
         </div>
         <div className="flex flex-1 justify-end">
           <Link
-            href={"https://x.com/extendui_pro"}
+            href={"https://x.com/extend-labs_pro"}
             target="_blank"
             className="flex items-end justify-end fill-current hover:text-accent"
           >

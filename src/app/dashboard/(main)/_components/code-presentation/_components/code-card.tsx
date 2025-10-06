@@ -33,10 +33,6 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
       setContainerHeight(height + extraPadding);
     }
   };
-  // const limitations = useSubscriptionLimitations(subscriptionStatus);
-  const limitations = {
-    proUser: true,
-  };
 
   return (
     <>
@@ -70,11 +66,11 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
                 diffMap={diffMap}
               />
             </div>
-            {!limitations.proUser && (
-              <div className="absolute bottom-6 right-0">
-                <Watermark />
-              </div>
-            )}
+            (
+            <div className="absolute bottom-6 right-0">
+              <Watermark />
+            </div>
+            )
             <div className="py-2" />
           </div>
 

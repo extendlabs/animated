@@ -34,7 +34,9 @@ export const useRecording = () => {
         ) {
           return (window as any).MediaRecorder.isTypeSupported(type);
         }
-      } catch (_) {}
+      } catch (_error) {
+        console.error("Error checking if type is supported:", _error);
+      }
       // Fallback: let RecordRTC/UA handle it; return true to avoid blocking
       return true;
     };
@@ -87,7 +89,8 @@ export const useRecording = () => {
         try {
           displayStream =
             await navigator.mediaDevices.getDisplayMedia(mediaConfig);
-        } catch (err) {
+        } catch (_error) {
+          console.error("Error getting display stream:", _error);
           onCancel?.();
           return;
         }

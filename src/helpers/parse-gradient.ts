@@ -4,8 +4,6 @@ export const parseGradient = (gradientString: string) => {
   const content = gradientString.match(/linear-gradient\((.*?)\)/)?.[1];
   if (!content) return [];
 
-  const directionMatch = content.match(/^(to right|to bottom)/);
-  const direction = directionMatch ? directionMatch[1] : "to right";
   const stopsContent = content.replace(/^(to right|to bottom),\s*/, "");
 
   const stops = stopsContent.split(",").map((stop) => stop.trim());

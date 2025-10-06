@@ -24,20 +24,8 @@ export function AppSidebar({
     deleteSlide,
     isRecordingMode,
   } = useUIStore();
-  // const limitations = useSubscriptionLimitations(subscriptionStatus);
-  const limitations = {
-    proUser: true,
-  };
-
-  // Free users get 2 slides, pro users get unlimited
-  const MAX_FREE_SLIDES = 2;
 
   const handleAddSlide = () => {
-    if (!limitations.proUser && slides.length >= MAX_FREE_SLIDES) {
-      console.error("Upgrade to Pro to add more slides");
-      return;
-    }
-
     const newSlide = {
       id: slides.length,
       code: "function newSlide() {}",
@@ -51,12 +39,6 @@ export function AppSidebar({
   const handleDeleteSlide = (id: number) => {
     deleteSlide(id);
     setCurrentSlide(0);
-  };
-
-  const isAddDisabled = () => {
-    if (isRecordingMode) return true;
-    if (limitations.proUser) return false;
-    return slides.length >= MAX_FREE_SLIDES;
   };
 
   return (
@@ -83,7 +65,7 @@ export function AppSidebar({
                     variant="ghost"
                     className="h-[120px] w-full rounded-md bg-slate-600/20 p-2 hover:bg-slate-600/50"
                     onClick={handleAddSlide}
-                    disabled={isAddDisabled()}
+                    disabled={isRecordingMode}
                   >
                     <Plus className="text-slate-200" />
                   </Button>

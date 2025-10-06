@@ -16,11 +16,11 @@ export const metadata: Metadata = {
   keywords: siteConfig.keywords,
   authors: [
     {
-      name: "extendui",
+      name: "extend-labs",
       url: siteConfig.links.github,
     },
   ],
-  creator: "extendui",
+  creator: "extend-labs",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -67,7 +67,7 @@ function generateSiteStructure() {
       },
       "query-input": "required name=search_term_string",
     },
-    sameAs: ["https://github.com/extendui", "https://x.com/extendui_pro"],
+    sameAs: ["https://github.com/extend-labs", "https://x.com/extend-labs_pro"],
   };
 }
 
