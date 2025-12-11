@@ -57,19 +57,16 @@ export default function HeroSection() {
             </h1>
           </FadeUp>
           <FadeUp delay={0.6} duration={1.2}>
-            <p className="mx-auto max-w-2xl text-base font-medium tracking-wide text-zinc-400 sm:text-lg">
-              {`Create vivid, engaging recordings that
-                showcase your code in motion. Perfect for tutorials,
-                documentation, and those 'aha' moments that deserve to be
-                shared.`}
+            <p className="mx-auto max-w-4xl text-base font-light tracking-wide text-zinc-400 sm:text-lg">
+              {`Create engaging code recordings. Perfect for tutorials, docs, and sharing those 'aha' moments.`}
             </p>
           </FadeUp>
           <FadeUp delay={0.9} duration={1.2}>
-            <div className="flex items-center justify-center gap-3">
+            <div className="mt-16 flex items-center justify-center gap-3">
               <Link href="/dashboard">
                 <Button
-                  variant="default"
-                  className="flex items-center justify-center gap-1 rounded-lg bg-gradient-to-br from-emerald-600 to-emerald-800 font-semibold text-zinc-100 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                  variant="outline"
+                  className="flex items-center justify-center gap-1 rounded-lg border-emerald-600 font-semibold text-white drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] transition-all duration-300 hover:scale-105 hover:bg-emerald-600 hover:text-zinc-100"
                 >
                   Get started for free
                 </Button>

@@ -216,7 +216,9 @@ export function Features({ title, description, features }: FeatureProps) {
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
           {title}
         </h2>
-        <p className="mt-4 sm:text-lg">{description}</p>
+        <p className="mx-auto mt-4 max-w-4xl text-base font-light tracking-wide text-zinc-400 sm:text-lg">
+          {description}
+        </p>
       </div>
       <div className="relative mx-auto flex max-w-5xl flex-col items-start justify-between gap-12 md:flex-row">
         <div className="scrollbar-hide flex w-full items-center gap-4 overflow-x-auto pb-4 md:w-auto md:flex-col md:pb-0">

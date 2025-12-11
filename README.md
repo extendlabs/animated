@@ -4,7 +4,6 @@ A powerful tool for creating stunning animated code presentations. Record videos
 
 <img width="1200" height="630" alt="opengraph-image" src="https://github.com/user-attachments/assets/b96c2b61-0b85-4c12-9b75-3fbf97b960f2" />
 
-
 ## About Animated
 
 Animated empowers developers to create professional code presentations and demonstrations effortlessly. Whether you're documenting your code, creating tutorials, or showcasing your projects, Animated provides the tools you need to bring your code to life with beautiful animations and recordings.
@@ -33,12 +32,14 @@ Explore the live application and start creating:
 ## Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/extend-labs/animated.git
    cd animated
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    # or
@@ -49,6 +50,7 @@ Explore the live application and start creating:
    Create a `.env.local` file in the root directory with the necessary environment variables (check `src/env.js` for required variables).
 
 4. **Run the development server**
+
    ```bash
    bun dev
    # or
@@ -98,6 +100,7 @@ animated/
 ## Configuration
 
 The project uses environment variables for configuration. Make sure to set up:
+
 - Database connection (Supabase)
 - Authentication settings
 - API keys (if needed)
@@ -117,6 +120,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Code Quality
 
 This project uses:
+
 - **ESLint** for code linting
 - **Prettier** for code formatting
 - **TypeScript** for type safety

@@ -15,7 +15,7 @@ export default function LandingPage() {
       <FadeUp delay={0.4} duration={1}>
         <Features
           title="Simple Tools, Powerful Results"
-          description="We've simplified code recording down to its essence. Every feature is thoughtfully designed to be intuitive yet powerful, helping you create professional demonstrations with ease."
+          description="Intuitive yet powerful features designed to help you create professional code demonstrations effortlessly."
           features={features}
         />
       </FadeUp>

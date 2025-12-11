@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Animated",
     short_name: "Animated",
     description:
-      "Create vivid, engaging recordings that showcase your code in motion.",
+      "Create engaging code recordings. Perfect for tutorials, docs, and sharing 'aha' moments.",
     start_url: "/",
     display: "standalone",
     background_color: "#fff",
