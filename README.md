@@ -34,7 +34,7 @@ Explore the live application and start creating:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/extend-labs/animated.git
+   git clone https://github.com/extendlabs/animated.git
    cd animated
    ```
 
