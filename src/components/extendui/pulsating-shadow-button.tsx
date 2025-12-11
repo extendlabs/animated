@@ -35,7 +35,7 @@ export const PulsatingOutlineShadowButton = React.forwardRef<
       className,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <motion.div
@@ -71,7 +71,7 @@ export const PulsatingOutlineShadowButton = React.forwardRef<
           ref={ref}
           className={cn(
             `relative z-10 shadow-none border-[${glowColor}]/40 border-2 hover:bg-[${glowColor}]/40`,
-            className,
+            className
           )}
           {...props}
         >
@@ -79,7 +79,7 @@ export const PulsatingOutlineShadowButton = React.forwardRef<
         </Button>
       </motion.div>
     );
-  },
+  }
 );
 
 PulsatingOutlineShadowButton.displayName = "PulsatingOutlineShadowButton";

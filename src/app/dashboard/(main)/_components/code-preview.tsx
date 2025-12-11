@@ -20,7 +20,7 @@ export const CodePreview = ({ currentSlide }: Props) => {
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
-    [slides, currentSlide],
+    [slides, currentSlide]
   );
 
   return (

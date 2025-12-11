@@ -37,7 +37,7 @@ export function SidebarCardLanding({
           className={cn(
             "absolute inset-0 transition-opacity duration-200",
             !isCurrent && "bg-black/50",
-            isHovered && "bg-slate-300/30",
+            isHovered && "bg-slate-300/30"
           )}
         />
       </div>

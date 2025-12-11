@@ -22,19 +22,13 @@ import { parseGradient } from "@/helpers/parse-gradient";
 export const slides = [
   {
     id: 0,
-    code: 'import { useState } from "react";\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n\n  return (\n    <input\n      value={query}\n      onChange={(e) => setQuery(e.target.value)}\n      placeholder="Search..."\n    />\n  );\n}',
+    code: "function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <>\n      Count: {count}\n    </>\n  );\n}",
     file_name: "",
     description: "",
   },
   {
     id: 1,
-    code: 'import { useEffect, useState } from "react";\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n  const [results, setResults] = useState<string[]>([]);\n\n  useEffect(() => {\n    if (!query) {\n      setResults([]);\n      return;\n    }\n\n    const id = setTimeout(async () => {\n      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);\n      const data = await res.json();\n      setResults(data.items ?? []);\n    }, 300);\n\n    return () => clearTimeout(id);\n  }, [query]);\n\n  return (\n    <div>\n      <input\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder="Search..."\n      />\n      <ul>\n        {results.map((item) => (\n          <li key={item}>{item}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}',
-    file_name: "",
-    description: "",
-  },
-  {
-    id: 2,
-    code: 'import { useEffect, useMemo, useState } from "react";\n\nfunction useDebouncedValue<T>(value: T, delay = 300) {\n  const [debounced, setDebounced] = useState(value);\n  useEffect(() => {\n    const id = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(id);\n  }, [value, delay]);\n  return debounced;\n}\n\nfunction SearchBox() {\n  const [query, setQuery] = useState("");\n  const [results, setResults] = useState<string[]>([]);\n  const debouncedQuery = useDebouncedValue(query, 400);\n\n  useEffect(() => {\n    if (!debouncedQuery) {\n      setResults([]);\n      return;\n    }\n    (async () => {\n      const res = await fetch(`/api/search?q=${encodeURIComponent(debouncedQuery)}`);\n      const data = await res.json();\n      setResults(data.items ?? []);\n    })();\n  }, [debouncedQuery]);\n\n  const hasResults = useMemo(() => results.length > 0, [results]);\n\n  return (\n    <div>\n      <input\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder="Search..."\n      />\n      {hasResults ? (\n        <ul>\n          {results.map((item) => (\n            <li key={item}>{item}</li>\n          ))}\n        </ul>\n      ) : (\n        <p className="text-muted-foreground">No results</p>\n      )}\n    </div>\n  );\n}',
+    code: "function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <>\n      <h1>Count: {count}</h1>\n    </>\n  );\n}",
     file_name: "",
     description: "",
   },
@@ -67,7 +61,7 @@ type Props = {
 
 export const initialState: Settings = {
   background: "linear-gradient(to right, #11998e, #38ef7d)",
-  width: 500,
+  width: 800,
   radius: 10,
   language: "tsx",
   withLineIndex: true,
@@ -93,7 +87,7 @@ export default function LandingPresentation({
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
-    [slides, currentSlide],
+    [slides, currentSlide]
   );
 
   const handleSlideChange = useCallback(
@@ -107,14 +101,14 @@ export default function LandingPresentation({
         if (slides[newIndex] && slides[currentSlide]) {
           const newDiff = computeDiff(
             slides[currentSlide].code,
-            slides[newIndex].code,
+            slides[newIndex].code
           );
           setDiffMap(newDiff);
           setCurrentSlide(newIndex);
         }
       }
     },
-    [currentSlide, slides, setCurrentSlide],
+    [currentSlide, slides, setCurrentSlide]
   );
 
   useEffect(() => {
@@ -162,11 +156,11 @@ export default function LandingPresentation({
         </div>
       </div>
       <div className="flex h-full w-[85%] flex-col rounded-r-xl border-b bg-background">
-        <div className="pt-8 text-left">
+        <div className="flex-1 pt-8 text-left">
           <div className="mx-auto pl-1">
             <motion.div className="space-y-4 rounded-lg p-4">
               <div
-                className="relative mx-auto h-[80%] w-[56%] items-center justify-center overflow-hidden rounded-md"
+                className="relative mx-auto w-[56%] items-center justify-center overflow-hidden rounded-md"
                 style={{ background: initialState.background }}
               >
                 <div className="hidden sm:block">
@@ -200,30 +194,30 @@ export default function LandingPresentation({
                   </p>
                 </div>
               </div>
-              <div className="flex justify-center max-sm:hidden">
-                <div className="mt-4 flex items-center space-x-4">
-                  <Button
-                    onClick={() => {
-                      setCurrentSlide(0);
-                      setIsAutoPlaying(!isAutoPlaying);
-                    }}
-                    aria-label={isAutoPlaying ? "Pause" : "Play"}
-                    disabled={isAutoPlaying}
-                    variant="ghost"
-                    size="icon"
-                  >
-                    {isAutoPlaying ? (
-                      <PauseIcon className="h-4 w-4" />
-                    ) : (
-                      <PlayIcon className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>
-        <div className="mt-4 scale-75 items-center justify-center px-10 text-left">
+        <div className="mt-auto scale-75 items-center justify-center px-10 pb-4 text-left">
+          <div className="mb-4 flex justify-center max-sm:hidden">
+            <div className="flex items-center space-x-4">
+              <Button
+                onClick={() => {
+                  setCurrentSlide(0);
+                  setIsAutoPlaying(!isAutoPlaying);
+                }}
+                aria-label={isAutoPlaying ? "Pause" : "Play"}
+                disabled={isAutoPlaying}
+                variant="ghost"
+                size="icon"
+              >
+                {isAutoPlaying ? (
+                  <PauseIcon className="h-4 w-4" />
+                ) : (
+                  <PlayIcon className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-12 max-lg:gap-y-4 lg:grid-cols-5">
             <div className="space-y-4">
               <div className="flex flex-col gap-1">

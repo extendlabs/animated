@@ -43,13 +43,13 @@ export const SidebarCard = ({
           className={cn(
             "absolute inset-0 transition-opacity duration-200",
             !isCurrent && "bg-black/50",
-            isHovered && "bg-slate-300/30",
+            isHovered && "bg-slate-300/30"
           )}
         />
         <div
           className={cn(
             "absolute right-0 top-0 p-2 transition-opacity duration-200",
-            isHovered ? "opacity-100" : "opacity-0",
+            isHovered ? "opacity-100" : "opacity-0"
           )}
         >
           <Button

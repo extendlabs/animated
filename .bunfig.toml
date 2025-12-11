@@ -1,0 +1,4 @@
+# Bun configuration file
+[install]
+# Lock file will be created automatically as bun.lockb
+

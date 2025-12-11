@@ -16,7 +16,7 @@ export const CodePreviewLanding = ({
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
-    [currentSlide],
+    [currentSlide]
   );
 
   return (

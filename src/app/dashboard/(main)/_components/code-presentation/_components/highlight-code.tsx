@@ -51,14 +51,14 @@ export const HighlightCode = ({
       <Highlight theme={theme} code={currentCode} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => {
           const currentLines = tokens.map((line) =>
-            line.map((token) => token.content).join(""),
+            line.map((token) => token.content).join("")
           );
           return (
             <pre
               className={cn(
                 className,
                 "overflow-hidden pl-5 pt-4 text-sm will-change-contents",
-                thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]",
+                thumbnail && "pl-1 pt-1 text-[5px] leading-[6px]"
               )}
               style={style}
             >
@@ -72,7 +72,7 @@ export const HighlightCode = ({
                           <span
                             className={cn(
                               "mr-4 select-none text-gray-500",
-                              thumbnail && "mr-3",
+                              thumbnail && "mr-3"
                             )}
                           >
                             {String(index + 1).padStart(2, "0")}

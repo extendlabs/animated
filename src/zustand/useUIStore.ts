@@ -103,7 +103,7 @@ export const useUIStore = create(
     updateSlide: (id, updatedSlide) =>
       set((state: any) => {
         const slideIndex = state.slides.findIndex(
-          (slide: any) => slide.id === id,
+          (slide: any) => slide.id === id
         );
         if (slideIndex !== -1) {
           state.slides[slideIndex] = {
@@ -117,5 +117,5 @@ export const useUIStore = create(
       set((state) => {
         state.slides = slides.map((slide, index) => ({ ...slide, id: index }));
       }),
-  })),
+  }))
 );

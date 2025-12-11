@@ -265,11 +265,11 @@ export function Features({ title, description, features }: FeatureProps) {
               alt="Preloaded image"
               onLoad={() => {
                 setLoadedImages(
-                  (prev) => new Set([...prev, feature.firstFrame!]),
+                  (prev) => new Set([...prev, feature.firstFrame!])
                 );
               }}
             />
-          ) : null,
+          ) : null
         )}
       </div>
     </section>

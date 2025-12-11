@@ -11,7 +11,7 @@ interface UseComponentScreenshotOptions {
 }
 
 export const useComponentScreenshot = (
-  options: UseComponentScreenshotOptions = {},
+  options: UseComponentScreenshotOptions = {}
 ) => {
   const {
     fileName = "code-screenshot",
@@ -113,7 +113,7 @@ export const useComponentScreenshot = (
         throw error;
       }
     },
-    [fileName, quality, padding, background, maxWidth, scale],
+    [fileName, quality, padding, background, maxWidth, scale]
   );
 
   return { takeScreenshot };

@@ -9,7 +9,7 @@ export const tokenizeLine = (line: string): string[] => {
 
 export const computeTokenSimilarity = (
   baseTokens: string[],
-  compareTokens: string[],
+  compareTokens: string[]
 ) => {
   let matches = 0;
   let structuralDifferences = 0;

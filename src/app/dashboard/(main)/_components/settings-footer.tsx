@@ -65,7 +65,7 @@ export default function DraggableFooter() {
 
   const availableThemes = Object.keys(themes);
   const filteredThemes = availableThemes.filter(
-    (theme) => theme !== "synthwave84",
+    (theme) => theme !== "synthwave84"
   );
 
   const handleGradientChange = (newGradient: GradientStop[]) => {
@@ -108,7 +108,7 @@ export default function DraggableFooter() {
       <footer
         className={cn(
           "bottom-0 left-0 w-full border-t bg-background transition-[height] duration-500",
-          isExpanded ? "h-full lg:h-80" : "h-12",
+          isExpanded ? "h-full lg:h-80" : "h-12"
         )}
       >
         <div className="container m-1.5 mx-auto cursor-pointer text-center text-sm font-medium">

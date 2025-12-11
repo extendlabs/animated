@@ -8,7 +8,7 @@ export default function Logo({ className }: { className?: string }) {
       href="/"
       className={cn(
         "flex items-center justify-start gap-2 text-zinc-200 duration-200",
-        className,
+        className
       )}
     >
       <div className="flex items-center justify-center gap-2 py-2 font-bold">

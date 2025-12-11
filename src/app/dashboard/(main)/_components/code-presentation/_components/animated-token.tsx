@@ -27,7 +27,7 @@ export const AnimatedToken = ({
   };
 
   const { transitionDuration, transitionDelay } = useSettingsStore(
-    (state) => state,
+    (state) => state
   );
 
   return (

@@ -12,8 +12,8 @@
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx,json,css,scss,md}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx,json,css,scss,md}\" --cache",
     "prepare": "husky",
     "knip": "knip",
     "tsprune": "ts-prune -p tsconfig.json"
@@ -67,7 +67,7 @@
     "monaco-editor": "^0.52.2",
     "motion": "^11.12.0",
     "msr": "^1.3.4",
-    "next": "^15.2.4",
+    "next": "15.2.6",
     "prism-react-renderer": "^2.4.0",
     "prismjs": "^1.30.0",
     "react": "^18.3.1",
@@ -123,7 +123,7 @@
   "ct3aMetadata": {
     "initVersion": "7.38.1"
   },
-  "packageManager": "npm@10.2.3",
+  "packageManager": "bun@1.2.22",
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   }

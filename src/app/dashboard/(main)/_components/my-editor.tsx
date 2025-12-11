@@ -39,7 +39,7 @@ export const MyEditor = ({ value, handleUpdateSlide }: Props) => {
 
   const handleEditorMount = (
     editor: MonacoEditor.editor.IStandaloneCodeEditor,
-    monacoInstance: Monaco,
+    monacoInstance: Monaco
   ) => {
     editor.onKeyDown((e: MonacoEditor.IKeyboardEvent) => {
       const isEnter =

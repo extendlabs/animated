@@ -27,7 +27,7 @@ const selectVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 const selectContentVariants = cva(
@@ -45,7 +45,7 @@ const selectContentVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 const Select = SelectPrimitive.Root;
@@ -78,7 +78,7 @@ const SelectTrigger = React.forwardRef<
       leftText,
       ...props
     },
-    ref,
+    ref
   ) => (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -91,7 +91,7 @@ const SelectTrigger = React.forwardRef<
             "focus:outline-red-500",
         ],
         disabled && "cursor-not-allowed opacity-50",
-        icon && "relative ps-9",
+        icon && "relative ps-9"
       )}
       {...props}
     >
@@ -99,7 +99,7 @@ const SelectTrigger = React.forwardRef<
         <div
           className={cn(
             "pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-primary",
-            error && "text-red-500",
+            error && "text-red-500"
           )}
         >
           {icon}
@@ -116,7 +116,7 @@ const SelectTrigger = React.forwardRef<
 
       <SelectIcon asChild>{openIcon}</SelectIcon>
     </SelectPrimitive.Trigger>
-  ),
+  )
 );
 
 export default SelectTrigger;
@@ -130,7 +130,7 @@ const SelectScrollUpButton = React.forwardRef<
     ref={ref}
     className={cn(
       "flex cursor-default items-center justify-center py-1",
-      className,
+      className
     )}
     {...props}
   >
@@ -147,7 +147,7 @@ const SelectScrollDownButton = React.forwardRef<
     ref={ref}
     className={cn(
       "flex cursor-default items-center justify-center py-1",
-      className,
+      className
     )}
     {...props}
   >
@@ -170,7 +170,7 @@ const SelectContent = React.forwardRef<
         selectContentVariants({ variant }),
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className,
+        className
       )}
       position={position}
       {...props}
@@ -180,7 +180,7 @@ const SelectContent = React.forwardRef<
         className={cn(
           "p-1",
           position === "popper" &&
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
         )}
       >
         {children}
@@ -211,7 +211,7 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-secondary focus:text-secondary-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className,
+      className
     )}
     {...props}
   >
@@ -249,7 +249,7 @@ const SelectHelperText = React.forwardRef<
       className={cn(
         "mt-2 text-xs text-muted-foreground",
         error && "text-red-500",
-        className,
+        className
       )}
       {...props}
     />

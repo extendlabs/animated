@@ -41,7 +41,7 @@ export const parseGradient = (gradientString: string) => {
   if (parsedGradient.length === 0) {
     parsedGradient.push(
       { color: "#FFFFFF", position: 0 },
-      { color: "#000000", position: 100 },
+      { color: "#000000", position: 100 }
     );
   } else if (parsedGradient.length === 1 && parsedGradient[0]) {
     // If only one stop, add a second stop

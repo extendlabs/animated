@@ -39,7 +39,7 @@ export const CodePresentation = () => {
 
   const currentCode = useMemo(
     () => slides[currentSlide]?.code ?? "",
-    [slides, currentSlide],
+    [slides, currentSlide]
   );
 
   const { autoPlayInterval } = useSettingsStore((state) => state);
@@ -120,14 +120,14 @@ export const CodePresentation = () => {
         if (slides[newIndex] && slides[currentSlide]) {
           const newDiff = computeDiff(
             slides[currentSlide].code,
-            slides[newIndex].code,
+            slides[newIndex].code
           );
           setDiffMap(newDiff);
           setCurrentSlide(newIndex);
         }
       }
     },
-    [currentSlide, slides, setCurrentSlide],
+    [currentSlide, slides, setCurrentSlide]
   );
 
   useEffect(() => {
@@ -244,7 +244,7 @@ export const CodePresentation = () => {
           "relative flex flex-col items-center rounded-md transition-all duration-200",
           isRecordingMode
             ? "fixed inset-0 z-50 overflow-y-auto bg-background"
-            : "mx-auto mt-4 max-w-3xl py-12",
+            : "mx-auto mt-4 max-w-3xl py-12"
         )}
       >
         {!isRecordingMode && (
@@ -258,7 +258,7 @@ export const CodePresentation = () => {
           ref={componentRef}
           className={cn(
             "mx-auto w-full max-w-3xl",
-            isRecordingMode && "my-auto",
+            isRecordingMode && "my-auto"
           )}
           style={{ height: containerHeight || "auto" }}
         >

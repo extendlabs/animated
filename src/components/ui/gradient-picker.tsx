@@ -41,7 +41,7 @@ const GradientPicker = forwardRef<
       direction = "to right",
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     const ref = useForwardedRef(forwardedRef);
     const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ const GradientPicker = forwardRef<
 
     const gradientStyle = useMemo(() => {
       const sortedStops = [...gradientStops].sort(
-        (a, b) => a.position - b.position,
+        (a, b) => a.position - b.position
       );
       const gradient = sortedStops
         .map((stop) => `${stop.color} ${stop.position}%`)
@@ -77,7 +77,7 @@ const GradientPicker = forwardRef<
 
     const handlePositionChange = (
       e: React.ChangeEvent<HTMLInputElement>,
-      index: number,
+      index: number
     ) => {
       const position = Math.min(100, Math.max(0, Number(e.target.value)));
       const newStops = [...gradientStops];
@@ -187,7 +187,7 @@ const GradientPicker = forwardRef<
         </PopoverContent>
       </Popover>
     );
-  },
+  }
 );
 
 GradientPicker.displayName = "GradientPicker";

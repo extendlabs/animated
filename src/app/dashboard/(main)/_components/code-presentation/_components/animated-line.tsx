@@ -53,7 +53,7 @@ export const AnimatedLine = React.memo(
           <motion.span
             className={cn(
               "mr-4 select-none text-gray-500",
-              thumbnail && "mr-3",
+              thumbnail && "mr-3"
             )}
           >
             {String(lineIndex + 1).padStart(2, "0")}
@@ -72,6 +72,6 @@ export const AnimatedLine = React.memo(
         ))}
       </motion.div>
     );
-  },
+  }
 );
 AnimatedLine.displayName = "AnimatedLine";

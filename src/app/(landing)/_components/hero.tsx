@@ -28,7 +28,7 @@ export default function HeroSection() {
       const scrollPosition = window.scrollY;
       const newScale = Math.max(
         MIN_SCALE,
-        INITIAL_SCALE - scrollPosition * SCROLL_FACTOR,
+        INITIAL_SCALE - scrollPosition * SCROLL_FACTOR
       );
       const opacityThreshold = 0.85;
       const opacityRange = opacityThreshold - MIN_SCALE;

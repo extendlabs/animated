@@ -147,7 +147,7 @@ export const useRecording = () => {
             0,
             0,
             canvas.width,
-            canvas.height,
+            canvas.height
           );
 
           animationFrameId = requestAnimationFrame(drawVideo);
@@ -185,7 +185,7 @@ export const useRecording = () => {
         onCancel?.();
       }
     },
-    [cleanup],
+    [cleanup]
   );
 
   const stopRecording = useCallback(() => {
