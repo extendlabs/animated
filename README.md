@@ -130,7 +130,7 @@ This project uses:
 ## Links
 
 - **Website**: [https://www.animated.extend-labs.com/](https://www.extend-labs.com/)
-- **GitHub**: [https://github.com/extend-labs/](https://github.com/extendlabs/)
+- **GitHub**: [https://github.com/extendlabs/](https://github.com/extendlabs/)
 
 ## Acknowledgments
 
