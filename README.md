@@ -9,7 +9,7 @@ A powerful tool for creating stunning animated code presentations. Record videos
 Animated empowers developers to create professional code presentations and demonstrations effortlessly. Whether you're documenting your code, creating tutorials, or showcasing your projects, Animated provides the tools you need to bring your code to life with beautiful animations and recordings.
 
 Explore the live application and start creating:  
-👉 [**Animated**](https://www.extend-labs.com/)
+👉 [**Animated**]([https://www.extend-labs.com/](https://animated.extend-ui.com/))
 
 ## Key Features
 
@@ -129,7 +129,7 @@ This project uses:
 
 ## Links
 
-- **Website**: [https://www.animated.extend-labs.com/](https://www.extend-labs.com/)
+- **Website**: [https://www.extend-labs.com/](https://www.extend-labs.com/)
 - **GitHub**: [https://github.com/extendlabs/](https://github.com/extendlabs/)
 
 ## Acknowledgments
