@@ -4,7 +4,6 @@ import { useSettingsStore } from "@/zustand/useSettingsStore";
 import { type DiffResult } from "types/code-presentation.type";
 import { useEffect, useRef, useState } from "react";
 import { useUIStore } from "@/zustand/useUIStore";
-import Watermark from "@/app/_components/watermark";
 
 type Props = {
   currentCode: string;
@@ -66,11 +65,6 @@ export const CodeCard = ({ currentCode, currentSlide, diffMap }: Props) => {
                 diffMap={diffMap}
               />
             </div>
-            (
-            <div className="absolute bottom-6 right-0">
-              <Watermark />
-            </div>
-            )
             <div className="py-2" />
           </div>
 
